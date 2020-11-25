@@ -1,0 +1,416 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin:0; padding:0;
+	font-family:"微软雅黑";
+}
+a{
+	border:none;
+	bblr:expression(this.onFocus=this.blur());/*IE使用*/
+	outline-style:none;/*FF使用*/
+}
+a:link,a:hover,a:visited,a:active{
+	outline-style:none;       /*解决bootstrap超链接点击时出现的虚边框*/
+}
+#frame1{
+
+	padding:0px;
+	float:left;
+/*	height:600px;*/
+	overflow-x: visible;;
+	overflow:visible;
+}
+#max{
+	width:100%;
+	height:600px;
+	background:url(../img/img21.jpg);
+	background-attachment:scroll;
+	background-repeat:no-repeat;
+	background-size:cover;
+	background-position:center center;
+}
+#max1{
+	width:100%;
+	height:600px;
+	background-color:rgba(225,225,225,0.1);
+}
+
+ /*filter:blur(5px);	-webkit-filter:blur(5px);*/
+.img{
+	-webkit-filter:blur(18px);
+    -moz-filter:blur(18px);
+    -o-filter:blur(18px);
+    filter:blur(18px);
+	}
+
+#header p{
+	display:block;
+	float:left;
+	padding:10px 0;
+    font-size:32px;
+    padding-left:38px;
+    font-weight:bold;
+	color:white;
+}
+#header{
+	padding-top:15px;
+	padding-left:30px;
+	width:100%;
+	height:100px;
+	background-color:rgba(0,0,0,0.2);
+}
+#name{
+	font-size:42px;
+	color:#C60000;
+	font-family: "华文新魏";
+}
+#nav{
+	margin:0;
+	padding-top:50px;
+	width:400px;
+	float:right;
+}
+#nav ul{
+	list-style:none;
+}
+#nav ul li{
+	float:left;
+	margin-right:15px;
+}
+#nav ul li a{
+	font-size:20px;
+	color:white;
+	display:block;
+}
+.sidebar{
+		background-image:linear-gradient(to bottom,#3C8DBC,#fff);
+	}
+#Content{
+	margin:10px;
+	width:100%;
+	height:auto;
+}
+#Mleft{
+	width:500px;
+	height:500px;
+	float:left;
+}
+#Menu{
+	/*position:absolute;
+	z-index: 1;*/
+	width:350px;
+	height:350px;
+	margin-top:40px;
+	margin-left:8%;
+}
+#Mright{
+	overflow:auto;
+	background-color:rgba(225,225,225,0.8);
+	/*background-color:white;*/
+	margin:0;
+	margin-right:30px;
+	float:right;
+	height:460px;
+	width:600px;
+	border:2px double white;
+}
+#Mright p{
+	padding-top:150px;
+	color:#60C;
+	text-align:500px;
+	text-align:center;
+	font-size:36px;
+	font-weight:100;
+}
+
+.Links{
+	display:inline-block;   /*可以加背景图片*/
+	background-image:url(/img/button21.png);
+	background-repeat:no-repeat;
+	width:120px;
+	text-align:center;
+	height:74px;
+	line-height:74px;
+	font-size:22px;
+	color:#60C;
+	font-family:'微软雅黑','黑体';
+	/*font-weight:bold;*/
+	text-decoration:none;
+	cursor:pointer;
+}
+.Cont{
+	padding:10px 20px;
+}
+.Cont h2{
+	color:red;
+}
+.table{
+	margin:0;
+	border:0;
+}
+.table tr td,tr th{
+	text-align:center;
+	font-size:16px;
+	font-family:Georgia, "Times New Roman", Times, serif;
+	border:0px;
+}
+.table tr td{
+	text-align:center;
+	font-size:14px;
+	border:0px;
+	font-family:"Times New Roman", Times, serif;
+	font-weight:800;
+}
+.slideTB{
+	border:0px;
+	display:none;
+}
+#test{
+	font-size:12px;
+	color:black;
+}
+.myth{
+	background-color:#0F9;
+	border-right:0px solid white;
+}
+.info a,.warning a{
+	font-family:"Times New Roman", Times, serif;
+}
+.info a:hover,.warning a:hover{
+	color:red;
+	text-decoration:none;
+}
+.th_head{
+	text-align:left;
+	border-left:none;
+	border-style:none;
+	background:white;
+}
+.table_btn{
+	font-size:12px;
+	padding:2px 8px;
+	float:right;
+}
+.color1{
+
+}
+
+.color2{
+
+}
+/*practice*/
+
+#Bigbox{
+	width:100%;
+}
+
+.head{
+	font-family:"Times New Roman", Times, serif;
+	font-weight:bolder;
+	font-size:16px;
+}
+#containter{
+	width:85% !important;
+	height:auto;
+	float:left;
+	margin-left:15px;
+}
+#containter p{
+	margin-top:150px;
+	text-align:center;
+}
+#Right_nav{
+/*	overflow:auto;*/
+	margin-left:0px;
+	font-family:"Times New Roman", Times, serif;
+	font-weight:bolder;
+	width:99%;
+	float:left;
+
+	border-radius: 5px;
+	padding:2px;
+}
+#Right_nav a{
+	font-family:"Times New Roman", Times, serif;
+}
+#Right_nav .btn{
+	width:100%;
+
+}
+.Nmenu1{
+	width:100%;
+	background-color: #FFFFFF;
+	box-sizing: border-box;
+  box-shadow: 0 3px 4px rgba(0,0,0,.3);
+}
+.Nmenu1>li{
+	width:100%;
+	margin-top:4px;
+	cursor: pointer;
+}
+.tt:hover{
+
+}
+#nav_down{
+	width:100%;
+	margin-top:5px;
+}
+.slide{
+	width:100%;
+	   /*一级导航*/
+	text-align: center;
+}
+.slide .tt{
+	width:100%;
+	padding:12px 0px;
+}
+.slide .tt a{
+	color:black;
+}
+#nav_down >ul >li >a,.MyMouse>a{
+	color:black;
+}
+
+.Nmenu2{
+	display:none;
+	background-color:	#F4F4F4;
+	letter-spacing: 5px;
+	/* box-sizing: border-box;
+  box-shadow: 0 1px 1px rgba(0,0,0,.2); */
+}
+.Nmenu2 li{
+	border-radius: 5px;
+
+	list-style:none;
+	display:black;
+	width:140px;
+	width:100%;
+	margin-top:0px;
+	line-height:35px;
+}
+.Nmenu2 li>a{
+	/*padding-left: 15%;*/
+}
+.MyMouse{
+
+}
+.dd a{
+	color:black;
+}
+.Nmenu3{
+	display:none;
+	width:100%;
+	margin:0 auto;
+	height:auto;
+	overflow: visible;
+	padding:0px;
+	background-color:#e4e4e4;
+
+}
+.Nmenu3 >li{
+	letter-spacing: 1px;
+	margin:0px;
+	padding:5px;
+	display:block;
+	width:98%;
+	margin:0 auto;
+	height:auto;
+}
+.Nmenu3 li a{
+	color:black;
+	padding-left: 0px;
+	margin:0px;
+}
+.Nmenu3 li a:hover{
+
+	text-decoration:none;
+	margin:0px;
+}
+
+/*下面为右边试卷的样式*/
+#Head-top{
+	padding-top:0px;
+	height:42px;
+	background-color:#DBDBDB;
+}
+#Head-top ul{
+	list-style:none;
+	padding:5px 0;
+}
+#Head-top ul li{
+	border:1px solid #CDCDCD;
+	background-color:#F0F0F0;
+	float:left;
+	width:auto;
+	margin-right:3px;
+	text-align:center;
+	line-height:30px;
+	margin-left:5px;
+	padding:0 10px;
+	cursor:pointer;
+}
+#Head-top ul li:hover{background-color:white;}
+.Tet{
+	width:auto;
+	height:50px;
+	margin:5px 0;
+}
+.test{
+	float:left;
+	margin-top:5px;
+	padding:5px;
+	border:2px solid #DBDBDB;
+	background-color:white;
+	color:#924949;
+	font-size:18px;
+}
+.toggle{
+	float:left;
+	width:85px;
+	height:45px;
+	text-align: center;
+	line-height: 45px;
+	color:white;
+	font-size: 18px;
+	background-color: #56a9d8;
+	border: 0px solid #286090;
+}
+.toggle:hover{
+	background-color: #286090;
+	border:0px solid #204d74;
+}
+.Content{
+	border:5px solid #DBDBDB;
+	padding:5px;
+	margin-top:10px;
+	overflow:hidden;
+}
+.T-name{
+	background-color: #BFD7FF;
+	border:1px solid #80D3DA;
+	border:1px solid #ccc;
+	border-radius:5px;
+	width:auto;
+	height:30px;
+	line-height: 30px;
+	margin:5px 0;
+	cursor:pointer;
+}
+.T-name:hover{
+	background-color:#A5D0D4;
+}
+.My_Text{
+	line-height:20px;
+	display:none;
+}
+.Mid_Text{
+	display:none;
+}
+.Foot{
+	color:#71B8FF;
+	margin-top:20px;
+	text-align:center;
+}
+input{
+	margin-left:20px;
+}

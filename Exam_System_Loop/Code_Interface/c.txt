@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int GCD(int m, int n)
+{
+        int tmp;
+        while(n)
+		{
+                tmp = m%n;
+                m = n;
+                n = tmp;
+        }
+        return m;
+}
+
+int main()
+{
+        int m, n;
+		printf("please input m,n:");
+        scanf("%d,%d", &m, &n);
+
+                printf("Output:\n%d\n", GCD(m, n));
+
+
+        return 0;
+}
