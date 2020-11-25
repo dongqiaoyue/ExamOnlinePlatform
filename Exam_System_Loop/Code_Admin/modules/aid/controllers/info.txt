@@ -1,0 +1,108 @@
+
+
+attendancerecord        点到记录
+commonhomework 作业表
+    module                模块配置
+staticmodulepercent 固定的模板配置
+studentswork        学生作业提交
+    question            学生上课回答记录情况
+
+attendancerecord        点到记录
+CREATE TABLE `attendancerecord` (
+  `AttendaceRecordID` varchar(32) NOT NULL DEFAULT '',
+  `StudentName` varchar(20) DEFAULT '',
+  `StudentNum` varchar(50) DEFAULT '',
+  `AttendanceDate` datetime DEFAULT NULL,
+  `Score` int(11) DEFAULT '0',
+  `AttendanceState` varchar(20) DEFAULT '',
+  `TeachClass` varchar(32) DEFAULT '',
+  PRIMARY KEY (`AttendaceRecordID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+commonhomework 作业表
+CREATE TABLE `commonhomework` (
+  `HomeworkID` varchar(32) NOT NULL DEFAULT '',
+  `TeacherName` varchar(20) DEFAULT '',
+  `TeachClass` varchar(32) DEFAULT '',
+  `HomeworkName` varchar(50) DEFAULT '',
+  `WorkDesc` varchar(2000) DEFAULT '',
+  `WorkURL` varchar(500) DEFAULT '',
+  `WorkScore` int(11) DEFAULT '0',
+  `DeadTime` datetime DEFAULT NULL,
+  `IsStuSee` varchar(10) DEFAULT '',
+  `Memo` varchar(300) DEFAULT '',
+  PRIMARY KEY (`HomeworkID`),
+  KEY `PK4` (`HomeworkID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ module                模块配置
+CREATE TABLE `module` (
+	//模块id
+  `ModuleID` varchar(32) NOT NULL DEFAULT '',
+  //模块名字
+  `ModuleName` varchar(10) DEFAULT '',
+  //模块比例
+  `ModulePercent` int(11) DEFAULT '0',
+  //模块所在班级
+  `TeachingClassID` varchar(32) DEFAULT '',
+  PRIMARY KEY (`ModuleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+staticmodulepercent 固定的模板配置
+CREATE TABLE `staticmodulepercent` (
+  `StaticID` varchar(32) NOT NULL DEFAULT '',
+  `AttendancePercent` int(11) DEFAULT '0',
+  `HomeworkPercent` int(11) DEFAULT '0',
+  `QuestionPercent` int(11) DEFAULT '0',
+  `OtherPercent` int(11) DEFAULT '0',
+  `TeachingClassID` varchar(32) DEFAULT '',
+  PRIMARY KEY (`StaticID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+studentswork        学生作业提交
+CREATE TABLE `studentswork` (
+  `StudentWorkID` varchar(32) NOT NULL DEFAULT '',
+  `HomeworkID` varchar(32) DEFAULT '',
+  `StudentName` varchar(20) DEFAULT '',
+  `StudentNum` varchar(50) DEFAULT '',
+  `TeacherName` varchar(20) DEFAULT '',
+  `WorkContent` text,
+  `GetScore` int(11) DEFAULT '0',
+  `ScoreGrade` varchar(5) DEFAULT '',
+  `AnswerURL` varchar(500) DEFAULT '',
+  `uploadTime` datetime DEFAULT NULL,
+  `MarkDate` datetime DEFAULT NULL,
+  `TeachClass` varchar(32) DEFAULT '',
+  `Memo` varchar(300) DEFAULT '',
+  PRIMARY KEY (`StudentWorkID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+    question            学生上课回答记录情况
+
+CREATE TABLE `questions` (
+  `QuestionBh` varchar(32) NOT NULL DEFAULT '',
+  `CustomBh` varchar(50) DEFAULT '',
+  `IsProgramming` int(11) NOT NULL DEFAULT '0',
+  `Score` double DEFAULT '0',
+  `Difficulty` int(11) NOT NULL DEFAULT '0',
+  `Chapter` int(11) DEFAULT '0',
+  `Stage` int(11) NOT NULL DEFAULT '0',
+  `Description` text,
+  `QuestionType` varchar(50) NOT NULL DEFAULT '',
+  `name` varchar(1000) DEFAULT '',
+  `SourceCode` text,
+  `StartTag` varchar(50) DEFAULT '',
+  `EndTag` varchar(50) DEFAULT '',
+  `AnswerDescript` varchar(1000) DEFAULT '',
+  `Answer` text,
+  `KnowledgeBh` varchar(32) DEFAULT '',
+  `Memo` varchar(8000) DEFAULT '',
+  `IsProgramBlank` varchar(50) DEFAULT '',
+  `Checked` varchar(50) DEFAULT '',
+  `AddTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`QuestionBh`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

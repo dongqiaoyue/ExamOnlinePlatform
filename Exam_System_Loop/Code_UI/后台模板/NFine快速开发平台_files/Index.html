@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)http://www.nfine.cn:8099/SystemManage/ItemsData/Index -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Index</title>
+    <link href="./framework-font.css" rel="stylesheet">
+    <link href="./framework-theme.css" rel="stylesheet">
+    <script src="./jquery-2.1.1.min.js"></script>
+    <script src="./jquery-ui.min.js"></script>
+    <script src="./bootstrap.js"></script>
+    <link href="./bootstrap.min.css" rel="stylesheet">
+    <script src="./jquery.layout.js"></script>
+    <script src="./tree.js"></script>
+    <link href="./tree.css" rel="stylesheet">
+    <script src="./jqgrid.min.js"></script>
+    <link href="./jqgrid.css" rel="stylesheet">
+    <script src="./grid.locale-cn.js"></script>
+    <link href="./framework-ui.css" rel="stylesheet">
+    <script src="./framework-ui.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="theme-blue-gradient">
+    
+<script>
+    $(function () {
+        $('#layout').layout();
+        treeView();
+        gridList();
+    });
+    function treeView() {
+        $("#itemTree").treeview({
+            url: "/SystemManage/ItemsType/GetTreeJson",
+            onnodeclick: function (item) {
+                $("#txt_keyword").val('');
+                $('#btn_search').trigger("click");
+            }
+        });
+    }
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            height: $(window).height() - 96,
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '名称', name: 'F_ItemName', width: 150, align: 'left' },
+                { label: '编号', name: 'F_ItemCode', width: 150, align: 'left' },
+                { label: '排序', name: 'F_SortCode', width: 80, align: 'center' },
+                {
+                    label: "默认", name: "F_IsDefault", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == true ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                {
+                    label: '创建时间', name: 'F_CreatorTime', width: 80, align: 'left',
+                    formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
+                },
+                {
+                    label: "有效", name: "F_EnabledMark", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == true ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                { label: "备注", name: "F_Description", index: "F_Description", width: 200, align: "left", sortable: false }
+            ]
+        });
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                url: "/SystemManage/ItemsData/GetGridJson",
+                postData: { itemId: $("#itemTree").getCurrentNode().id, keyword: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        var itemId = $("#itemTree").getCurrentNode().id;
+        var itemName = $("#itemTree").getCurrentNode().text;
+        if (!itemId) {
+            return false;
+        }
+        $.modalOpen({
+            id: "Form",
+            title: itemName + " 》新增字典",
+            url: "/SystemManage/ItemsData/Form?itemId=" + itemId,
+            width: "450px",
+            height: "350px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var itemName = $("#itemTree").getCurrentNode().text;
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalOpen({
+            id: "Form",
+            title: itemName + " 》修改字典",
+            url: "/SystemManage/ItemsData/Form?keyValue=" + keyValue,
+            width: "450px",
+            height: "350px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+        $.deleteForm({
+            url: "/SystemManage/ItemsData/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            success: function () {
+                $("#gridList").resetSelection();
+                $("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalOpen({
+            id: "Details",
+            title: "查看字典",
+            url: "/SystemManage/ItemsData/Details?keyValue=" + keyValue,
+            width: "450px",
+            height: "470px",
+            btn: null,
+        });
+    }
+    function btn_itemstype() {
+        $.modalOpen({
+            id: "ItemsType",
+            title: "字典分类",
+            url: "/SystemManage/ItemsType/Index",
+            width: "800px",
+            height: "550px",
+            btn: null,
+        });
+    }
+</script>
+<div class="ui-layout ui-layout-container" id="layout" style="height: 100%; width: 100%; overflow: hidden; position: relative;">
+    <div class="ui-layout-west ui-layout-pane ui-layout-pane-west" style="position: absolute; margin: 0px; left: 0px; right: auto; top: 0px; bottom: 0px; height: 799px; z-index: 0; padding: 0px; border: 1px solid rgb(221, 221, 221); overflow: auto; width: 198px; display: block; visibility: visible;">
+        <div id="itemTree" class="bbit-tree" style="overflow: auto;"><div class="bbit-tree-bwrap"><div class="bbit-tree-body itemTree"><ul class="bbit-tree-root bbit-tree-arrows"><li class="bbit-tree-node"><div id="itemTree_77070117_3F1A_41BA_BF81_B8B85BF10D5E" tpath="0" unselectable="on" title="通用字典" class="bbit-tree-node-el bbit-tree-node-expanded"><span class="bbit-tree-node-indent"></span><img class="bbit-tree-ec-icon bbit-tree-elbow-end-minus" src="./s.gif"><i class="fa fa-folder-open" style="width:15px"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="77070117-3F1A-41BA-BF81-B8B85BF10D5E" class="bbit-tree-node-text" unselectable="on">通用字典</span></a></div><ul class="bbit-tree-node-ct" style="z-index: 0; position: static; visibility: visible; top: auto; left: auto;"><li class="bbit-tree-node"><div id="itemTree_9EB4602B_BF9A_4710_9D80_C73CE89BEC5D" tpath="0.0" unselectable="on" title="机构分类" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="9EB4602B-BF9A-4710-9D80-C73CE89BEC5D" class="bbit-tree-node-text" unselectable="on">机构分类</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_D94E4DC1_C2FD_4D19_9D5D_3886D39900CE" tpath="0.1" unselectable="on" title="角色类型" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="D94E4DC1-C2FD-4D19-9D5D-3886D39900CE" class="bbit-tree-node-text" unselectable="on">角色类型</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_0DF5B725_5FB8_487F_B0E4_BC563A77EB04" tpath="0.2" unselectable="on" title="数据库类型" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="0DF5B725-5FB8-487F-B0E4-BC563A77EB04" class="bbit-tree-node-text" unselectable="on">数据库类型</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_9a7079bd_0660_4549_9c2d_db5e8616619f" tpath="0.3" unselectable="on" title="系统日志" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="9a7079bd-0660-4549-9c2d-db5e8616619f" class="bbit-tree-node-text" unselectable="on">系统日志</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_954AB9A1_9928_4C6D_820A_FC1CDC85CDE0" tpath="0.4" unselectable="on" title="审核状态" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="954AB9A1-9928-4C6D-820A-FC1CDC85CDE0" class="bbit-tree-node-text" unselectable="on">审核状态</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_2748F35F_4EE2_417C_A907_3453146AAF67" tpath="0.5" unselectable="on" title="证件名称" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="2748F35F-4EE2-417C-A907-3453146AAF67" class="bbit-tree-node-text" unselectable="on">证件名称</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_00F76465_DBBA_484A_B75C_E81DEE9313E6" tpath="0.6" unselectable="on" title="学历" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="00F76465-DBBA-484A-B75C-E81DEE9313E6" class="bbit-tree-node-text" unselectable="on">学历</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_FA7537E2_1C64_4431_84BF_66158DD63269" tpath="0.7" unselectable="on" title="婚姻" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="FA7537E2-1C64-4431-84BF-66158DD63269" class="bbit-tree-node-text" unselectable="on">婚姻</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_8CEB2F71_026C_4FA6_9A61_378127AE7320" tpath="0.8" unselectable="on" title="生育" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="8CEB2F71-026C-4FA6-9A61-378127AE7320" class="bbit-tree-node-text" unselectable="on">生育</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_15023A4E_4856_44EB_BE71_36A106E2AA59" tpath="0.9" unselectable="on" title="民族" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="15023A4E-4856-44EB-BE71-36A106E2AA59" class="bbit-tree-node-text" unselectable="on">民族</span></a></div></li><li class="bbit-tree-node"><div id="itemTree_BDD797C3_2323_4868_9A63_C8CC3437AEAA" tpath="0.10" unselectable="on" title="性别" class="bbit-tree-node-el bbit-tree-node-leaf"><span class="bbit-tree-node-indent"><img class="bbit-tree-icon" src="./s.gif"></span><img class="bbit-tree-ec-icon bbit-tree-elbow-end" src="./s.gif"><i class="fa fa-file-text-o"></i><a hidefocus="" class="bbit-tree-node-anchor" tabindex="1" href="javascript:void(0);"><span data-value="BDD797C3-2323-4868-9A63-C8CC3437AEAA" class="bbit-tree-node-text" unselectable="on">性别</span></a></div></li></ul></li></ul></div></div></div>
+    </div>
+    <div class="ui-layout-center ui-layout-pane ui-layout-pane-center ui-layout-pane-hover ui-layout-pane-center-hover ui-layout-pane-open-hover ui-layout-pane-center-open-hover" style="position: absolute; margin: 0px; left: 207px; right: 0px; top: 0px; bottom: 0px; height: 799px; width: 1471px; z-index: 0; padding: 0px; border: 1px solid rgb(221, 221, 221); overflow: auto; display: block; visibility: visible;">
+        <div class="topPanel">
+            <div class="toolbar">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+                <div class="btn-group">
+                    <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建字典</a>
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a id="NF-itemstype" authorize="yes" onclick="btn_itemstype()" href="javascript:void()">分类管理</a></li>
+                    </ul>
+                </div>
+                <div class="operate">
+                    <ul class="nav nav-pills">
+                        <li class="first">已选中<span>1</span>项</li>
+                        <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改字典</a></li>
+                        <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除字典</a></li>
+                        <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看字典</a></li>
+                    </ul>
+                    <a href="javascript:;" class="close"></a>
+                </div>
+                <script>$('.toolbar').authorizeButton()</script>
+            </div>
+            <div class="search">
+                <table>
+                    <tbody><tr>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="名称/编号" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <div class="ui-jqgrid " id="gbox_gridList" dir="ltr" style="width: 1471px;"><div class="jqgrid-overlay ui-overlay" id="lui_gridList"></div><div class="loading row" id="load_gridList">读取中...</div><div class="ui-jqgrid-view table-responsive" role="grid" id="gview_gridList" style="width: 1471px;"><div class="ui-jqgrid-titlebar ui-jqgrid-caption" style="display: none;"><span class="ui-jqgrid-title"></span></div><div class="ui-jqgrid-hdiv" style="width: 1469px;"><div class="ui-jqgrid-hbox"><table class="ui-jqgrid-htable ui-common-table table table-bordered" style="width:1425px" role="presentation" aria-labelledby="gbox_gridList"><thead><tr class="ui-jqgrid-labels" role="row"><th id="gridList_rn" style="text-align: center; width: 28px;" role="columnheader" class="ui-th-column ui-th-ltr "><div class="ui-th-div" id="jqgh_gridList_rn"><span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_Id" style="width: 150px; display: none;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_Id">主键<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_ItemName" style="text-align: left; width: 150px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_ItemName">名称<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_ItemCode" style="text-align: left; width: 150px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_ItemCode">编号<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_SortCode" style="text-align: center; width: 80px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_SortCode">排序<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_IsDefault" style="text-align: center; width: 60px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_IsDefault">默认<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_CreatorTime" style="text-align: left; width: 80px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_CreatorTime">创建时间<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_EnabledMark" style="text-align: center; width: 60px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_EnabledMark">有效<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th><th id="gridList_F_Description" style="text-align: left; width: 777px;" role="columnheader" class="ui-th-column ui-th-ltr "><span class="ui-jqgrid-resize ui-jqgrid-resize-ltr" style="cursor: col-resize;">&nbsp;</span><div class="ui-th-div ui-jqgrid-sortable" id="jqgh_gridList_F_Description">备注<span class="s-ico" style="display:none"><span sort="asc" class="ui-grid-ico-sort ui-icon-asc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-top"></span><span sort="desc" class="ui-grid-ico-sort ui-icon-desc ui-sort-ltr ui-disabled glyphicon glyphicon-triangle-bottom"></span></span></div></th></tr></thead></table></div></div><div class="ui-jqgrid-bdiv" style="height: 758px; width: 1469px;"><div style="position:relative;"><div></div><table id="gridList" tabindex="0" role="presentation" aria-multiselectable="false" aria-labelledby="gbox_gridList" class="ui-jqgrid-btable ui-common-table table table-bordered" style="width: 1425px;"><tbody><tr class="jqgfirstrow" role="row"><td role="gridcell" style="height:0px;width:28px;"></td><td role="gridcell" style="height:0px;width:150px;display:none;"></td><td role="gridcell" style="height:0px;width:150px;"></td><td role="gridcell" style="height:0px;width:150px;"></td><td role="gridcell" style="height:0px;width:80px;"></td><td role="gridcell" style="height:0px;width:60px;"></td><td role="gridcell" style="height:0px;width:80px;"></td><td role="gridcell" style="height:0px;width:60px;"></td><td role="gridcell" style="height:0px;width:777px;"></td></tr></tbody></table></div><div class="unwritten" style="color:red;padding:7px;border-bottom:#ddd 1px solid;">没有找到您要的相关数据!</div></div></div><div class="ui-jqgrid-resize-mark" id="rs_mgridList">&nbsp;</div></div>
+        </div>
+    </div>
+<div id="" class="ui-layout-resizer ui-layout-resizer-west ui-layout-resizer-open ui-layout-resizer-west-open" title="Resize" aria-disabled="false" style="position: absolute; padding: 0px; margin: 0px; font-size: 1px; text-align: left; overflow: hidden; z-index: 2; border: none; cursor: col-resize; left: 200px; height: 801px; width: 7px; top: 0px;"></div></div>
+
+    <input name="__RequestVerificationToken" type="hidden" value="LHjbtGZf60socpQfv4awnMXYRA_PM0FmSlKK2VD0WylNVBD96QZhbr5WERqMW9oBLhzBJ8s3KAL8Gl7__1yoStb6OJ2qraxKNRmaLL4us0Y1">
+
+
+</body></html>
