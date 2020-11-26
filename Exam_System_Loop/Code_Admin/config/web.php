@@ -61,6 +61,11 @@ $config = [
         'aid' => [
             'class' => 'app\modules\aid\module',
             'layout' => '//lte_main'
+        ],
+        //碎片化学习平台管理
+        'phone' => [
+            'class' => 'app\modules\phone\module',
+            'layout' => '//lte_main',
         ]
 
     ],
