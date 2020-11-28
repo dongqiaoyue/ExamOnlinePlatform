@@ -52,14 +52,6 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         立即上传</button>
                                 </p>
                             </div>
-                            <?php
-                            if ($up != null)
-                            {
-                                $up = iconv("gbk", "UTF-8",$up);
-                                $up = str_replace('../../','',$up);
-                                echo $up.'已上传成功';
-                            }
-                            ?>
                             <div class="progress progress-small">
                                 <div class="progress-bar bg-yellow" id="myProgress" style="width: 0%;">
                                 </div>
@@ -70,6 +62,19 @@ $m_know = new \app\models\question\Knowledgepoint();
 
                     </div>
                     <?php $form = ActiveForm::begin(["id" => "admin-role-form", "class"=>"form-horizontal", "action"=>Url::toRoute("video/index"),'options'=> ['enctype' => 'multipart/form-data']]); ?>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">视频路径</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="urlGO" name="Tresources[ResourcesURL]" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1></h1>
+                    <br>
+
+
                     <div class="row">
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">自定义编号</label>
@@ -163,15 +168,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                     <div class="row">
                         <div class="form-group">
                             <div class="col-xs-10 col-md-offset-10">
-                                <?php
-                                if ($up != null)
-                                    {
-                                    echo '<button id="videoSubmit" type="button" class="btn btn-primary">提交</button>';
-                                    /*unset($_SESSION['nnnnnn']);*/
-                                    }
-                                else
-                                    echo '<button  type="button" class="btn btn-primary"  disabled>请先上传视频文件</button>';
-                                ?>
+                                <button id="videoSubmit" type="button" class="btn btn-primary">提交</button>
                             </div>
                         </div>
                     </div>
@@ -241,7 +238,7 @@ $m_know = new \app\models\question\Knowledgepoint();
 
             type:'POST',
             dataType:'json',
-            url:'<?=Url::toRoute("video/create").'&up='.$up?>',
+            url:'<?=Url::toRoute("video/create")?>',
 
             success:function (value) {
                 //alert();
@@ -258,9 +255,9 @@ $m_know = new \app\models\question\Knowledgepoint();
     // 进度条
     function Progress(value) {
         $('#myProgress').css('width', value + '%');
-        if(value == 100){
-            window.location.reload();
-        }
+        // if(value == 100){
+        //     window.location.reload();
+        // }
     }
 
     function CloseDialog() {
@@ -288,14 +285,13 @@ $m_know = new \app\models\question\Knowledgepoint();
             // 信息
             var msg = res.message;
             // url
-            var url = res.url + "?" + Math.random();
-
-            $filename = $newfile ;
+            var url = res.url;
 
             // 已经完成了
             if (status == 2) {
                 alert(msg);
                 $('#pic').attr("src", url);
+                $("#urlGO").attr("value", url)
                 $('#mydialog').show();
             }
 

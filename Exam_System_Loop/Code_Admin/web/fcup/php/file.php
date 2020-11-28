@@ -1,4 +1,3 @@
-<?php session_start()?>
 <?php
 
 /**
@@ -29,16 +28,10 @@ $md5   = isset($_POST['file_md5']) ? $_POST['file_md5'] : 0; //文件的md5值
 $size  = isset($_POST['file_size']) ?  $_POST['file_size'] : null; //文件大小
 
 // 在实际使用中，用md5来给文件命名，这样可以减少冲突
-$pathh = '../../uploads/video/'.time();
-if(!file_exists($pathh)){
-    mkdir($pathh);
-}
-
-$newfile = $pathh.'/'.iconv("UTF-8", "gbk",$name);
-$_SESSION['upVideo']=$newfile;
+$newfile = '../../uploads/video/'.$md5.'.mp4';
 
 // 文件可访问的地址
-$url = $pathh.'/'.iconv("UTF-8", "gbk",$name);
+$url = '/uploads/video/'.$md5.'.mp4';
 
 //echo '总片数：'.$total.'当前片数：'.$index;
 

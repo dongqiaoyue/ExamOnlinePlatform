@@ -6,10 +6,7 @@ use app\models\question\Knowledgepoint;
 use app\models\phone\Tresources;
 use app\models\system\TbcuitmoonDictionary;
 use common\commonFuc;
-use app\models\phone\UploadFile;
 use Yii;
-use yii\data\Pagination;
-use yii\helpers\Url;use yii\web\UploadedFile;
 
 class VideoController extends BaseController{
 
@@ -88,7 +85,7 @@ class VideoController extends BaseController{
             $m_vid->CourseID = Yii::$app->session->get('courseCode');
             $m_vid->IsPublish = '0';
             $m_vid->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
-            $m_vid->ResourcesURL = Yii::$app->request->get('up');
+            //$m_vid->ResourcesURL = Yii::$app->request->get('up');
 
             $m_vid->Type = '1000803';
             if($m_vid->validate() && $m_vid->save()){
@@ -100,7 +97,6 @@ class VideoController extends BaseController{
         }else{
             $com->JsonFail('数据出错');
         }
-        unset($_SESSION['upVideo']);
     }
 
     public function actionView()
@@ -139,13 +135,11 @@ class VideoController extends BaseController{
         $m_dic = new TbcuitmoonDictionary();
 
         $data = $m_know->find()->all();
-        $up = Yii::$app->session->get('upVideo');
         return $this->render('add',[
             //默认显示第一阶段知识点
             'stage' => $m_dic->getDictionaryList('题目阶段'),
             'defaultKnow' => $m_know->getByStage(1000301),
             'data' => $data,
-            'up' => $up
         ]);
     }
 
