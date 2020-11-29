@@ -174,7 +174,7 @@ class commonFuc{
         $basedir = "$OJ_DATA/$pid";
 
         if(!file_exists($basedir)) {
-            mkdir($basedir);
+            mkdir($basedir, 0777, true);
         }
 
         $fp = @fopen ( $basedir . "/$filename", "w" );
