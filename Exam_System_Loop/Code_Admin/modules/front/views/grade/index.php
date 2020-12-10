@@ -24,20 +24,17 @@ $i = 1;
 <div class="row">
   <div class="col-xs-12">
   		<div class="card">
-
 				<div class="card-body">
-					<?php foreach ($info as $key=>$item) { $i=1;?>
-  			<div class="panel panel-default">
-  						<div class="panel-heading flip" id="<?=$key;?>"  onclick='TestClick("<?=$key;?>")'>
-											<?=$key?>
-  						</div>
+					<?php foreach ($info as $key=>$item) {?>
+  			            <div class="panel panel-default">
+                            <div class="panel-heading flip" id="<?=$key;?>"  onclick='TestClick("<?=$key;?>")'><?=$key?></div>
 							<div class="panel-body " id="1<?=$key;?>">
 										<p>你可以点击标题</p>
 							</div>
-      						<div class="pan" id="2<?=$key;?>">
-
-
-									<table  class="table  table-hover " >
+                            <?php foreach ($item as $ke=>$it) {?>
+      						<div class="panel-heading flip" id="2<?=$ke;?>" onclick='TestClick1("<?=$ke;?>")'>
+                                <div class="pan" id="3<?=$ke;?>">
+                                    <table  class="table  table-hover " >
 												<thead>
 													 <tr>
 															<th>#</th>
@@ -48,7 +45,7 @@ $i = 1;
 															<th>成绩</th>
 													 </tr>
 												</thead>
-													<?php foreach ($item as $va) {?>
+													<?php foreach ($it as $va) { ?>
 												<tbody>
 
 													<tr class="">
@@ -63,9 +60,11 @@ $i = 1;
 												</tbody>
 												<?php }?>
 									</table>
-											</div>
-
-							</div><?php } ?>
+                                </div>
+							</div>
+                            <?php }?>
+                        </div>
+                    <?php } ?>
   			</div>
   		</div>
   </div>
@@ -73,7 +72,12 @@ $i = 1;
 <script  type="application/javascript">
 function TestClick(a){//定义了2个参数a,b
 	// console.log(".pan"+a);
-		$("#1"+a).stop().slideToggle(500);
+    $("#1"+a).stop().slideToggle(500);
 	$("#2"+a).stop().slideToggle(500);
   }
+
+function TestClick1(a){//定义了2个参数a,b
+    // console.log(".pan"+a);
+    $("#3"+a).stop().slideToggle(500);
+}
 </script>
