@@ -32,7 +32,7 @@ $i = 1;
 										<p>你可以点击标题</p>
 							</div>
                             <?php foreach ($item as $ke=>$it) {?>
-      						<div class="panel-heading flip" id="2<?=$ke;?>" onclick='TestClick1("<?=$ke;?>")'>
+      						<div class="panel-heading flip" id="2<?=$ke;?>" onclick='TestClick1("<?=$ke;?>")'><?=$ke?></div>
                                 <div class="pan" id="3<?=$ke;?>">
                                     <table  class="table  table-hover " >
 												<thead>
@@ -61,7 +61,7 @@ $i = 1;
 												<?php }?>
 									</table>
                                 </div>
-							</div>
+
                             <?php }?>
                         </div>
                     <?php } ?>
