@@ -6,5 +6,6 @@ return [
     'dsn' => 'mysql:host=172.18.0.1;dbname=stu_system',
     'username' => 'root',
     'password' => 'Cuitloop@123456',
+//    'password' => '622626223019',
     'charset' => 'utf8',
 ];
