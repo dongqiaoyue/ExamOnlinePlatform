@@ -16,7 +16,7 @@ class GradeController extends BaseController
 //            ->groupBy('CourseID')->all();
         $Scores = Stuscore::find()->where(['StuNumber' => $StudentNum])->all();
         foreach($Scores as $score){
-            $Terms[] = Examplan::find()->where(['ExamPlanBh' => $score->ExamPlanBh])->all()['Term'];
+            $Terms[] = Examplan::find()->where(['ExamPlanBh' => $score->ExamPlanBh])->one()['Term'];
         }
         $Terms = array_unique($Terms);
         $Info = [];
@@ -24,7 +24,7 @@ class GradeController extends BaseController
         foreach ($Terms as $term) {
             foreach ($Scores as $score){
                 // $finalExam = Exampaper::find()->where(['CourseID'=>$CourseID->CourseID,'Type'=>'1'])->asArray()->all();
-                if($term == Examplan::find()->where(['ExamPlanBh' => $score->ExamPlanBh])->all()['Term']){
+                if($term == Examplan::find()->where(['ExamPlanBh' => $score->ExamPlanBh])->one()['Term']){
                     $CourseName = $m_dic->codeTranName($score->CourseID);
                     $Info[$term][$CourseName] = Stuscore::find()->where([
                         'StuNumber' => $StudentNum,
