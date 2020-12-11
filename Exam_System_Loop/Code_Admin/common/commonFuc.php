@@ -96,8 +96,8 @@ class commonFuc{
             $onlineip = $_SERVER['REMOTE_ADDR'];
             $c_agentip = 0;
         }
-//        return $onlineip;
-        return $_SERVER['HTTP_X_REAL_IP'];
+        return $onlineip;
+//        return $_SERVER['HTTP_X_REAL_IP'];
     }
 
 
