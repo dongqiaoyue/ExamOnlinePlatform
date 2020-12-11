@@ -243,8 +243,8 @@ a{
                     </ul>
                   </li>
               </ul>
-              <a class="btn btn-default navbar-btn navbar-right" href="<?=Url::toRoute('/site/index')?>" role="button">老师登陆</a>
-              <a class="btn btn-default navbar-btn navbar-right" href="<?=Url::toRoute('/front/site/index')?>" role="button">学生登陆</a>
+              <a class="btn btn-default navbar-btn navbar-right" href="<?=Url::toRoute('/site/index')?>" role="button"><?php echo $m_Dic->getDictionaryListByType('2020402')['name']['0']?>登陆</a>
+              <a class="btn btn-default navbar-btn navbar-right" href="<?=Url::toRoute('/front/site/index')?>" role="button"><?php echo $m_Dic->getDictionaryListByType('2020401')['name']['0']?>登陆</a>
               <from class="navbar-form navbar-right hidden-xs" role="search">
                   <div class="form-group">
                     <input type="text" class="form-control" placeholder="请输入内容">
@@ -296,8 +296,8 @@ a{
              <div class="row">
                   <div class="col-xs-12">
                     <div class="footer-link">
-                       <a href="<?=Url::toRoute('/front/site/index')?>" title="学生登陆">学员登陆</a>
-                       <a href="<?=Url::toRoute('/site/index')?>" title="老师登陆">教员登陆</a>
+                       <a href="<?=Url::toRoute('/front/site/index')?>" title="<?php echo $m_Dic->getDictionaryListByType('2020401')['name']['0']?>登陆"><?php echo $m_Dic->getDictionaryListByType('2020401')['name']['0']?>登陆</a>
+                       <a href="<?=Url::toRoute('/site/index')?>" title="<?php echo $m_Dic->getDictionaryListByType('2020402')['name']['0']?>登陆"><?php echo $m_Dic->getDictionaryListByType('2020402')['name']['0']?>登陆</a>
                     </div>
 
                   </div>

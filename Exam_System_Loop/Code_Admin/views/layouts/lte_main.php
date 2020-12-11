@@ -3,15 +3,16 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\commonFuc;
-
-$this->title = '非涉密课程学习考评系统';
+use app\models\system\TbcuitmoonDictionary;
+$m_dic = new TbcuitmoonDictionary();
+$this->title = $m_dic->getDictionaryListByType(['2020301'])['name']['0']."系统";
 $Module = new app\models\system\TbcuitmoonModule();
 $system_menus = $Module->getAllModules();
 $route = $this->context->route;
 $route = '/'.$route;
 $funInfo['menu_name'] = '模块管理';
 $funInfo['entry_url'] = $route;
-$m_dic = new \app\models\system\TbcuitmoonDictionary();
+
 $course = $m_dic->getDictionaryList('课程');
 $session = Yii::$app->session;
 $session->open();
@@ -145,7 +146,7 @@ $com = new commonFuc();
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>Y</b>BT</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>非涉密课程考评</b>后台</span>
+      <span class="logo-lg"><b><?php echo $m_dic->getDictionaryListByType(['2020301'])['name']['0']?></b>后台</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
