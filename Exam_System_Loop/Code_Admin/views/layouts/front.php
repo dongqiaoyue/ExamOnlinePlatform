@@ -1,12 +1,15 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\models\system\TbcuitmoonDictionary;
+$m_Dic = new TbcuitmoonDictionary();
+
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>非涉密课程学习考评系统</title>
+    <title><?php echo $m_Dic->getDictionaryListByType(['2020301'])['name']['0']?>系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Fonts -->
     <!-- CSS Libs -->
@@ -55,7 +58,7 @@ use yii\helpers\Html;
                             <i class="fa fa-bars icon"></i>
                         </button>
                         <ol class="breadcrumb navbar-breadcrumb">
-                            <li class="active">非涉密课程学习考评系统</li>
+                            <li class="active"><?php echo $m_Dic->getDictionaryListByType(['2020301'])['name']['0']?>系统</li>
                         </ol>
                         <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
                             <i class="fa fa-th icon"></i>
@@ -122,7 +125,7 @@ use yii\helpers\Html;
                         <div class="navbar-header">
                             <a class="navbar-brand" href="#">
                                 <div class="icon fa fa-paper-plane"></div>
-                                <div class="title">非涉密课程学习考评系统</div>
+                                <div class="title"><?php echo $m_Dic->getDictionaryListByType(['2020301'])['name']['0']?>系统</div>
                             </a>
                             <button type="button" class="navbar-expand-toggle pull-right visible-xs">
                                 <i class="fa fa-times icon"></i>

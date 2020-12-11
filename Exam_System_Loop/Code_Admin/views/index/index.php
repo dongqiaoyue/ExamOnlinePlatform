@@ -4,6 +4,8 @@ use yii\base\Object;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use common\commonFuc;
+use app\models\system\TbcuitmoonDictionary;
+$m_Dic = new TbcuitmoonDictionary();
 $com = new commonFuc();
 $i = 1;
 // var_dump($deve);
@@ -411,7 +413,7 @@ a{
                   </li>
               </ul>
 
-              <a class="btn btn-default navbar-btn navbar-right" href="<?=Url::toRoute('/site/index')?>" role="button">教员登陆</a>
+              <a class="btn btn-default navbar-btn navbar-right" href="<?=Url::toRoute('/site/index')?>" role="button"><?php echo $m_Dic->getDictionaryListByType([2020402])['name'][0];?>登陆</a>
 
 
             </div>
@@ -450,7 +452,7 @@ a{
                   </div>
                   <div class="col-xs-8 col-xs-offset-2">
                       <div class="container">
-                          <h3 >非涉密课程学习考评系统</h3>
+                          <h3 ><?php echo $m_Dic->getDictionaryListByType(['2020301'])['name']['0']?>系统</h3>
                       </div>
 
                   </div>
@@ -510,8 +512,8 @@ a{
              <div class="row">
                 <div class="col-xs-12">
                   <div class="footer-link">
-                     <a href="<?=Url::toRoute('/front/site/index')?>" title="学生登陆">学员登陆</a>
-                     <a href="<?=Url::toRoute('/site/index')?>" title="老师登陆">教员登陆</a>
+                     <a href="<?=Url::toRoute('/front/site/index')?>" title="<?php echo $m_Dic->getDictionaryListByType(['2020401'])['name']['0']?>登陆"><?php echo $m_Dic->getDictionaryListByType(['2020401'])['name']['0']?>登陆</a>
+                     <a href="<?=Url::toRoute('/site/index')?>" title="<?php echo $m_Dic->getDictionaryListByType(['2020402'])['name']['0']?>登陆"><?php echo $m_Dic->getDictionaryListByType(['2020402'])['name']['0']?>登陆</a>
                   </div>
                 </div>
              </div>

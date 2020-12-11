@@ -2,7 +2,8 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use yii\captcha\Captcha;
-
+use app\models\system\TbcuitmoonDictionary;
+$m_Dic = new TbcuitmoonDictionary();
 
 ?>
 <style type="text/css">
@@ -113,7 +114,7 @@ footer{
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <span class="box-top"><h4 class="login-box-msg"><b style="letter-spacing: 2px; color:#363636;">教员登陆</b></h4></span>
+    <span class="box-top"><h4 class="login-box-msg"><b style="letter-spacing: 2px; color:#363636;"><?php echo $m_Dic->getDictionaryListByType(['2020402'])['name']['0']?>登陆</b></h4></span>
   <?php $form = ActiveForm::begin(['id' => 'login-form', 'action'=>Url::toRoute('site/login')]); ?>
     <!-- <form action="../../index2.html" method="post">   -->
       <div class="form-group has-feedback">

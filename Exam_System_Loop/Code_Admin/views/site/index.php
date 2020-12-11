@@ -1,4 +1,9 @@
-<h2 style="font-style: italic; margin-left: 10px; padding-top: 10px;">欢迎进入非涉密课程学习考评系统教务管理中心</h2>
+<?php
+use app\models\system\TbcuitmoonDictionary;
+$m_Dic = new TbcuitmoonDictionary();
+
+?>
+<h2 style="font-style: italic; margin-left: 10px; padding-top: 10px;">欢迎进入<?php echo $m_Dic->getDictionaryListByType(['2020301'])['name']['0']?>系统教务管理中心</h2>
 
 <!-- Main content -->
 <section class="content">
