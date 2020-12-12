@@ -1,12 +1,10 @@
 
 <?php
 use yii\widgets\LinkPager;
-use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use common\commonFuc;
-$com = new commonFuc();
-$m_know = new \app\models\question\Knowledgepoint();
 
+$com = new commonFuc();
 ?>
 
 
@@ -23,9 +21,6 @@ $m_know = new \app\models\question\Knowledgepoint();
                 <div class="box-header">
                     <h3 class="box-title">学生问答管理</h3>
                     <div class="box-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <button id="delete_btn" type="button" class="btn btn-xs btn-danger">批量删除</button>
-                        </div>
                     </div>
                 </div>
                 <!-- /.box-header -->
@@ -34,12 +29,64 @@ $m_know = new \app\models\question\Knowledgepoint();
                         <!-- row start search-->
                         <div class="row">
                             <div class="col-sm-12">
-                                <label>我的教学班:&nbsp;</label>
-                                <select class="form-control" id="myClass-choice">
-                                    <option>请选择</option>
-                                    <?php foreach ($myClass as $model) {?>
-                                        <option value="<?=$model['TeachingClassID']?>"><?=$model['TeachingName']?></option>
-                                    <?php }?>
+                                <label>学期:&nbsp;</label>
+                                <select class="form-control" id="term-choice">
+                                    <option value="0">全部学期</option>
+                                    <?php if(isset($_GET['term'])){?>
+                                        <?php foreach ($term as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryCode === $_GET['term']){?>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
+                                            <?php }else{?>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                            <?php }?>
+                                        <?php }?>
+                                    <?php }else{?>
+                                        <?php foreach ($term as $model){?>
+                                            <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                        <?php }}?>
+                                </select>
+
+                                <label>资源类型:&nbsp;</label>
+                                <select class="form-control" id="type-choice">
+                                    <option value="0">全部</option>
+                                    <option value="1000801" <?php if(isset($_GET['type'])) if($_GET['type']==='1000801') echo 'selected';?>>文档</option>
+                                    <option value="1000802" <?php if(isset($_GET['type'])) if($_GET['type']==='1000802') echo 'selected';?>>ppt</option>
+                                    <option value="1000803" <?php if(isset($_GET['type'])) if($_GET['type']==='1000803') echo 'selected';?>>视频</option>
+                                </select>
+
+                                <label>阶段:&nbsp;</label>
+                                <select class="form-control" id="stage-choice">
+                                    <option value="0">全部阶段</option>
+                                    <?php if(isset($_GET['stage'])){?>
+                                        <?php foreach ($stage as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryCode === $_GET['stage']){?>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
+                                            <?php }else{?>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                            <?php }?>
+                                        <?php }?>
+                                    <?php }else{?>
+                                        <?php foreach ($stage as $model){?>
+                                            <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                        <?php }}?>
+                                </select>
+
+                                <label>知识点:&nbsp;</label>
+                                <select class="form-control" id="knowledgepoint-choice">
+                                    <option value="0">全部知识点</option>
+                                    <?php if(isset($_GET['knowledgeBh'])){?>
+                                        <?php foreach ($knowledgepoint as $model){?>
+                                            <?php if($model->KnowledgeBh === $_GET['knowledgeBh']){?>
+                                                <option value="<?=$model->KnowledgeBh?>" selected="selected"><?=$model->KnowledgeName?></option>
+                                            <?php }else{?>
+                                                <option value="<?=$model->KnowledgeBh?>" ><?=$model->KnowledgeName?></option>
+                                            <?php }?>
+                                        <?php }?>
+                                    <?php }else{?>
+                                        <?php foreach ($knowledgepoint as $model){?>
+                                            <option value="<?=$model->KnowledgeBh?>" ><?=$model->KnowledgeName?></option>
+                                        <?php }}?>
+
                                 </select>
                             </div>
                         </div>
@@ -56,10 +103,8 @@ $m_know = new \app\models\question\Knowledgepoint();
 
                                         <?php
                                         echo '<th><input id="data_table_check" type="checkbox"></th>';
-                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >所属资源名</th>';
-                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >帖子状态</th>';
-                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加时间</th>';
-                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >提问人</th>';
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >资源类型</th>';
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >资源名称</th>';
 
 
                                         ?>
@@ -72,36 +117,14 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         $id = $model['ID'];
                                         echo '<tr id="rowid_' . $model['ID']. '">';
                                         echo '  <td><label><input type="checkbox" value="' . $model['ID'] . '"></label></td>';
-                                        echo '  <td>' . (new \app\models\phone\Tresources())->Resources($model['ResourcesID']). '</td><td>';
-                                        if($model['Status']=='1000805'){
-                                            echo '      待确认';
-                                        }
-                                        else if ($model['Status']=='1000806'){
-                                            echo '      已完结';
-                                        }
-                                        else{
-                                            echo '      <font color="red">待回复</font>';
-                                        }
-                                        echo '  </td><td>' . $model->AddAt . '</td>';
-                                        echo '  <td>' . $model->AddBy . '</td>';
+                                        echo '  <td>' . $com->codeTranName($model['Type']) . '</td>';
+                                        echo '  <td>' . $model['Name'] . '</td>';
 
 
                                         echo '  <td class="center">';
 
-                                        echo '      <a id="view_btn" onclick="viewAction(\'' . $model->ID .'\')" class="btn btn-primary btn-sm" href="#"> <i class="glyphicon glyphicon-zoom-in icon-white"></i>查看</a>';
-                                        if($model['IsPublish']=='1'){
-                                            echo '      <a id="check_btn" onclick="IsPublish(' . "'$id'"  . ')" class="btn btn-primary btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>已公开</a>';
-                                        }
-                                        else{
-                                            echo '      <a id="check_btn" onclick="IsPublish(' . "'$id'"  . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>公开</a>';
-                                        }
-                                        if($model['IsTOP']=='1'){
-                                            echo '      <a id="top_btn" onclick="IsTOP(' . "'$id'"  . ')" class="btn btn-primary btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>已置顶</a>';
-                                        }
-                                        else{
-                                            echo '      <a id="top_btn" onclick="IsTOP(' . "'$id'"  . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>置顶</a>';
-                                        }
-                                        echo '      <a id="delete_btn" onclick="deleteAction(' . "'$id'" . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
+                                        echo '      <a id="view_btn" onclick="viewAction(\'' . $model['ID'] .'\')" class="btn btn-primary btn-sm" href="#"> <i class="glyphicon glyphicon-zoom-in icon-white"></i>查看</a>';
+
 
                                         echo '  </td>';
                                         echo '</tr>';
@@ -153,100 +176,83 @@ $m_know = new \app\models\question\Knowledgepoint();
 
 
 
-            $('#myClass-choice').change(function (e) {
+            $('#term-choice').change(function (e) {
                 e.preventDefault();
-                window.location.href = '<?=Url::toRoute("question/index")?>'+'&TeachingClassID='+$(this).val();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
+                var type = $("#type-choice").val();
+                var url = '<?=Url::toRoute('question/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
+                if (type != 0)
+                    url += '&type='+type
+
+                window.location.href = url;
+            });
+            $('#stage-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
+                var type = $("#type-choice").val();
+                var url = '<?=Url::toRoute('question/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
+                if (type != 0)
+                    url += '&type='+type
+
+                window.location.href = url;
+            });
+            $('#knowledgepoint-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
+                var type = $("#type-choice").val();
+                var url = '<?=Url::toRoute('question/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
+                if (type != 0)
+                    url += '&type='+type
+
+                window.location.href = url;
+            });
+            $('#type-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
+                var type = $("#type-choice").val();
+                var url = '<?=Url::toRoute('question/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
+                if (type != 0)
+                    url += '&type='+type
+
+                window.location.href = url;
             });
 
 
             function viewAction(id){
-                window.location.href = "<?=Url::toRoute('question/view')?>"+"&id="+id;
+                window.location.href = "<?=Url::toRoute('question/view')?>"+"&ID="+id;
             }
-
-            function IsPublish(id){
-                //alert(id);
-                $.ajax({
-                    type: 'GET',
-                    url: '<?=Url::toRoute('question/publish')?>',
-                    data: {"id": id},
-                    catch: false,
-                    async: false,
-                    dataType: 'json',
-                    success:function (value) {
-                        //alert();
-                        window.location.reload();
-                    }
-                })
-            }
-
-            function IsTOP(id){
-                //alert(id);
-                $.ajax({
-                    type: 'GET',
-                    url: '<?=Url::toRoute('question/top')?>',
-                    data: {"id": id},
-                    catch: false,
-                    async: false,
-                    dataType: 'json',
-                    success:function (value) {
-                        //alert();
-                        window.location.reload();
-                    }
-                })
-            }
-
-
-
-            function deleteAction(id){
-                var ids = [];
-                if(!!id == true){
-                    ids[0] = id;
-                }
-                else{
-                    var checkboxs = $('#data_table :checked');
-                    if(checkboxs.size() > 0){
-                        var c = 0;
-                        for(i = 0; i < checkboxs.size(); i++){
-                            var id = checkboxs.eq(i).val();
-                            if(id != ""){
-                                ids[c++] = id;
-                            }
-                        }
-                    }
-                }
-                if(ids.length > 0){
-                    admin_tool.confirm('请确认是否删除', function(){
-                        $.ajax({
-                            type: "GET",
-                            url: "<?=Url::toRoute('question/delete')?>",
-                            data: {"ids":ids},
-                            cache: false,
-                            dataType:"json",
-                            error: function (xmlHttpRequest, textStatus, errorThrown) {
-                                alert("出错了" + textStatus);
-                                // window.location.reload();
-                            },
-                            success: function(data){
-                                for(var i = 0; i < ids.length; i++){
-                                    $('#rowid_' + ids[i]).remove();
-                                }
-                                admin_tool.alert('msg_info', '删除成功', 'success');
-                                //window.location.reload();
-                            }
-                        });
-                    });
-                }
-                else{
-                    admin_tool.alert('msg_info', '请选择要删除的数据', 'warning');
-                }
-
-            }
-            
-
-            $('#delete_btn').click(function (e) {
-                e.preventDefault();
-                deleteAction('');
-            });
 
         </script>
         <?php $this->endBlock(); ?>

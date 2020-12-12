@@ -21,11 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="cf5d60b4-ad86-4ed4-a8f9-85af2df5b8cf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/VideoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/VideoController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/video/add.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/video/add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/web/fcup/php/file.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/web/fcup/php/file.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/QuestionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/QuestionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/question/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/question/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/question/view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/question/view.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +44,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/web" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../break" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -66,7 +64,13 @@
       <option name="presentableId" value="Default" />
       <updated>1606409296604</updated>
       <workItem from="1606409297723" duration="4673000" />
-      <workItem from="1606543155395" duration="11617000" />
+      <workItem from="1606543155395" duration="12986000" />
+      <workItem from="1606575105288" duration="388000" />
+      <workItem from="1606589387383" duration="1713000" />
+      <workItem from="1606625372275" duration="1244000" />
+      <workItem from="1606656972752" duration="2571000" />
+      <workItem from="1607597349120" duration="5319000" />
+      <workItem from="1607792877775" duration="4894000" />
     </task>
     <servers />
   </component>
@@ -86,10 +90,14 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1606544364210">
+    <state x="2610" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1607794242337">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1606544364210" />
+    <state x="2610" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607794242337" />
+    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1607794622525">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607794622525" />
     <state x="448" y="254" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606547765771">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
