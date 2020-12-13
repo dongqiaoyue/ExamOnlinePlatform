@@ -136,7 +136,7 @@ class TbcuitmoonDictionary extends \yii\db\ActiveRecord
         $res = [];
         $i = 0;
         foreach($type as $key){
-            $res['name'][$i] = self::find()->where(['CuitMoon_DictionaryCode' => $key])->one()->CuitMoon_DictionaryName;
+            $res['name'][$i] = self::find()->select('CuitMoon_DictionaryName')->where(['CuitMoon_DictionaryCode' => $key])->one();
             $i++;
         }
         $res['code'] = $type;
