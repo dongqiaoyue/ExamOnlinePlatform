@@ -181,6 +181,11 @@ use yii\helpers\Url;
     function viewAction(id){
         initModel(id, 'view', 'fun');
     }
+    $('#create_btn').click(function (e) {
+//        e.preventDefault();
+//        initEditSystemModule({}, 'create');
+        window.location.href = "<?=Url::toRoute('exam-module/add-view')?>";
+    });
 
     function initModel(id, type, fun){
         $.ajax({
@@ -296,12 +301,6 @@ use yii\helpers\Url;
         $('#admin-moduleName-form').submit();
     });
 
-
-    $('#create_btn').click(function (e) {
-//        e.preventDefault();
-//        initEditSystemModule({}, 'create');
-        window.location.href = "<?=Url::toRoute('exam-module/add-view')?>";
-    });
 
     $('#delete_btn').click(function (e) {
         e.preventDefault();
