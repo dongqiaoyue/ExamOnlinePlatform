@@ -62,4 +62,13 @@ class Tresourceexaminfo extends \yii\db\ActiveRecord
         $data = self::find()->where(['ResourcesID' => $id])->asArray()->one();
         return $data;
     }
+    
+    public function isModel($id){
+        $tmp = self::find(['ResourcesID'=>$id]);
+        if(isset($tmp)){
+            return self::find()->where(['ResourcesID'=>$id])->one();
+        }else{
+            return false;
+        }
+    }
 }

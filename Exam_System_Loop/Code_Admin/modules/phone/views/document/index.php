@@ -6,8 +6,8 @@ use app\models\phone\Tresourceexaminfo;
 use yii\helpers\Url;
 use common\commonFuc;
 $com = new commonFuc();
-$m_know = new \app\models\question\Knowledgepoint();
-
+$m_know = new \app\models\question\Knowledgepoint;
+$m_model = new \app\models\phone\Tresourceexaminfo;
 ?>
 
 
@@ -92,7 +92,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >文档名称</th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加时间</th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加人</th>';
-
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >模版名称</th>';
 
                                         ?>
                                         <th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >操作</th>
@@ -108,7 +108,15 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         echo '  <td>' . $model['Name'] . '</td>';
                                         echo '  <td>' . $model->AddAt . '</td>';
                                         echo '  <td>' . $model->AddBy . '</td>';
-
+                                        if($model['IsExam']==1){
+                                            if($m=$m_model->isModel($id)){
+                                                echo '      <td>'.$m['PaperName'].'</td>';
+                                            }else{
+                                                echo '      <td>未配置测试模板</td>';
+                                            }
+                                        }else{
+                                            echo '<td>不需要考核</td>';
+                                        }
 
                                         echo '  <td class="center">';
 
@@ -120,12 +128,17 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         else{
                                             echo '      <a id="check_btn" onclick="IsPublish(' . "'$id'"  . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>公开</a>';
                                         }
-                                        if($model['IsExam'] == 1) {
-                                            if (((new Tresourceexaminfo())->Check($id) == null))
-                                                echo '      <a id="have" onclick="jump(' . "'$id'" . ')" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-edit icon-white"></i>添加测试模板</a>';
-                                            else
-                                                echo '      <a id="have" onclick="alert(`测试模板已存在`)" class="btn btn-primary btn-sm" href="#"><i class="glyphicon glyphicon-edit icon-white"></i>已有测试模板</a>';
-                                        }
+                                        // if($model['IsExam'] == 1) {
+                                        //     if (!$m=$m_model->isModel($id)){
+                                        //         //echo '     <a id="have" onclick="jump('."'$id'".')" class="btn btn-danger btn-sm" herf="#"><i class="glyphicon glyphicon-edit icon-white"></i>添加测试模板</a>';
+                                        //         //echo ' <select size=1 ><option>选择模版</option>';foreach ($mod as $value){ echo '<option id="mod" value="'.$value['BH'].'">'.$value['PaperName'].'</option>';}echo '</select><a id="check_btn" onclick="getmod('."'$id'".')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>确认模版</a>';
+                                        //     }
+                                        //     else{
+                                        //         echo '      <a id="have" onclick="alert(`测试模板已存在`)" class="btn btn-primary btn-sm" href="#"><i class="glyphicon glyphicon-edit icon-white"></i>已有测试模板</a>';
+                                        //     }
+                                        // }else{
+                                        //     echo '<i class="glyphicon glyphicon-edit icon-white"></i>不需要测试</a>';
+                                        // }
                                         echo '      <a id="delete_btn" onclick="deleteAction(' . "'$id'" . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
 
                                         echo '  </td>';
@@ -199,6 +212,15 @@ $m_know = new \app\models\question\Knowledgepoint();
                         <?php }?>
                     </select>
                 </div>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
+                <select size=1 name="BH" id="model">
+                <?php foreach ($mod as $value){ ?>
+                <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                </select>
+                </span>
+                </div>
+                <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br>
                 <div  style="float: left;"  >
@@ -268,7 +290,7 @@ $m_know = new \app\models\question\Knowledgepoint();
 
                 <div class="modal-footer">
                     <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
-                    <a id="edit_dialog_ok" href="#" class="btn btn-primary" onclick="ContentAction()">确定</a>
+                    <a id="edit_dialog_ok" href="#" class="btn btn-primary">确定</a>
                 </div>
             </div>
         </div>
@@ -344,6 +366,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#document_Name").val('');
                     $("#document_Description").val('');
                     $("#document_ResourcesContent").val('');
+                    $("#model").val('');
                     UE.getEditor('document_ResourcesContent').setContent('');
                     UE.getEditor('document_ResourcesContent').setEnabled();
                 }
@@ -359,7 +382,10 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#document_Name").val(data['Name']);
                     $("#document_ResourcesContent").val(data['ResourcesContent']);
                     $("#document_Description").val(data['Description']);
+                    $('#model').addClass('hidden');
+                    $('#model1').addClass('hidden');
                     $('#edit_dialog_ok').addClass('hidden');
+
                 }
                 if(type == "view"){
                     $("#document_CustomBh").attr({readonly:true,disabled:true});
@@ -370,6 +396,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#document_Name").attr({readonly:true,disabled:true});
                     $("#document_ResourcesContent").attr({readonly:true,disabled:true});
                     $("#document_Description").attr({readonly:true,disabled:true});
+
                 }
                 else{
                     $("#document_CustomBh").attr({readonly:false,disabled:false})
@@ -380,6 +407,8 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#document_Name").attr({readonly:false,disabled:false});
                     $("#document_ResourcesContent").attr({readonly:false,disabled:false});
                     $("#document_Description").attr({readonly:false,disabled:false});
+                    $('#model').removeClass('hidden');
+                    $('#model1').removeClass('hidden');
                     $('#edit_dialog_ok').removeClass('hidden');
                 }
                 $('#edit_dialog').modal('show');
@@ -481,8 +510,17 @@ $m_know = new \app\models\question\Knowledgepoint();
                 return aa;
             }
 
-            function jump(id) {
-                window.location.href = "<?=Url::toRoute('exam-module/add-view')?>&id="+id;
+            function getmod(id){
+                var BH = $("#mod").val();
+                $.ajax({
+                    type: 'POST',
+                    url: '<?=Url::toRoute('document/add-model')?>',
+                    dataType: 'JSON',
+                    data: {'BH':BH,'id':id},
+                    success: function(value){
+                        alert(value);
+                    }
+                });
             }
 
             function IsPublish(id){

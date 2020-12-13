@@ -105,15 +105,30 @@ class ExamModuleController extends BaseController{
      */
     public function actionAddView(){
         $m_Dic = new TbcuitmoonDictionary();
-        $m= Knowledgepoint::find()->select(['KnowledgeName','CourseID','KnowledgeBh'])->asArray()->all();
+        $m_course = Yii::$app->session->get('courseCode');
+        $stage = $m_Dic->getDictionaryList('题目阶段');
+        $m= Knowledgepoint::find()->select(['KnowledgeName','CourseID','KnowledgeBh','Stage'])->where(['CourseID'=>$m_course])->asArray()->all();
         $id = Yii::$app->request->get('id');
 
         return $this->render('add',[
-            'type' => $m_Dic->getDictionaryList('题目类型'),
-            'stage' => $m,
+            'type' => $m_Dic->find()->select([
+                'CuitMoon_DictionaryName',
+                'CuitMoon_DictionaryCode'
+            ])->where(['CuitMoon_DictionaryCode'=>['1000203','100020101','1000204']])->all(),
+            'stage' => $stage,
             'diff' => $m_Dic->getDictionaryList('题目难度'),
             'id' => $id
         ]);
+    }
+  //获取阶段对应知识点
+    public function actionGetKonwledge(){
+        $m_know = new Knowledgepoint();
+        $stage = Yii::$app->request->get('Stage');
+        $data = $m_know->find()
+            ->select([
+                'KnowledgeName','KnowledgeBh','CourseID'
+            ])->where(['Stage' => $stage,'CourseID'=>Yii::$app->session->get('courseCode')])->asArray()->all();
+        echo json_encode($data);
     }
 
     /**
@@ -121,25 +136,33 @@ class ExamModuleController extends BaseController{
      * @return json
      */
     public function actionGetQuestionSum(){
+        $m_dic = new TbcuitmoonDictionary();
         $m_question = new Questions();
 
         $info = Yii::$app->request->post();
-        $data = [];
-        if(!isset($info['Stages'])){
+        //获取难度信息
+        $Tmp = $m_dic->find()->select(['CuitMoon_DictionaryName'])->where([
+            'CuitMoon_DictionaryCode' => $info['Diff']['0'],
+        ])->asArray()->all();
+        $data['diff'] = $Tmp[0]['CuitMoon_DictionaryName'];
+
+        $data['sum'] = [];
+        if(!isset($info['Stage']['0'])){
             echo 0;
         }else {
-            foreach ($info['Diffs'] as $key => $value) {
-                $data[$value] = 0;
-                foreach ($info['Stages'] as $k => $va) {
-                    $data[$value] += $m_question->find()->select(['QuestionBh'])->where([
-                        'KnowledgeBh' => $va,
-                        'Difficulty' => $value,
-                        'CourseID' => Yii::$app->session->get('courseCode'),
-                        'QuestionType' => $info['QuestionType'],
-                        'Checked' => 100001,
-                    ])->count();
-                }
-            }
+            //获取题目数量
+            $data['sum'] = $m_question->find()->select(['QuestionBh'])->where([
+                'Stage' => $info['Stage']['0'],
+                'Difficulty' => $info['Diff']['0'],
+                'CourseID' => Yii::$app->session->get('courseCode'),
+                'QuestionType' => $info['QuestionType'],
+                'Checked' => 100001,
+            ])->count();
+            //获取题目阶段
+            $data['stage'] = $m_dic->find()->select(['CuitMoon_DictionaryName'])->where([
+                'CuitMoon_DictionaryCode' => $info['Stage']['0'],
+            ])->asArray()->one()['CuitMoon_DictionaryName'];
+
             echo json_encode($data);
         }
     }
@@ -154,20 +177,18 @@ class ExamModuleController extends BaseController{
         $com = new commonFuc();
 
         $info = Yii::$app->request->post();
-        $ID = Yii::$app->request->get('id');
 
         $RecordID = $com->create_id();
         if($m_exam_config->load($info)){
             $m_exam_config->BH = $RecordID;
-            $m_exam_config->ResourcesID = $ID;
             $m_exam_config->AddAt = date('Y-m-d H:i:s');
             $m_exam_config->CourseID = Yii::$app->session->get('courseCode');
             $m_exam_config->AddBy = Yii::$app->session->get('UserName');
-            $m_exam_config->save();                $m_exam_config->save();
+            $m_exam_config->save(); 
 
             $sql = 'insert into Tresourceexaminfoset (XH,QuestionType,QuestionTypeNumber,EveryQuestionScore,KnowledgeBh,difficulty,BH) values';
             //Splicing sql
-            foreach ($info['Stages'] as $key=>$value){
+            foreach ($info['konwledge'] as $key=>$value){
                 foreach ($info['Num'][$key] as $k=>$va){
                     if($va != null && $info['Score'][$key][$k] != null) {
                         $Tmp = $com->create_id();

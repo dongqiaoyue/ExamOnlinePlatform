@@ -4,6 +4,7 @@ namespace app\modules\phone\controllers;
 
 use app\controllers\BaseController;
 use app\models\phone\Tresourceexaminfo;
+use app\models\phone\Tresourceexaminfoset;
 use app\models\phone\Tresources;
 use app\models\question\Knowledgepoint;
 use app\models\system\TbcuitmoonDictionary;
@@ -43,12 +44,12 @@ class DocumentController extends BaseController
         $whereL['CourseID'] = Yii::$app->session->get('courseCode');
         $whereL['Type'] = ['1000801'];
         $list = $m_doc->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereL,$w])->orderBy("AddAt ASC");
+            ->where(['and',$whereC,$w])->orderBy("AddAt ASC");
         $pr = $m_doc->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
             ->where(['and',$whereC,'IsPublish = 1'])->orderBy("AddAt ASC")->all();
-        $knowledgepoint = knowledgepoint::find()->where($whereK)->asArray()->all();
+        $knowledgepoint = knowledgepoint::find()->where(['Stage'=>$stage['stage'],'CourseID'=>Yii::$app->session->get('courseCode')])->asArray()->all();
         $knowledge = knowledgepoint::find()->asArray()->all();
-
+        $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>Yii::$app->session->get('courseCode')])->groupBy(['BH'])->orderBy('BH DESC')->all();
 
         //Tab
         $countList = clone $list;
@@ -64,15 +65,26 @@ class DocumentController extends BaseController
             'knowledgepoint'=>$knowledgepoint,
             'knowledge'=>$knowledge,
             'pr' => $pr,
+            'mod'=>$mod,
         ]);
     }
 
     public function actionCreate()
     {
         $m_doc = new Tresources();
+        $m_mod = new Tresourceexaminfo();
         $com = new commonFuc();
+        
         if ($m_doc->load(Yii::$app->request->post())) {
             $m_doc->ID= $com->create_id();
+            $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$_POST['BH']])->one();
+            $m_mod->AddBy = Yii::$app->session->get('UserName');
+            $m_mod->AddAt = date('Y-m-d H:i:s');
+            $m_mod->CourseID = Yii::$app->session->get('courseCode');
+            $m_mod->BH = $_POST['BH'];
+            $m_mod->PaperName = $PaperName['PaperName'];
+            $m_mod->ResourcesID = $m_doc->ID;
+            $m_mod->save();
             $m_doc->CourseID = Yii::$app->session->get('courseCode');
             $m_doc->Type = '1000801';
             $m_doc->IsPublish = '0';
@@ -105,6 +117,31 @@ class DocumentController extends BaseController
             $com->JsonSuccess('删除成功');
 
         }
+    }
+
+    public function actionAddModel(){
+        $m = new Tresourceexaminfo;
+        $com = new commonFuc;
+         if($data = Yii::$app->request->post()){
+         $BH = $data['BH'];
+         $ResourcesID = $data['id'];
+         Tresourceexaminfo::deleteAll($ResourcesID);
+         $model = $m->find()->where([
+            'BH' =>$BH,
+            'ResourcesID' => "",
+        ])->asArray()->all();
+        foreach ($model as $value){
+            $m = new Tresourceexaminfo;
+            $m->BH = $BH ;
+            $m->PaperName = $value['PaperName'];
+            $m->ResourcesID = $ResourcesID ;
+            $m->AddAt = date('Y-m-d H:i:s');
+            $m->AddBy = Yii::$app->session->get('Username');
+            $m->CourseID = Yii::$app->session->get('courseCode');
+            $m->save();
+        }
+        $com->JsonSuccess('成功配置');
+     }
     }
 
 
@@ -190,8 +227,8 @@ class DocumentController extends BaseController
         $stage = Yii::$app->request->get('stageId');
         $data = $m_know->find()
             ->select([
-                'KnowledgeName','KnowledgeBh'
-            ])->where(['Stage' => $stage])->asArray()->all();
+                'KnowledgeName','KnowledgeBh','CourseID'
+            ])->where(['Stage' => $stage,'CourseID'=>Yii::$app->session->get('courseCode')])->asArray()->all();
         echo json_encode($data);
     }
 
