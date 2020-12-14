@@ -2,6 +2,7 @@
 namespace app\modules\phone\controllers;
 
 use \app\controllers\BaseController;
+use app\models\phone\Tresourceexaminfo;
 use app\models\question\Knowledgepoint;
 use app\models\phone\Tresources;
 use app\models\system\TbcuitmoonDictionary;
@@ -21,35 +22,43 @@ class VideoController extends BaseController{
         $m_know = new Knowledgepoint();
         $m_vid = new Tresources();
         $com = new commonFuc();
-        $whereC = [];
-        $whereL = [];
-        $whereK = [];
-        $w =[];
-
-        //是否选择知识点
-        $stage = Yii::$app->request->get();
-
-        if (isset($stage['knowledgeBh'])) {
-            $w = [
-                'like',
-                'knowledgeBh',$stage['knowledgeBh'],
-            ];
-        }
-        if (isset($stage['stage'])) {
-            $whereK['Stage'] = $stage['stage'];
-        }
-
-        $whereC['CourseID'] = Yii::$app->session->get('courseCode');
 
 
-        $whereL['CourseID'] = Yii::$app->session->get('courseCode');
-        $whereL['Type'] = ['1000803'];
-        $list = $m_vid->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereL,$w])->orderBy("AddAt ASC");
+        $CourseID = Yii::$app->session->get('courseCode');
+        $Info = Yii::$app->request->get();
+
         $pr = $m_vid->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereC,'IsPublish = 1'])->orderBy("AddAt ASC")->all();
-        $knowledgepoint = knowledgepoint::find()->where($whereK)->asArray()->all();
-        $knowledge = knowledgepoint::find()->asArray()->all();
+            ->where(['and',['CourseID' => $CourseID],'IsPublish = 1'])->orderBy("AddAt ASC")->all();
+
+        $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>$CourseID])->groupBy(['BH'])->orderBy('BH DESC')->all();
+
+        $list = $m_vid->find()
+            ->where(['Type' => 1000803]);
+
+
+        if (isset($Info['term'])) {
+            $list = $list->andWhere([
+                'like',
+                'Term',
+                $Info['term']]);
+        }
+        if (isset($Info['stage'])) {
+            $knowledgepoint = $m_know->find()
+                ->where(['Stage' => $Info['stage'], 'CourseID' => $CourseID])
+                ->all();
+        }else{
+            $knowledgepoint = $m_know->find()
+                ->where(['CourseID' => $CourseID])
+                ->all();
+        }
+        if (isset($Info['knowledgeBh'])) {
+            $list = $list->andWhere([
+                'like',
+                'knowledgeBh',$Info['knowledgeBh']
+            ]);
+        }
+
+        $list = $list->orderBy("Type ASC");
 
 
         //Tab
@@ -59,13 +68,13 @@ class VideoController extends BaseController{
         return $this->render('index', [
             'list' => $list->offset($pages->offset)->limit($pages->limit)->all(),
             'pages' => $pages,
-            'Choice' => $stage,
-            'stage' => $m_dic->getDictionaryList('题目阶段'),
             //默认显示第一阶段知识点
             'defaultKnow' => $m_know->getByStage('1000301'),
-            'knowledgepoint'=>$knowledgepoint,
-            'knowledge'=>$knowledge,
-            'pr' => $pr,//前置资源好像是
+            'term' => $m_dic->getDictionaryList('学期'),
+            'stage' => $m_dic->getDictionaryList('题目阶段'),
+            'knowledgepoint' => $knowledgepoint,
+            'pr' => $pr, //前置资源
+            'mod'=>$mod,
         ]);
     }
 
@@ -237,8 +246,8 @@ class VideoController extends BaseController{
         $stage = Yii::$app->request->get('stageId');
         $data = $m_know->find()
             ->select([
-                'KnowledgeName','KnowledgeBh'
-            ])->where(['Stage' => $stage])->asArray()->all();
+                'KnowledgeName','KnowledgeBh','CourseID'
+            ])->where(['Stage' => $stage,'CourseID'=>Yii::$app->session->get('courseCode')])->asArray()->all();
         echo json_encode($data);
     }
 

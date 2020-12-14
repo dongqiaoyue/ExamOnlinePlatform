@@ -21,35 +21,44 @@ class DocumentController extends BaseController
         $m_know = new Knowledgepoint();
         $m_doc = new Tresources();
         $com = new commonFuc();
-        $whereC = [];
-        $whereL = [];
-        $whereK = [];
-        $w =[];
-        //是否选择知识点
-        $stage = Yii::$app->request->get();
-
-        if (isset($stage['knowledgeBh'])) {
-            $w = [
-                'like',
-                'knowledgeBh',$stage['knowledgeBh'],
-            ];
-        }
-        if (isset($stage['stage'])) {
-            $whereK['Stage'] = $stage['stage'];
-        }
-
-        $whereC['CourseID'] = Yii::$app->session->get('courseCode');
 
 
-        $whereL['CourseID'] = Yii::$app->session->get('courseCode');
-        $whereL['Type'] = ['1000801'];
-        $list = $m_doc->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereC,$w])->orderBy("AddAt ASC");
+        $CourseID = Yii::$app->session->get('courseCode');
+        $Info = Yii::$app->request->get();
+
         $pr = $m_doc->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereC,'IsPublish = 1'])->orderBy("AddAt ASC")->all();
-        $knowledgepoint = knowledgepoint::find()->where(['Stage'=>$stage['stage'],'CourseID'=>Yii::$app->session->get('courseCode')])->asArray()->all();
-        $knowledge = knowledgepoint::find()->asArray()->all();
-        $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>Yii::$app->session->get('courseCode')])->groupBy(['BH'])->orderBy('BH DESC')->all();
+            ->where(['and',['CourseID' => $CourseID],'IsPublish = 1'])->orderBy("AddAt ASC")->all();
+
+        $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>$CourseID])->groupBy(['BH'])->orderBy('BH DESC')->all();
+
+        $list = $m_doc->find()
+            ->where(['Type' => 1000801]);
+
+
+        if (isset($Info['term'])) {
+            $list = $list->andWhere([
+                'like',
+                'Term',
+                $Info['term']]);
+        }
+        if (isset($Info['stage'])) {
+            $knowledgepoint = $m_know->find()
+                ->where(['Stage' => $Info['stage'], 'CourseID' => $CourseID])
+                ->all();
+        }else{
+            $knowledgepoint = $m_know->find()
+                ->where(['CourseID' => $CourseID])
+                ->all();
+        }
+        if (isset($Info['knowledgeBh'])) {
+            $list = $list->andWhere([
+                'like',
+                'knowledgeBh',$Info['knowledgeBh']
+            ]);
+        }
+
+        $list = $list->orderBy("Type ASC");
+
 
         //Tab
         $countList = clone $list;
@@ -58,13 +67,12 @@ class DocumentController extends BaseController
         return $this->render('index', [
             'list' => $list->offset($pages->offset)->limit($pages->limit)->all(),
             'pages' => $pages,
-            'Choice' => $stage,
-            'stage' => $m_dic->getDictionaryList('题目阶段'),
             //默认显示第一阶段知识点
             'defaultKnow' => $m_know->getByStage('1000301'),
-            'knowledgepoint'=>$knowledgepoint,
-            'knowledge'=>$knowledge,
-            'pr' => $pr,
+            'term' => $m_dic->getDictionaryList('学期'),
+            'stage' => $m_dic->getDictionaryList('题目阶段'),
+            'knowledgepoint' => $knowledgepoint,
+            'pr' => $pr, //前置资源
             'mod'=>$mod,
         ]);
     }
