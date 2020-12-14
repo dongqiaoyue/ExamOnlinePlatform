@@ -207,7 +207,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <button type="button" class="close" data-dismiss="modal">x</button>
                 <h3>学习文档</h3>
             </div>
-            <div class="modal-body">
+            <br class="modal-body">
                 <?php $form = ActiveForm::begin(["id" => "admin-role-form", "class"=>"form-horizontal", "action"=>Url::toRoute("document/view")]); ?>
 
                 <input type="hidden" class="form-control" id="id" Name="id" />
@@ -219,6 +219,16 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     </div>
                     <div class="clearfix"></div>
                 </div>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon">&nbsp;学&nbsp;期</span>
+                    <select class="form-control" id="document_Term" value="0" name="Tresources[Term]">
+                        <?php foreach ($term as $model){?>
+                            <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+                </br>
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;所&nbsp;属&nbsp;阶&nbsp;段&nbsp;</span>
                     <select class="form-control" id="document_StageCode" value="0">
@@ -382,6 +392,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Name").val('');
                     $("#document_Description").val('');
                     $("#document_ResourcesContent").val('');
+                    $("#document_Term").val('');
                     $("#model").val('');
                     UE.getEditor('document_ResourcesContent').setContent('');
                     UE.getEditor('document_ResourcesContent').setEnabled();
@@ -398,6 +409,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Name").val(data['Name']);
                     $("#document_ResourcesContent").val(data['ResourcesContent']);
                     $("#document_Description").val(data['Description']);
+                    $("#"+data['Term']).attr("selected",true);
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
                     $('#edit_dialog_ok').addClass('hidden');
@@ -410,6 +422,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_IsExam").attr({readonly:true,disabled:true});
                     $("#document_BeforeID").attr({readonly:true,disabled:true});
                     $("#document_Name").attr({readonly:true,disabled:true});
+                    $("#document_Term").attr({readonly:true,disabled:true});
                     $("#document_ResourcesContent").attr({readonly:true,disabled:true});
                     $("#document_Description").attr({readonly:true,disabled:true});
 
@@ -423,6 +436,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Name").attr({readonly:false,disabled:false});
                     $("#document_ResourcesContent").attr({readonly:false,disabled:false});
                     $("#document_Description").attr({readonly:false,disabled:false});
+                    $("#document_Term").attr({readonly:false,disabled:false});
                     $('#model').removeClass('hidden');
                     $('#model1').removeClass('hidden');
                     $('#edit_dialog_ok').removeClass('hidden');

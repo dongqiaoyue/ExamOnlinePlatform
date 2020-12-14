@@ -84,7 +84,7 @@ class DocumentController extends BaseController
         $com = new commonFuc();
         $post = Yii::$app->request->post();
         
-        if ($m_doc->load(Yii::$app->request->post())) {
+        if ($m_doc->load($post)) {
             $m_doc->ID= $com->create_id();
             if (isset($post['BH']))
             {

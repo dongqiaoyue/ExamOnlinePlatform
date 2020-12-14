@@ -104,9 +104,10 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                                         <?php
                                         echo '<th><input id="data_table_check" type="checkbox"></th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >自定义编号</th>';
-                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >ppt名称</th>';
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >文档名称</th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加时间</th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加人</th>';
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >模版名称</th>';
 
 
                                         ?>
@@ -124,6 +125,15 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                                         echo '  <td>' . $model->AddAt . '</td>';
                                         echo '  <td>' . $model->AddBy . '</td>';
 
+                                        if($model['IsExam']==1){
+                                            if($m1=$m_model->isModel($id)){
+                                                echo '      <td>'.$m1['PaperName'].'</td>';
+                                            }else{
+                                                echo '      <td>未配置测试模板</td>';
+                                            }
+                                        }else{
+                                            echo '<td>不需要考核</td>';
+                                        }
 
                                         echo '  <td class="center">';
 
@@ -199,7 +209,15 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     </div>
                     <div class="clearfix"></div>
                 </div>
-
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon">&nbsp;学&nbsp;期</span>
+                    <select class="form-control" id="ppt_Term" value="0" name="Tresources[Term]">
+                        <?php foreach ($term as $model){?>
+                            <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="clearfix"></div>
                 <br>
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;所&nbsp;属&nbsp;阶&nbsp;段&nbsp;</span>
@@ -225,16 +243,6 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
 
                     </span>
                 </div>
-                <div class="input-group  col-sm-5" style="float: left;" >
-                    <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
-                    <select size=1 name="BH" id="model">
-                        <option value="0">无</option>
-                        <?php foreach ($mod as $value){ ?>
-                            <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
-                    </select>
-                    </span>
-                </div>
-                <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br>
 
@@ -368,6 +376,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_BeforeID").val('');
                     $("#ppt_Name").val('');
                     $("#ppt_Description").val('');
+                    $("#ppt_Term").val('');
                     $('#uploadfile-file').attr({readonly:false,disabled:false});
                 }
                 else{
@@ -383,6 +392,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
                     $("#ppt_Description").val(data['Description']);
+                    $("#"+data['Term']).attr("selected",true);
                     $('#edit_dialog_ok').addClass('hidden');
                     $('#uploadfile-file').attr({readonly:true,disabled:true});
                 }
@@ -393,6 +403,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_IsExam").attr({readonly:true,disabled:true});
                     $("#ppt_BeforeID").attr({readonly:true,disabled:true});
                     $("#ppt_Name").attr({readonly:true,disabled:true});
+                    $("#ppt_Term").attr({readonly:true,disabled:true});
                     $("#ppt_Description").attr({readonly:true,disabled:true});
                 }
                 else{
@@ -405,6 +416,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $('#model').removeClass('hidden');
                     $('#model1').removeClass('hidden');
                     $("#ppt_Description").attr({readonly:false,disabled:false});
+                    $("#ppt_Term").attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }
                 $('#edit_dialog').modal('show');

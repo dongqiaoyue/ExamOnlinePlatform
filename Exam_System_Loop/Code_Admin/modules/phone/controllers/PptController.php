@@ -84,17 +84,11 @@ class PptController extends BaseController
         $m_ppt = new Tresources();
         $m_mod = new Tresourceexaminfo();
         $com = new commonFuc();
+        $post = Yii::$app->request->post();
         $m = new UploadFile();
-        if ($m_ppt->load(Yii::$app->request->post())) {
+        if ($m_ppt->load($post)) {
             $m_ppt->ID= $com->create_id();
-            $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$_POST['BH']])->one();
-            $m_mod->AddBy = Yii::$app->session->get('UserName');
-            $m_mod->AddAt = date('Y-m-d H:i:s');
-            $m_mod->CourseID = Yii::$app->session->get('courseCode');
-            $m_mod->BH = $_POST['BH'];
-            $m_mod->PaperName = $PaperName['PaperName'];
-            $m_mod->ResourcesID = $m_doc->ID;
-            $m_mod->save();
+
             $m_ppt->CourseID = Yii::$app->session->get('courseCode');
             $m_ppt->Type = '1000802';
             $m_ppt->IsPublish = '0';
@@ -107,9 +101,20 @@ class PptController extends BaseController
             $path = 'uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
             if ($m_ppt->validate() && $m_ppt->save()) {
+                if (isset($post['BH']))
+                {
+                    $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                    $m_mod->AddBy = Yii::$app->session->get('UserName');
+                    $m_mod->AddAt = date('Y-m-d H:i:s');
+                    $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                    $m_mod->BH = $post['BH'];
+                    $m_mod->PaperName = $PaperName['PaperName'];
+                    $m_mod->ResourcesID = $m_ppt->ID;
+                    $m_mod->save();
+                }
                 $com->JsonSuccess('添加成功');
-            } else {
-                $com->JsonFail($m_ppt->getErrors());
+//            } else {
+//                $com->JsonFail($m_ppt->getErrors());
             }
         } else {
             /*$com->JsonFail('数据出错');*/
@@ -123,19 +128,12 @@ class PptController extends BaseController
     public function actionDelete()
     {
         $com = new commonFuc();
-        $m_ppt = new Tresources();
+        $m_doc = new Tresources();
 
-        $ids = Yii::$app->request->get('ids');
-
-
+        $ids = \Yii::$app->request->get('ids');
         if (count($ids) > 0) {
             foreach ($ids as $item) {
-                $path=$m_ppt->find()->select(['ResourcesURL','ID'])->where(['ID'=>$item])->one();
-                $t = $path['ResourcesURL'];
-                if(is_file($t)){
-                    unlink($t);
-                    $m_ppt->deleteAll(['ID' => $item]);
-                }
+                $m_doc->deleteAll(['ID' => $item]);
             }
             $com->JsonSuccess('删除成功');
 

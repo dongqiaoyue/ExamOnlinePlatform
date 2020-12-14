@@ -2,8 +2,6 @@
 
 namespace app\models\phone;
 
-use app\models\system\TbcuitmoonDictionary;
-use common\commonFuc;
 use Yii;
 
 /**
@@ -12,7 +10,6 @@ use Yii;
  * @property string $ID
  * @property string $Name
  * @property string $Type
- * @property string $Stage
  * @property string $Description
  * @property string $ResourcesURL
  * @property string $ResourcesContent
@@ -27,6 +24,8 @@ use Yii;
  * @property string $AddBy
  * @property string $AddIP
  * @property string $CustomBh
+ * @property string $Stage
+ * @property string $Term
  */
 class Tresources extends \yii\db\ActiveRecord
 {
@@ -50,9 +49,10 @@ class Tresources extends \yii\db\ActiveRecord
             [['AddAt'], 'safe'],
             [['ID', 'Type', 'CourseID', 'BeforeID'], 'string', 'max' => 32],
             [['Name', 'AddBy', 'AddIP'], 'string', 'max' => 100],
-            [['Stage', 'CustomBh'], 'string', 'max' => 50],
             [['Description', 'ResourcesURL', 'AddAgent'], 'string', 'max' => 300],
             [['KnowledgeBh'], 'string', 'max' => 500],
+            [['CustomBh'], 'string', 'max' => 50],
+            [['Stage', 'Term'], 'string', 'max' => 255],
         ];
     }
 
@@ -79,6 +79,8 @@ class Tresources extends \yii\db\ActiveRecord
             'AddBy' => 'Add By',
             'AddIP' => 'Add Ip',
             'CustomBh' => 'Custom Bh',
+            'Stage' => 'Stage',
+            'Term' => 'Term',
         ];
     }
     public function aaa(){
@@ -92,5 +94,4 @@ class Tresources extends \yii\db\ActiveRecord
         $data = self::find()->where(['ID' => $id])->asArray()->one();
         return $data['Name'];
     }
-
 }

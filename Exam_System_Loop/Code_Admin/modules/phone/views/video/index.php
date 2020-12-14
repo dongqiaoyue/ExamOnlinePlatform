@@ -211,7 +211,6 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     <div class="clearfix"></div>
                 </div>
 
-
                 <div id="Name_div" class="form-group">
                     <label for="Name" class="col-sm-2 control-label">视频URL</label>
                     <div class="col-sm-10">
@@ -220,6 +219,16 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     <div class="clearfix"></div>
                 </div>
 
+                <br>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon">&nbsp;学&nbsp;期</span>
+                    <select class="form-control" id="video_Term" value="0" name="Tresources[Term]">
+                        <?php foreach ($term as $model){?>
+                            <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="clearfix"></div>
                 <br>
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;所&nbsp;属&nbsp;阶&nbsp;段&nbsp;</span>
@@ -238,7 +247,6 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     </select>
                     </span>
                 </div>
-                <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br>
                 <div  style="float: left;"  >
@@ -379,46 +387,58 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#video_BeforeID").val('');
                     $("#video_Name").val('');
                     $("#video_Description").val('');
+                    $("#video_ResourcesContent").val('');
+                    $("#video_ResourcesURL").val();
+                    $("#video_Term").val('');
+                    $("#model").val('');
                     UE.getEditor('video_ResourcesContent').setContent('');
                     UE.getEditor('video_ResourcesContent').setEnabled();
                 }
                 else{
                     $("#id").val(data['ID']);
                     $("#video_CustomBh").val(data['CustomBh']);
-                    $("#video_ResourcesURL").val(data['ResourcesURL']);
                     stage(data['KnowledgeBh']);
                     knowledge(data['KnowledgeBh']);
                     //$("#video_KnowledgeBhCode").val(data['KnowledgeBh']);
                     $("#video_IsExam").val(data['IsExam']);
                     $("#video_BeforeID").val(data['BeforeID']);
+                    $("#video_ResourcesURL").val(data['ResourcesURL'])
                     //$("#video_DifficultyCode").val(data['DifficultyCode']);
                     $("#video_Name").val(data['Name']);
+                    $("#video_ResourcesContent").val(data['ResourcesContent']);
+                    $("#video_Description").val(data['Description']);
+                    $("#"+data['Term']).attr("selected",true);
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
-                    $("#video_Description").val(data['Description']);
                     $('#edit_dialog_ok').addClass('hidden');
+
                 }
                 if(type == "view"){
                     $("#video_CustomBh").attr({readonly:true,disabled:true});
-                    $("#video_KnowledgeBhCode").attr({readonly:true,disabled:true});
                     $("#video_StageCode").attr({readonly:true,disabled:true});
-                    $("#video_ResourcesURL").attr({readonly:true,disabled:true});
+                    $("#video_KnowledgeBhCode").attr({readonly:true,disabled:true});
                     $("#video_IsExam").attr({readonly:true,disabled:true});
                     $("#video_BeforeID").attr({readonly:true,disabled:true});
                     $("#video_Name").attr({readonly:true,disabled:true});
+                    $("#video_ResourcesURL").attr({readonly:true,disabled:true});
+                    $("#video_Term").attr({readonly:true,disabled:true});
+                    $("#video_ResourcesContent").attr({readonly:true,disabled:true});
                     $("#video_Description").attr({readonly:true,disabled:true});
+
                 }
                 else{
-                    $("#video_CustomBh").attr({readonly:false,disabled:false});
-                    $("#video_KnowledgeBhCode").attr({readonly:false,disabled:false});
+                    $("#video_CustomBh").attr({readonly:false,disabled:false})
                     $("#video_StageCode").attr({readonly:false,disabled:false});
-                    $("#video_ResourcesURL").attr({readonly:true,disabled:true});
+                    //$("#video_KnowledgeBhCode").attr({readonly:false,disabled:false});
                     $("#video_IsExam").attr({readonly:false,disabled:false});
                     $("#video_BeforeID").attr({readonly:false,disabled:false});
                     $("#video_Name").attr({readonly:false,disabled:false});
+                    $("#video_ResourcesContent").attr({readonly:false,disabled:false});
+                    $("#video_Description").attr({readonly:false,disabled:false});
+                    $("#video_ResourcesURL").attr({readonly:false,disabled:false});
+                    $("#video_Term").attr({readonly:false,disabled:false});
                     $('#model').removeClass('hidden');
                     $('#model1').removeClass('hidden');
-                    $("#video_Description").attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }
                 $('#edit_dialog').modal('show');

@@ -166,6 +166,7 @@ class VideoController extends BaseController{
             'stage' => $m_dic->getDictionaryList('题目阶段'),
             'defaultKnow' => $m_know->getByStage(1000301),
             'data' => $data,
+            'term' => $m_dic->getDictionaryList('学期'),
         ]);
     }
 
