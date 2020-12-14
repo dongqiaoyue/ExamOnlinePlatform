@@ -6,8 +6,8 @@ use app\models\phone\Tresourceexaminfo;
 use yii\helpers\Url;
 use common\commonFuc;
 $com = new commonFuc();
-$m_know = new \app\models\question\Knowledgepoint();
-
+$m_know = new \app\models\question\Knowledgepoint;
+$m_model = new \app\models\phone\Tresourceexaminfo;
 ?>
 
 
@@ -135,12 +135,6 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         else{
                                             echo '      <a id="check_btn" onclick="IsPublish(' . "'$id'"  . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>公开</a>';
                                         }
-                                        if($model['IsExam'] == 1) {
-                                            if (((new Tresourceexaminfo())->Check($id) == null))
-                                                echo '      <a id="have" onclick="jump(' . "'$id'" . ')" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-edit icon-white"></i>添加测试模板</a>';
-                                            else
-                                                echo '      <a id="have" onclick="alert(`已有测试模板`)" class="btn btn-primary btn-sm" href="#"><i class="glyphicon glyphicon-edit icon-white"></i>已有测试模板</a>';
-                                        }
                                         echo '      <a id="delete_btn" onclick="deleteAction(' . "'$id'" . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
 
                                         echo '  </td>';
@@ -215,6 +209,14 @@ $m_know = new \app\models\question\Knowledgepoint();
                         <?php }?>
                     </select>
                 </div>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
+                    <select size=1 name="BH" id="model">
+                        <?php foreach ($mod as $value){ ?>
+                            <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                    </select>
+                    </span>
+                </div>
                 <div class="clearfix"></div>
                 <br>
                 <div  style="float: left;"  >
@@ -223,6 +225,16 @@ $m_know = new \app\models\question\Knowledgepoint();
 
                     </span>
                 </div>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
+                    <select size=1 name="BH" id="model">
+                        <option value="0">无</option>
+                        <?php foreach ($mod as $value){ ?>
+                            <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                    </select>
+                    </span>
+                </div>
+                <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br>
 
@@ -368,6 +380,8 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#ppt_BeforeID").val(data['BeforeID']);
                     //$("#ppt_DifficultyCode").val(data['DifficultyCode']);
                     $("#ppt_Name").val(data['Name']);
+                    $('#model').addClass('hidden');
+                    $('#model1').addClass('hidden');
                     $("#ppt_Description").val(data['Description']);
                     $('#edit_dialog_ok').addClass('hidden');
                     $('#uploadfile-file').attr({readonly:true,disabled:true});
@@ -388,6 +402,8 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#ppt_IsExam").attr({readonly:false,disabled:false});
                     $("#ppt_BeforeID").attr({readonly:false,disabled:false});
                     $("#ppt_Name").attr({readonly:false,disabled:false});
+                    $('#model').removeClass('hidden');
+                    $('#model1').removeClass('hidden');
                     $("#ppt_Description").attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }

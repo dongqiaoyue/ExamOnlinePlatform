@@ -125,10 +125,27 @@ class VideoController extends BaseController{
     {
         $com = new commonFuc();
         $m_vid = new Tresources();
-        $id = Yii::$app->request->post('id');
+        $m_mod = new Tresourceexaminfo();
+        $post = Yii::$app->request->post();
+        $id = $post['id'];
         $update = $m_vid->findOne($id);
+        if ($m_mod->find()->where(['ResourcesID'=>$id])->exists())
+        {
+            $m_mod = Tresourceexaminfo::findOne($id);
+        }
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load(Yii::$app->request->post())) {
+            if (isset($post['BH']))
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $post['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $id;
+                $m_mod->save();
+            }
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {

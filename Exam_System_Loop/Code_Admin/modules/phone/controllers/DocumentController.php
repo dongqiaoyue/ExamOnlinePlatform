@@ -82,21 +82,25 @@ class DocumentController extends BaseController
         $m_doc = new Tresources();
         $m_mod = new Tresourceexaminfo();
         $com = new commonFuc();
+        $post = Yii::$app->request->post();
         
         if ($m_doc->load(Yii::$app->request->post())) {
             $m_doc->ID= $com->create_id();
-            $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$_POST['BH']])->one();
-            $m_mod->AddBy = Yii::$app->session->get('UserName');
-            $m_mod->AddAt = date('Y-m-d H:i:s');
-            $m_mod->CourseID = Yii::$app->session->get('courseCode');
-            $m_mod->BH = $_POST['BH'];
-            $m_mod->PaperName = $PaperName['PaperName'];
-            $m_mod->ResourcesID = $m_doc->ID;
-            $m_mod->save();
+            if (isset($post['BH']))
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $post['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $m_doc->ID;
+                $m_mod->save();
+            }
             $m_doc->CourseID = Yii::$app->session->get('courseCode');
             $m_doc->Type = '1000801';
             $m_doc->IsPublish = '0';
-            $m_doc->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
+            $m_doc->KnowledgeBh =  implode("||",$post['KnowledgeBhCode']);
             $m_doc->AddAt = date('Y-m-d H:i:s');
             $m_doc->AddBy = Yii::$app->session->get('UserName');
 
@@ -170,10 +174,28 @@ class DocumentController extends BaseController
     {
         $com = new commonFuc();
         $m_doc = new Tresources();
-        $id = Yii::$app->request->post('id');
+        $m_mod = new Tresourceexaminfo();
+        $post = Yii::$app->request->post();
+        $id = $post['id'];
+        if ($m_mod->find()->where(['ResourcesID'=>$id])->exists())
+        {
+            $m_mod = Tresourceexaminfo::findOne($id);
+        }
         $update = $m_doc->findOne($id);
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load(Yii::$app->request->post())) {
+            if (isset($post['BH']))
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$_POST['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $_POST['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $id;
+                $m_mod->save();
+            }
+
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {

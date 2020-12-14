@@ -82,10 +82,19 @@ class PptController extends BaseController
     public function actionCreate()
     {
         $m_ppt = new Tresources();
+        $m_mod = new Tresourceexaminfo();
         $com = new commonFuc();
         $m = new UploadFile();
         if ($m_ppt->load(Yii::$app->request->post())) {
             $m_ppt->ID= $com->create_id();
+            $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$_POST['BH']])->one();
+            $m_mod->AddBy = Yii::$app->session->get('UserName');
+            $m_mod->AddAt = date('Y-m-d H:i:s');
+            $m_mod->CourseID = Yii::$app->session->get('courseCode');
+            $m_mod->BH = $_POST['BH'];
+            $m_mod->PaperName = $PaperName['PaperName'];
+            $m_mod->ResourcesID = $m_doc->ID;
+            $m_mod->save();
             $m_ppt->CourseID = Yii::$app->session->get('courseCode');
             $m_ppt->Type = '1000802';
             $m_ppt->IsPublish = '0';
@@ -151,10 +160,27 @@ class PptController extends BaseController
     {
         $com = new commonFuc();
         $m_ppt = new Tresources();
-        $id = Yii::$app->request->post('id');
+        $m_mod = new Tresourceexaminfo();
+        $post = Yii::$app->request->post();
+        $id = $post['id'];
+        if ($m_mod->find()->where(['ResourcesID'=>$id])->exists())
+        {
+            $m_mod = Tresourceexaminfo::findOne($id);
+        }
         $update = $m_ppt->findOne($id);
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
-        if ($update->load(Yii::$app->request->post())) {
+        if ($update->load($post)) {
+            if (isset($post['BH']))
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $post['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $id;
+                $m_mod->save();
+            }
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {

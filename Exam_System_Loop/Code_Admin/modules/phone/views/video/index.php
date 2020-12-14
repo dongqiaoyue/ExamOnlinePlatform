@@ -6,7 +6,8 @@ use app\models\phone\Tresourceexaminfo;
 use yii\helpers\Url;
 use common\commonFuc;
 $com = new commonFuc();
-$m_know = new \app\models\question\Knowledgepoint();
+$m_know = new \app\models\question\Knowledgepoint;
+$m_model = new \app\models\phone\Tresourceexaminfo;
 
 ?>
 
@@ -123,7 +124,15 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         echo '  <td>' . $model['Name'] . '</td>';
                                         echo '  <td>' . $model->AddAt . '</td>';
                                         echo '  <td>' . $model->AddBy . '</td>';
-
+                                        if($model['IsExam']==1){
+                                            if($m=$m_model->isModel($id)){
+                                                echo '      <td>'.$m['PaperName'].'</td>';
+                                            }else{
+                                                echo '      <td>未配置测试模板</td>';
+                                            }
+                                        }else{
+                                            echo '<td>不需要考核</td>';
+                                        }
 
                                         echo '  <td class="center">';
 
@@ -135,12 +144,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         else{
                                             echo '      <a id="check_btn" onclick="IsPublish(' . "'$id'"  . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>公开</a>';
                                         }
-                                        if($model['IsExam'] == 1) {
-                                            if (((new Tresourceexaminfo())->Check($id) == null))
-                                                echo '      <a id="have" onclick="jump(' . "'$id'" . ')" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-edit icon-white"></i>添加测试模板</a>';
-                                            else
-                                                echo '      <a id="have" onclick="alert(`已经有一个测试模板了，还要我怎样`)" class="btn btn-primary btn-sm" href="#"><i class="glyphicon glyphicon-edit icon-white"></i>已有测试模板</a>';
-                                        }
+
                                         echo '      <a id="delete_btn" onclick="deleteAction(' . "'$id'" . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
 
                                         echo '  </td>';
@@ -225,6 +229,16 @@ $m_know = new \app\models\question\Knowledgepoint();
                         <?php }?>
                     </select>
                 </div>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
+                    <select size=1 name="BH" id="model">
+                        <option value="0">无</option>
+                        <?php foreach ($mod as $value){ ?>
+                            <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                    </select>
+                    </span>
+                </div>
+                <div class="clearfix"></div>
                 <div class="clearfix"></div>
                 <br>
                 <div  style="float: left;"  >
@@ -379,6 +393,8 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#video_BeforeID").val(data['BeforeID']);
                     //$("#video_DifficultyCode").val(data['DifficultyCode']);
                     $("#video_Name").val(data['Name']);
+                    $('#model').addClass('hidden');
+                    $('#model1').addClass('hidden');
                     $("#video_Description").val(data['Description']);
                     $('#edit_dialog_ok').addClass('hidden');
                 }
@@ -400,6 +416,8 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#video_IsExam").attr({readonly:false,disabled:false});
                     $("#video_BeforeID").attr({readonly:false,disabled:false});
                     $("#video_Name").attr({readonly:false,disabled:false});
+                    $('#model').removeClass('hidden');
+                    $('#model1').removeClass('hidden');
                     $("#video_Description").attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }

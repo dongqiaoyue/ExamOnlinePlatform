@@ -230,6 +230,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <div class="input-group  col-sm-5" style="float: left;" >
                 <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
                 <select size=1 name="BH" id="model">
+                    <option value="0">无</option>
                 <?php foreach ($mod as $value){ ?>
                 <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
                 </select>
