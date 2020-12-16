@@ -28,17 +28,7 @@ use yii\helpers\Url;
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">模块名称</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" id="moduleName" name="Examconfigrecord[ExamPaperName]">
-                            </div>
-                        </div>
-                    </div>
-
-                    <h1></h1>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-1 control-label col-md-offset-1">模块备注</label>
-                            <div class="col-xs-4">
-                                <textarea class="form-control" rows="3" id="moduleRemarks" name="Examconfigrecord[ConfigMemo]"></textarea>
+                                <input type="text" class="form-control" id="moduleName" name="Tresourceexaminfo[PaperName]">
                             </div>
                         </div>
                     </div>
