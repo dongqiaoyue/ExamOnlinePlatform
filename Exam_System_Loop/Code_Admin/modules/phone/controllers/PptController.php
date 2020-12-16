@@ -23,35 +23,42 @@ class PptController extends BaseController
         $m_ppt = new Tresources();
         $com = new commonFuc();
         $m = new UploadFile();
-        $whereC = [];
-        $whereL = [];
-        $whereK = [];
-        $w =[];
 
-        //是否选择知识点
-        $stage = Yii::$app->request->get();
+        $CourseID = Yii::$app->session->get('courseCode');
+        $Info = Yii::$app->request->get();
 
-        if (isset($stage['knowledgeBh'])) {
-            $w = [
-                'like',
-                'knowledgeBh',$stage['knowledgeBh'],
-            ];
-        }
-        if (isset($stage['stage'])) {
-            $whereK['Stage'] = $stage['stage'];
-        }
-
-        $whereC['CourseID'] = Yii::$app->session->get('courseCode');
-
-
-        $whereL['CourseID'] = Yii::$app->session->get('courseCode');
-        $whereL['Type'] = ['1000802'];
-        $list = $m_ppt->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereL,$w])->orderBy("AddAt ASC");
         $pr = $m_ppt->find()->select(['ID', 'Name', 'KnowledgeBh', 'IsPublish','AddAt','AddBy','CustomBh','IsExam'])
-            ->where(['and',$whereC,'IsPublish = 1'])->orderBy("AddAt ASC")->all();
-        $knowledgepoint = knowledgepoint::find()->where($whereK)->asArray()->all();
-        $knowledge = knowledgepoint::find()->asArray()->all();
+            ->where(['and',['CourseID' => $CourseID],'IsPublish = 1'])->orderBy("AddAt ASC")->all();
+
+        $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>$CourseID])->groupBy(['BH'])->orderBy('BH DESC')->all();
+
+        $list = $m_ppt->find()
+            ->where(['Type' => 1000802]);
+
+        if (isset($Info['term'])) {
+            $list = $list->andWhere([
+                'like',
+                'Term',
+                $Info['term']]);
+        }
+
+        if (isset($Info['stage'])) {
+            $knowledgepoint = $m_know->find()
+                ->where(['Stage' => $Info['stage'], 'CourseID' => $CourseID])
+                ->all();
+        }else{
+            $knowledgepoint = $m_know->find()
+                ->where(['CourseID' => $CourseID])
+                ->all();
+        }
+        if (isset($Info['knowledgeBh'])) {
+            $list = $list->andWhere([
+                'like',
+                'knowledgeBh',$Info['knowledgeBh']
+            ]);
+        }
+
+        $list = $list->orderBy("Type ASC");
 
 
         //Tab
@@ -61,13 +68,13 @@ class PptController extends BaseController
         return $this->render('index', [
             'list' => $list->offset($pages->offset)->limit($pages->limit)->all(),
             'pages' => $pages,
-            'Choice' => $stage,
-            'stage' => $m_dic->getDictionaryList('题目阶段'),
             //默认显示第一阶段知识点
             'defaultKnow' => $m_know->getByStage('1000301'),
-            'knowledgepoint'=>$knowledgepoint,
-            'knowledge'=>$knowledge,
-            'pr' => $pr,//前置资源好像是
+            'term' => $m_dic->getDictionaryList('学期'),
+            'stage' => $m_dic->getDictionaryList('题目阶段'),
+            'knowledgepoint' => $knowledgepoint,
+            'pr' => $pr,//前置资源
+            'mod' => $mod,
             'm' => $m
         ]);
     }
@@ -75,10 +82,13 @@ class PptController extends BaseController
     public function actionCreate()
     {
         $m_ppt = new Tresources();
+        $m_mod = new Tresourceexaminfo();
         $com = new commonFuc();
+        $post = Yii::$app->request->post();
         $m = new UploadFile();
-        if ($m_ppt->load(Yii::$app->request->post())) {
+        if ($m_ppt->load($post)) {
             $m_ppt->ID= $com->create_id();
+
             $m_ppt->CourseID = Yii::$app->session->get('courseCode');
             $m_ppt->Type = '1000802';
             $m_ppt->IsPublish = '0';
@@ -91,9 +101,20 @@ class PptController extends BaseController
             $path = 'uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
             if ($m_ppt->validate() && $m_ppt->save()) {
+                if (isset($post['BH']))
+                {
+                    $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                    $m_mod->AddBy = Yii::$app->session->get('UserName');
+                    $m_mod->AddAt = date('Y-m-d H:i:s');
+                    $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                    $m_mod->BH = $post['BH'];
+                    $m_mod->PaperName = $PaperName['PaperName'];
+                    $m_mod->ResourcesID = $m_ppt->ID;
+                    $m_mod->save();
+                }
                 $com->JsonSuccess('添加成功');
-            } else {
-                $com->JsonFail($m_ppt->getErrors());
+//            } else {
+//                $com->JsonFail($m_ppt->getErrors());
             }
         } else {
             /*$com->JsonFail('数据出错');*/
@@ -107,19 +128,12 @@ class PptController extends BaseController
     public function actionDelete()
     {
         $com = new commonFuc();
-        $m_ppt = new Tresources();
+        $m_doc = new Tresources();
 
-        $ids = Yii::$app->request->get('ids');
-
-
+        $ids = \Yii::$app->request->get('ids');
         if (count($ids) > 0) {
             foreach ($ids as $item) {
-                $path=$m_ppt->find()->select(['ResourcesURL','ID'])->where(['ID'=>$item])->one();
-                $t = $path['ResourcesURL'];
-                if(is_file($t)){
-                    unlink($t);
-                    $m_ppt->deleteAll(['ID' => $item]);
-                }
+                $m_doc->deleteAll(['ID' => $item]);
             }
             $com->JsonSuccess('删除成功');
 
@@ -144,10 +158,27 @@ class PptController extends BaseController
     {
         $com = new commonFuc();
         $m_ppt = new Tresources();
-        $id = Yii::$app->request->post('id');
+        $m_mod = new Tresourceexaminfo();
+        $post = Yii::$app->request->post();
+        $id = $post['id'];
+        if ($m_mod->find()->where(['ResourcesID'=>$id])->exists())
+        {
+            $m_mod = Tresourceexaminfo::findOne($id);
+        }
         $update = $m_ppt->findOne($id);
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
-        if ($update->load(Yii::$app->request->post())) {
+        if ($update->load($post)) {
+            if (isset($post['BH']))
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $post['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $id;
+                $m_mod->save();
+            }
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {
@@ -209,8 +240,8 @@ class PptController extends BaseController
         $stage = Yii::$app->request->get('stageId');
         $data = $m_know->find()
             ->select([
-                'KnowledgeName','KnowledgeBh'
-            ])->where(['Stage' => $stage])->asArray()->all();
+                'KnowledgeName','KnowledgeBh','CourseID'
+            ])->where(['Stage' => $stage,'CourseID'=>Yii::$app->session->get('courseCode')])->asArray()->all();
         echo json_encode($data);
     }
 

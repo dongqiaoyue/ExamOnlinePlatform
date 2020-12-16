@@ -37,42 +37,57 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                         <!-- row start search-->
                         <div class="row">
                             <div class="col-sm-12">
-                                <select class="form-control" id="stage-choice">
-                                    <?php if(isset($Choice['stage'])){?>
-                                        <?php foreach ($stage as $model){?>
-                                            <?php if($model->CuitMoon_DictionaryCode == $Choice['stage']){?>
+                                <label>学期:&nbsp;</label>
+                                <select class="form-control" id="term-choice">
+                                    <option value="0">全部学期</option>
+                                    <?php if(isset($_GET['term'])){?>
+                                        <?php foreach ($term as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryCode === $_GET['term']){?>
                                                 <option value="<?=$model->CuitMoon_DictionaryCode?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }else{?>
                                                 <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }?>
                                         <?php }?>
                                     <?php }else{?>
-                                        <option value="0">全部阶段</option>
-                                        <?php foreach ($stage as $model){?>
+                                        <?php foreach ($term as $model){?>
                                             <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                         <?php }}?>
-                                    >
                                 </select>
-                                <select class="form-control" id="knowledgepoint-choice">
-                                    <?php if(isset($Choice['knowledgeBh'])){?>
-                                        <?php foreach ($knowledgepoint as $key => $value){?>
-                                            <?php if($$value['KnowledgeBh'] == $Choice['knowledgeBh']){?>
-                                                <option value="<?=$value['KnowledgeBh']?>" selected="selected"><?=$value['KnowledgeName']?></option>
+
+                                <label>阶段:&nbsp;</label>
+                                <select class="form-control" id="stage-choice">
+                                    <option value="0">全部阶段</option>
+                                    <?php if(isset($_GET['stage'])){?>
+                                        <?php foreach ($stage as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryCode === $_GET['stage']){?>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }else{?>
-                                                <option value="<?=$value['KnowledgeBh']?>" ><?=$value['KnowledgeName']?></option>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }?>
                                         <?php }?>
                                     <?php }else{?>
-                                    <option value="0">全部知识点</option>
-                                    <?php foreach ($knowledgepoint as $key => $value){?>
-                                        <option value="<?=$value['KnowledgeBh']?>" ><?=$value['KnowledgeName']?></option>
-                                    <?php }}?>
-                                    >
+                                        <?php foreach ($stage as $model){?>
+                                            <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                        <?php }}?>
                                 </select>
-                                <div class="input-group">
-                                    <span class="input-group-addon">搜索：</span>
-                                    <input type="text" id="search" placeholder="支持题编号，名字"/>
-                                </div>
+
+                                <label>知识点:&nbsp;</label>
+                                <select class="form-control" id="knowledgepoint-choice">
+                                    <option value="0">全部知识点</option>
+                                    <?php if(isset($_GET['knowledgeBh'])){?>
+                                        <?php foreach ($knowledgepoint as $model){?>
+                                            <?php if($model->KnowledgeBh === $_GET['knowledgeBh']){?>
+                                                <option value="<?=$model->KnowledgeBh?>" selected="selected"><?=$model->KnowledgeName?></option>
+                                            <?php }else{?>
+                                                <option value="<?=$model->KnowledgeBh?>" ><?=$model->KnowledgeName?></option>
+                                            <?php }?>
+                                        <?php }?>
+                                    <?php }else{?>
+                                        <?php foreach ($knowledgepoint as $model){?>
+                                            <option value="<?=$model->KnowledgeBh?>" ><?=$model->KnowledgeName?></option>
+                                        <?php }}?>
+
+                                </select>
                             </div>
                         </div>
                         <!-- row start search-->
@@ -192,7 +207,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <button type="button" class="close" data-dismiss="modal">x</button>
                 <h3>学习文档</h3>
             </div>
-            <div class="modal-body">
+            <br class="modal-body">
                 <?php $form = ActiveForm::begin(["id" => "admin-role-form", "class"=>"form-horizontal", "action"=>Url::toRoute("document/view")]); ?>
 
                 <input type="hidden" class="form-control" id="id" Name="id" />
@@ -205,6 +220,16 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     <div class="clearfix"></div>
                 </div>
                 <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon">&nbsp;学&nbsp;期</span>
+                    <select class="form-control" id="document_Term" value="0" name="Tresources[Term]">
+                        <?php foreach ($term as $model){?>
+                            <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+                </br>
+                <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;所&nbsp;属&nbsp;阶&nbsp;段&nbsp;</span>
                     <select class="form-control" id="document_StageCode" value="0">
                         <?php foreach ($stage as $model){?>
@@ -215,6 +240,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <div class="input-group  col-sm-5" style="float: left;" >
                 <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
                 <select size=1 name="BH" id="model">
+                    <option value="0">无</option>
                 <?php foreach ($mod as $value){ ?>
                 <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
                 </select>
@@ -366,6 +392,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Name").val('');
                     $("#document_Description").val('');
                     $("#document_ResourcesContent").val('');
+                    $("#document_Term").val('');
                     $("#model").val('');
                     UE.getEditor('document_ResourcesContent').setContent('');
                     UE.getEditor('document_ResourcesContent').setEnabled();
@@ -382,6 +409,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Name").val(data['Name']);
                     $("#document_ResourcesContent").val(data['ResourcesContent']);
                     $("#document_Description").val(data['Description']);
+                    $("#"+data['Term']).attr("selected",true);
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
                     $('#edit_dialog_ok').addClass('hidden');
@@ -394,6 +422,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_IsExam").attr({readonly:true,disabled:true});
                     $("#document_BeforeID").attr({readonly:true,disabled:true});
                     $("#document_Name").attr({readonly:true,disabled:true});
+                    $("#document_Term").attr({readonly:true,disabled:true});
                     $("#document_ResourcesContent").attr({readonly:true,disabled:true});
                     $("#document_Description").attr({readonly:true,disabled:true});
 
@@ -407,6 +436,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Name").attr({readonly:false,disabled:false});
                     $("#document_ResourcesContent").attr({readonly:false,disabled:false});
                     $("#document_Description").attr({readonly:false,disabled:false});
+                    $("#document_Term").attr({readonly:false,disabled:false});
                     $('#model').removeClass('hidden');
                     $('#model1').removeClass('hidden');
                     $('#edit_dialog_ok').removeClass('hidden');
@@ -474,24 +504,51 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
             }
 
 
-            $('#knowledgepoint-choice').change(function () {
-                var know = $(this).val();
+            $('#term-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
                 var url = '<?=Url::toRoute('document/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
 
-                if(know != 0)
-                    url += '&knowledgeBh='+know;
                 window.location.href = url;
-            })
-
-            $('#stage-choice').change(function () {
-                var Tmp = $(this).val();
-                var know = $("#knowledgepoint-choice").val();
+            });
+            $('#stage-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
                 var url = '<?=Url::toRoute('document/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
 
-                if(Tmp != 0)
-                    url += '&stage='+Tmp;
                 window.location.href = url;
-            })
+            });
+            $('#knowledgepoint-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
+                var url = '<?=Url::toRoute('document/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
+
+                window.location.href = url;
+            });
 
             function checkcheck(id) {
                 var aa;

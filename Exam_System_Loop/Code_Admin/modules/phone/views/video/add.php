@@ -87,6 +87,17 @@ $m_know = new \app\models\question\Knowledgepoint();
                     <h1></h1>
                     <br>
 
+                    <div class="input-group  col-sm-5" style="float: left;" >
+                        <span class="input-group-addon">&nbsp;学&nbsp;期</span>
+                        <select class="form-control" id="video_Term" value="0" name="Tresources[Term]">
+                            <?php foreach ($term as $model){?>
+                                <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                            <?php }?>
+                        </select>
+                    </div>
+                    <h1></h1>
+                    <br>
+
                     <div class="row">
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">所属阶段</label>

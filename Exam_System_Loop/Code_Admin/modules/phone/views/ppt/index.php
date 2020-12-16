@@ -6,8 +6,8 @@ use app\models\phone\Tresourceexaminfo;
 use yii\helpers\Url;
 use common\commonFuc;
 $com = new commonFuc();
-$m_know = new \app\models\question\Knowledgepoint();
-
+$m_know = new \app\models\question\Knowledgepoint;
+$m_model = new \app\models\phone\Tresourceexaminfo;
 ?>
 
 
@@ -37,42 +37,57 @@ $m_know = new \app\models\question\Knowledgepoint();
                         <!-- row start search-->
                         <div class="row">
                             <div class="col-sm-12">
-                                <select class="form-control" id="stage-choice">
-                                    <?php if(isset($Choice['stage'])){?>
-                                        <?php foreach ($stage as $model){?>
-                                            <?php if($model->CuitMoon_DictionaryCode == $Choice['stage']){?>
+                                <label>学期:&nbsp;</label>
+                                <select class="form-control" id="term-choice">
+                                    <option value="0">全部学期</option>
+                                    <?php if(isset($_GET['term'])){?>
+                                        <?php foreach ($term as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryCode === $_GET['term']){?>
                                                 <option value="<?=$model->CuitMoon_DictionaryCode?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }else{?>
                                                 <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }?>
                                         <?php }?>
                                     <?php }else{?>
-                                        <option value="0">全部阶段</option>
-                                        <?php foreach ($stage as $model){?>
+                                        <?php foreach ($term as $model){?>
                                             <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                         <?php }}?>
-                                    >
                                 </select>
-                                <select class="form-control" id="knowledgepoint-choice">
-                                    <?php if(isset($Choice['knowledgeBh'])){?>
-                                        <?php foreach ($knowledgepoint as $key => $value){?>
-                                            <?php if($$value['KnowledgeBh'] == $Choice['knowledgeBh']){?>
-                                                <option value="<?=$value['KnowledgeBh']?>" selected="selected"><?=$value['KnowledgeName']?></option>
+
+                                <label>阶段:&nbsp;</label>
+                                <select class="form-control" id="stage-choice">
+                                    <option value="0">全部阶段</option>
+                                    <?php if(isset($_GET['stage'])){?>
+                                        <?php foreach ($stage as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryCode === $_GET['stage']){?>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }else{?>
-                                                <option value="<?=$value['KnowledgeBh']?>" ><?=$value['KnowledgeName']?></option>
+                                                <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                             <?php }?>
                                         <?php }?>
                                     <?php }else{?>
-                                        <option value="0">全部知识点</option>
-                                        <?php foreach ($knowledgepoint as $key => $value){?>
-                                            <option value="<?=$value['KnowledgeBh']?>" ><?=$value['KnowledgeName']?></option>
+                                        <?php foreach ($stage as $model){?>
+                                            <option value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                                         <?php }}?>
-                                    >
                                 </select>
-                                <div class="input-group">
-                                    <span class="input-group-addon">搜索：</span>
-                                    <input type="text" id="search" placeholder="支持题编号，名字"/>
-                                </div>
+
+                                <label>知识点:&nbsp;</label>
+                                <select class="form-control" id="knowledgepoint-choice">
+                                    <option value="0">全部知识点</option>
+                                    <?php if(isset($_GET['knowledgeBh'])){?>
+                                        <?php foreach ($knowledgepoint as $model){?>
+                                            <?php if($model->KnowledgeBh === $_GET['knowledgeBh']){?>
+                                                <option value="<?=$model->KnowledgeBh?>" selected="selected"><?=$model->KnowledgeName?></option>
+                                            <?php }else{?>
+                                                <option value="<?=$model->KnowledgeBh?>" ><?=$model->KnowledgeName?></option>
+                                            <?php }?>
+                                        <?php }?>
+                                    <?php }else{?>
+                                        <?php foreach ($knowledgepoint as $model){?>
+                                            <option value="<?=$model->KnowledgeBh?>" ><?=$model->KnowledgeName?></option>
+                                        <?php }}?>
+
+                                </select>
                             </div>
                         </div>
                         <!-- row start search-->
@@ -89,9 +104,10 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         <?php
                                         echo '<th><input id="data_table_check" type="checkbox"></th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >自定义编号</th>';
-                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >ppt名称</th>';
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >文档名称</th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加时间</th>';
                                         echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >添加人</th>';
+                                        echo '<th tabindex="0" aria-controls="data_table" rowspan="1" colspan="1" aria-sort="ascending" >模版名称</th>';
 
 
                                         ?>
@@ -109,6 +125,15 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         echo '  <td>' . $model->AddAt . '</td>';
                                         echo '  <td>' . $model->AddBy . '</td>';
 
+                                        if($model['IsExam']==1){
+                                            if($m1=$m_model->isModel($id)){
+                                                echo '      <td>'.$m1['PaperName'].'</td>';
+                                            }else{
+                                                echo '      <td>未配置测试模板</td>';
+                                            }
+                                        }else{
+                                            echo '<td>不需要考核</td>';
+                                        }
 
                                         echo '  <td class="center">';
 
@@ -119,12 +144,6 @@ $m_know = new \app\models\question\Knowledgepoint();
                                         }
                                         else{
                                             echo '      <a id="check_btn" onclick="IsPublish(' . "'$id'"  . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>公开</a>';
-                                        }
-                                        if($model['IsExam'] == 1) {
-                                            if (((new Tresourceexaminfo())->Check($id) == null))
-                                                echo '      <a id="have" onclick="jump(' . "'$id'" . ')" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-edit icon-white"></i>添加测试模板</a>';
-                                            else
-                                                echo '      <a id="have" onclick="alert(`已有测试模板`)" class="btn btn-primary btn-sm" href="#"><i class="glyphicon glyphicon-edit icon-white"></i>已有测试模板</a>';
                                         }
                                         echo '      <a id="delete_btn" onclick="deleteAction(' . "'$id'" . ')" class="btn btn-danger btn-sm" href="#"> <i class="glyphicon glyphicon-trash icon-white"></i>删除</a>';
 
@@ -190,7 +209,15 @@ $m_know = new \app\models\question\Knowledgepoint();
                     </div>
                     <div class="clearfix"></div>
                 </div>
-
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon">&nbsp;学&nbsp;期</span>
+                    <select class="form-control" id="ppt_Term" value="0" name="Tresources[Term]">
+                        <?php foreach ($term as $model){?>
+                            <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="clearfix"></div>
                 <br>
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;所&nbsp;属&nbsp;阶&nbsp;段&nbsp;</span>
@@ -199,6 +226,14 @@ $m_know = new \app\models\question\Knowledgepoint();
                             <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
                         <?php }?>
                     </select>
+                </div>
+                <div class="input-group  col-sm-5" style="float: left;" >
+                    <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
+                    <select size=1 name="BH" id="model">
+                        <?php foreach ($mod as $value){ ?>
+                            <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                    </select>
+                    </span>
                 </div>
                 <div class="clearfix"></div>
                 <br>
@@ -341,6 +376,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#ppt_BeforeID").val('');
                     $("#ppt_Name").val('');
                     $("#ppt_Description").val('');
+                    $("#ppt_Term").val('');
                     $('#uploadfile-file').attr({readonly:false,disabled:false});
                 }
                 else{
@@ -353,7 +389,10 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#ppt_BeforeID").val(data['BeforeID']);
                     //$("#ppt_DifficultyCode").val(data['DifficultyCode']);
                     $("#ppt_Name").val(data['Name']);
+                    $('#model').addClass('hidden');
+                    $('#model1').addClass('hidden');
                     $("#ppt_Description").val(data['Description']);
+                    $("#"+data['Term']).attr("selected",true);
                     $('#edit_dialog_ok').addClass('hidden');
                     $('#uploadfile-file').attr({readonly:true,disabled:true});
                 }
@@ -364,6 +403,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#ppt_IsExam").attr({readonly:true,disabled:true});
                     $("#ppt_BeforeID").attr({readonly:true,disabled:true});
                     $("#ppt_Name").attr({readonly:true,disabled:true});
+                    $("#ppt_Term").attr({readonly:true,disabled:true});
                     $("#ppt_Description").attr({readonly:true,disabled:true});
                 }
                 else{
@@ -373,7 +413,10 @@ $m_know = new \app\models\question\Knowledgepoint();
                     $("#ppt_IsExam").attr({readonly:false,disabled:false});
                     $("#ppt_BeforeID").attr({readonly:false,disabled:false});
                     $("#ppt_Name").attr({readonly:false,disabled:false});
+                    $('#model').removeClass('hidden');
+                    $('#model1').removeClass('hidden');
                     $("#ppt_Description").attr({readonly:false,disabled:false});
+                    $("#ppt_Term").attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }
                 $('#edit_dialog').modal('show');
@@ -443,24 +486,52 @@ $m_know = new \app\models\question\Knowledgepoint();
                 getKnowledge($("#ppt_StageCode").val(),$("#ppt_StageCode option:selected").text());
             });
 
-            $('#knowledgepoint-choice').change(function () {
-                var know = $(this).val();
+            $('#term-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
                 var url = '<?=Url::toRoute('ppt/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
 
-                if(know != 0)
-                    url += '&knowledgeBh='+know;
                 window.location.href = url;
-            })
-
-            $('#stage-choice').change(function () {
-                var Tmp = $(this).val();
-                var know = $("#knowledgepoint-choice").val();
+            });
+            $('#stage-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
                 var url = '<?=Url::toRoute('ppt/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
 
-                if(Tmp != 0)
-                    url += '&stage='+Tmp;
                 window.location.href = url;
-            })
+            });
+            $('#knowledgepoint-choice').change(function (e) {
+                e.preventDefault();
+                var kno = $("#knowledgepoint-choice").val();
+                var stage = $("#stage-choice").val();
+                var term = $("#term-choice").val();
+                var url = '<?=Url::toRoute('ppt/index')?>';
+                if (term != 0)
+                    url += '&term='+term;
+                if (stage != 0)
+                    url += '&stage='+stage;
+                if (kno != 0)
+                    url += '&knowledgeBh='+kno
+
+                window.location.href = url;
+            });
+
 
             function checkcheck(id) {
                 var aa;
