@@ -180,7 +180,6 @@ class ExamModuleController extends BaseController{
         $info = Yii::$app->request->post();
 
         $RecordID = $com->create_id();
-       // if($m_exam_config->load($info)){
             $m_exam_config->BH = $RecordID;
             $m_exam_config->AddAt = date('Y-m-d H:i:s');
             $m_exam_config->CourseID = Yii::$app->session->get('courseCode');
@@ -216,9 +215,6 @@ class ExamModuleController extends BaseController{
                 $transaction->rollBack();
                 $com->JsonFail($m_exam_config->getErrors());
             }
-        // }else{
-        //     echo $com->JsonFail('数据错误');
-        // }
     }
 
     /**
