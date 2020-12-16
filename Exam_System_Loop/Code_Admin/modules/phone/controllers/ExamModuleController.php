@@ -137,6 +137,7 @@ class ExamModuleController extends BaseController{
      */
     public function actionGetQuestionSum(){
         $m_dic = new TbcuitmoonDictionary();
+        $m_knowledge = new Knowledgepoint();
         $m_question = new Questions();
 
         $info = Yii::$app->request->post();
@@ -147,21 +148,21 @@ class ExamModuleController extends BaseController{
         $data['diff'] = $Tmp[0]['CuitMoon_DictionaryName'];
 
         $data['sum'] = [];
-        if(!isset($info['Stage']['0'])){
+        if(!isset($info['Knowledge']['0'])){
             echo 0;
         }else {
             //获取题目数量
             $data['sum'] = $m_question->find()->select(['QuestionBh'])->where([
-                'Stage' => $info['Stage']['0'],
                 'Difficulty' => $info['Diff']['0'],
+                'KnowledgeBh'=> $info['Knowledge']['0'],
                 'CourseID' => Yii::$app->session->get('courseCode'),
                 'QuestionType' => $info['QuestionType'],
                 'Checked' => 100001,
             ])->count();
             //获取题目阶段
-            $data['stage'] = $m_dic->find()->select(['CuitMoon_DictionaryName'])->where([
-                'CuitMoon_DictionaryCode' => $info['Stage']['0'],
-            ])->asArray()->one()['CuitMoon_DictionaryName'];
+            $data['Knowledge'] = $m_knowledge->find()->select(['KnowledgeName'])->where([
+                'KnowledgeBh' => $info['Knowledge']['0'],
+            ])->asArray()->one();
 
             echo json_encode($data);
         }
@@ -179,22 +180,27 @@ class ExamModuleController extends BaseController{
         $info = Yii::$app->request->post();
 
         $RecordID = $com->create_id();
-        if($m_exam_config->load($info)){
+       // if($m_exam_config->load($info)){
             $m_exam_config->BH = $RecordID;
             $m_exam_config->AddAt = date('Y-m-d H:i:s');
             $m_exam_config->CourseID = Yii::$app->session->get('courseCode');
             $m_exam_config->AddBy = Yii::$app->session->get('UserName');
+            $m_exam_config->ResourcesID = $RecordID;
             $m_exam_config->save(); 
 
             $sql = 'insert into Tresourceexaminfoset (XH,QuestionType,QuestionTypeNumber,EveryQuestionScore,KnowledgeBh,difficulty,BH) values';
-            //Splicing sql
-            foreach ($info['konwledge'] as $key=>$value){
-                foreach ($info['Num'][$key] as $k=>$va){
-                    if($va != null && $info['Score'][$key][$k] != null) {
-                        $Tmp = $com->create_id();
-                        $score = $info['Score'][$key][$k];
-                        $stage = implode('|',$value);
-                        $sql .= "('$Tmp','$key','$va','$score','$stage','$k','$RecordID'),";
+            //题目类型
+            foreach ($info['Num'] as $key=>$value){
+                //题目难度
+                foreach ($info['Num'][$key] as $ke=>$val){
+                    //题目阶段
+                    foreach($info['Num'][$key][$ke] as $k=>$v){
+                        if($val != null && $info['Score'][$key][$ke][$k] != null && $v != 0) {
+                            $Tmp = $com->create_id();
+                            $score = $info['Score'][$key][$ke][$k];
+                            $stage = $k;
+                            $sql .= "('$Tmp','$key','$v','$score','$stage','$ke','$RecordID'),";
+                        }
                     }
                 }
             }
@@ -210,9 +216,9 @@ class ExamModuleController extends BaseController{
                 $transaction->rollBack();
                 $com->JsonFail($m_exam_config->getErrors());
             }
-        }else{
-            echo $com->JsonFail('数据错误');
-        }
+        // }else{
+        //     echo $com->JsonFail('数据错误');
+        // }
     }
 
     /**

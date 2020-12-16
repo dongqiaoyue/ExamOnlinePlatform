@@ -47,7 +47,7 @@ class ExamModuleController extends BaseController{
             $info['tmp']['CourseID'] = $com->codeTranName($info['tmp']['CourseID']);
             $info['data'] = $m_paper_config->find()->where([
                 'ExamConfigRecordID' => $id,
-                'ExamPlanBh' => ''
+                'ExamPlanBh' => ''                                                                                                                                      
             ])->orderBy('QuestionType desc')->addOrderBy('difficulty desc')->asArray()->all();
             $info['totalScore'] = 0;
             $info['totalNumber'] = 0;
@@ -55,12 +55,15 @@ class ExamModuleController extends BaseController{
                 $info['data'][$key]['QuestionType'] = $com->codeTranName($info['data'][$key]['QuestionType']);
                 $info['data'][$key]['difficulty'] = $com->codeTranName($info['data'][$key]['difficulty']);
                 $info['data'][$key]['EveryQuestionSocre'] = $value['EveryQuestionSocre'];
-                $tmp = explode('|',$info['data'][$key]['stage']);
-                $tmp_name = [];
-                foreach ($tmp as $item){
-                    $tmp_name[] = $com->codeTranName($item);
-                }
-                $info['data'][$key]['stage'] = implode('|',$tmp_name);
+                //$tmp = explode('|',$info['data'][$key]['stage']);
+                $tmp =$info['data'][$key]['stage'];
+                $tmp_name = $com->codeTranName($tmp);
+               // $tmp_name = [];
+                //foreach ($tmp as $item){
+                //    $tmp_name[] = $com->codeTranName($item);
+                //}
+                //$info['data'][$key]['stage'] = implode('|',$tmp_name);
+                $info['data'][$key]['stage'] = $tmp_name;
                 $info['totalScore'] = $info['totalScore']+($value['EveryQuestionSocre']*$value['QuestionTypeNumber']);
                 $info['totalNumber'] += $value['QuestionTypeNumber'];
             }

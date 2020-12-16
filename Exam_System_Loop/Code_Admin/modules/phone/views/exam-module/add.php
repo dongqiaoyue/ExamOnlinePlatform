@@ -159,67 +159,72 @@ use yii\helpers\Url;
                 '<tr><td>题目数量</td><td>' +
                 '<input id="'+ Tmp_Code +'-num" class="form-control" name="'+ Tmp_Code +'-number"></td></tr>' +
                 '<tr><td>题目难度</td>' +
-                '<td><?php foreach ($diff as $value){?><label class="checkbox-inline" id="'+ Tmp_Code +'-diff"><input type="radio" name="diff" id="'+ Tmp_Code +'-'+ <?=$value["CuitMoon_DictionaryCode"]?> +'-diff" value="<?=$value["CuitMoon_DictionaryCode"]?>"><?=$value["CuitMoon_DictionaryName"]?></label><?php }?></td></tr><tr><td>题目阶段</td><td><?php foreach ($stage as $value){?><label class="checkbox-inline" id="'+ Tmp_Code +'-stage"><input type="radio" name="Stages['+ Tmp_Code +'][]" id="'+ Tmp_Code +'-stage" value="<?=$value["CuitMoon_DictionaryCode"]?>" onclick="Stage('+ Tmp_Code +')"><?=$value["CuitMoon_DictionaryName"]?></label><?php }?></td></tr><tr><td>知识点</td><td><label class="checkbox-inline" id="'+ Tmp_Code +'-konwledge" ></label></td></tr><tr><td>每种难度题目数量</td><td><table class="table" id="'+ Tmp_Code +'-new-table">' +
-                '<tr><th>题目难度</th><th>题目阶段</th><th>题目总数</th><th>题目数量</th><th>每题分值</th><th>操作</th></tr></table></td></tr></table></div>')
+                '<td><?php foreach ($diff as $value){?><label class="checkbox-inline" id="'+ Tmp_Code +'-diff"><input type="radio" name="diff" id="'+ Tmp_Code +'-'+ <?=$value["CuitMoon_DictionaryCode"]?> +'-diff" value="<?=$value["CuitMoon_DictionaryCode"]?>"><?=$value["CuitMoon_DictionaryName"]?></label><?php }?></td></tr><tr><td>题目阶段</td><td><?php foreach ($stage as $value){?><label class="checkbox-inline" id="'+ Tmp_Code +'-stage"><input type="radio" name="Stages['+ Tmp_Code +'][]" id="'+ Tmp_Code +'-stage" value="<?=$value["CuitMoon_DictionaryCode"]?>" onclick="Stage('+ Tmp_Code +')"><?=$value["CuitMoon_DictionaryName"]?></label><?php }?></td></tr><tr><td>知识点</td><td><div class="checkbox-inline" id="'+ Tmp_Code +'-konwledge" ></div></td></tr><tr><td>每种难度题目数量</td><td><table class="table" id="'+ Tmp_Code +'-new-table">' +
+                '<tr><th>题目难度</th><th>题目知识点</th><th>题目总数</th><th>题目数量</th><th>每题分值</th><th>操作</th></tr></table></td></tr></table></div>')
         }
     });
 
-    //add question difficulty
-    //function Diff(Tmp_Code,diff_code) {
-    //    $.ajax({
-    //        type:'GET',
-    //        url:'<?//=Url::toRoute('exam-module/fool')?>//',
-    //        dataType:'JSON',
-    //        data:{code:diff_code},
-    //        success:function (Value) {
-                // if($('input[id='+ Tmp_Code +'-'+ diff_code +'-diff]').is(':checked')){
-                //     $('#'+ Tmp_Code +'-new-table').append('<tr id="'+ Tmp_Code +'-'+ diff_code +'-rm"><td>'+ Value +'</td>' +
-                //         '<td id="'+ Tmp_Code +'-'+ diff_code +'-question-sum">0</td>' +
-                //         '<td id="'+ Tmp_Code +'-'+ diff_code +'-question-sum">0</td>' +
-                //         '<td><input data="'+ Tmp_Code +'-'+ diff_code +'" id="'+ Tmp_Code +'-Num" class="number2" name="Num['+ Tmp_Code +']['+ diff_code +']" onchange="javascript:checkYesOrNo('+ Tmp_Code +','+  diff_code +');"></td>' +
-                //         '<td><input dataOne="'+ Tmp_Code +'-'+ diff_code +'"  id="'+ Tmp_Code +'-Score" name="Score['+ Tmp_Code +']['+ diff_code +']" onchange="javascript:SumScore('+ Tmp_Code +','+  diff_code +');"></td></tr>')
-                //         Stage(Tmp_Code);
-                // }else{
-                //     $('#'+ Tmp_Code +'-'+ diff_code +'-rm').remove();
-                // }
-    //         }
-    //     })
-    // }
-
     //Asynchronous get the number of questions
-    function Stage(Tmp_Code) {
+    function getkonwledge(Tmp_Code,Stage){
+            var a=''
+            $.ajax({
+                type:'GET',
+                url: '<?=Url::toRoute("exam-module/get-konwledge")?>',
+                dataType: 'JSON',
+                data: {'Stage':Stage},
+                success: function (value) {
+                     if(value!=null){
+                        for(tmp in value){
+                         a=a+'<label id="'+ Tmp_Code +'-konwledge"><input type="radio" name="Knowledge['+ Tmp_Code +'][]" id="'+ Tmp_Code+'" value="'+value[tmp]['KnowledgeBh']+'" onclick="Knowledge('+ Tmp_Code +')">'+value[tmp]['KnowledgeName']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>'
+                        }
+                        $('#'+Tmp_Code+'-konwledge').append(a)
+                     }
+                }
+            })
+    }
+
+    function Stage(Tmp_Code){
         var Stage = []
-        var Diff = []
-        //loop get stages
         $('label[id='+ Tmp_Code +'-stage]').each(function (i) {
             if($(this).children().is(':checked')){
                 Stage.push($(this).children().val());
                 getkonwledge(Tmp_Code,Stage);
             }
         });
-        //loop get diificult
+    }
+
+    function Knowledge(Tmp_Code) {
+        var Diff = []
+        var Knowledge = []
+        $('label[id='+ Tmp_Code +'-konwledge]').each(function (i){
+             if($(this).children().is(':checked')){
+                 Knowledge.push($(this).children().val());
+             }
+        });
+
         $('label[id='+ Tmp_Code +'-diff]').each(function (i) {
             if($(this).children().is(':checked')){
                 Diff.push($(this).children().val());
             }
         });
+
         if(Diff[0] != null){
-            if($("#"+Tmp_Code+"-"+Diff[0]+"-"+Stage[0]+"-rm").length==0) {
+            if($("#"+Tmp_Code+"-"+Diff[0]+"-"+Knowledge[0]+"-rm").length==0) {
                 console.log('s')
-                if (Diff.length != 0) {
+                if (Diff.length != 0 && Knowledge.length !=0) {
                     $.ajax({
                         type: 'POST',
                         url: '<?=Url::toRoute("exam-module/get-question-sum")?>',
                         dataType: 'JSON',
-                        data: {QuestionType: Tmp_Code, Stage: Stage, Diff: Diff},
+                        data: {QuestionType: Tmp_Code, Diff: Diff, Knowledge: Knowledge},
                         success: function (value) {
                             if ($('input[id=' + Tmp_Code + '-' + Diff[0] + '-diff]').is(':checked')) {
-                                $('#' + Tmp_Code + '-new-table').append('<tr id="' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '-rm"><td>' + value.diff + '</td>' +
-                                    '<td id="' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '-stage">' + value.stage + '</td>' +
-                                    '<td id="' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '-question-sum">0</td>' +
-                                    '<td><input data="' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '" id="' + Tmp_Code + '-Num" class="number2" name="Num[' + Tmp_Code + '][' + Diff[0] + '][' + Stage[0] + ']" onchange="javascript:checkYesOrNo(' + Tmp_Code + ',' + Diff[0] + ',' + Stage[0]+ ');"></td>' +
-                                    '<td><input dataOne="' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '"  id="' + Tmp_Code + '-Score" name="Score[' + Tmp_Code + '][' + Diff[0] + '][' + Stage[0] + ']" onchange="javascript:SumScore(' + Tmp_Code + ',' + Diff[0] + ',' + Stage[0] + ');"></td>' +
-                                    '<td id="' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '-del"><button style="height:25px; width: 50px;" onclick="javascript:delCol(' + Tmp_Code + ',' + Diff[0] + ',' + Stage[0] + ')">删除</button></td></tr>'
+                                $('#' + Tmp_Code + '-new-table').append('<tr id="' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '-rm"><td>' + value.diff + '</td>' +
+                                    '<td id="' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '-stage">' + value.Knowledge['KnowledgeName'] + '</td>' +
+                                    '<td id="' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '-question-sum">0</td>' +
+                                    '<td><input data="' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '" id="' + Tmp_Code + '-Num" class="number2" name="Num[' + Tmp_Code + '][' + Diff[0] + '][' + Knowledge[0] + ']" onchange="javascript:checkYesOrNo(' + Tmp_Code + ',' + Diff[0] + ',&quot;'+ Knowledge[0]+'&quot;);"></td>' +
+                                    '<td><input dataOne="' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '"  id="' + Tmp_Code + '-Score" name="Score[' + Tmp_Code + '][' + Diff[0] + '][' + Knowledge[0] + ']" onchange="javascript:SumScore(' + Tmp_Code + ',' + Diff[0] + ',&quot;' + Knowledge[0] + '&quot;);"></td>' +
+                                    '<td id="' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '-del"><button style="height:25px; width: 50px;" onclick="javascript:delCol(' + Tmp_Code + ',' + Diff[0] + ',&quot;' + Knowledge[0] + '&quot;)">删除</button></td></tr>'
                                 )
 
                             } else {
@@ -228,7 +233,7 @@ use yii\helpers\Url;
 
                             if (value.sum == 0) {
                             } else {
-                                $('td[id=' + Tmp_Code + '-' + Diff[0] + '-' + Stage[0] + '-question-sum]').text(value.sum)
+                                $('td[id=' + Tmp_Code + '-' + Diff[0] + '-' + Knowledge[0] + '-question-sum]').text(value.sum)
                             }
                         }
                     })
@@ -236,7 +241,7 @@ use yii\helpers\Url;
             }
         }else{
             alert('请先选择难度。');
-            $('label[id='+ Tmp_Code +'-stage]').each(function (i) {
+            $('label[id='+ Tmp_Code +'-Knowledge]').each(function (i) {
                 if($(this).children().is(':checked')){
                     $(this).children().attr("checked",false);
                 }
@@ -244,10 +249,6 @@ use yii\helpers\Url;
 
         }
     }
-
-    // function getlist(Tmp_Code,stage){
-    //   $('#'+)
-    // }
 
     //删除 行
     function delCol(Tmp_Code, diff_code, stage_code){
@@ -259,6 +260,7 @@ use yii\helpers\Url;
         // var num1 = $('#'+Tmp_Code+'-num').val();
         var Sum = getSum();
         var Tnum = getNum();
+
         var Tmp = $('input[data='+ Tmp_Code +'-'+ diff_code +'-'+ stage_code +']').val();
         var Nims = $('#'+ Tmp_Code +'-'+ diff_code +'-'+ stage_code +'-question-sum').text();
         /*if(parseInt(num1) != parseInt(Tmp)){
@@ -341,22 +343,7 @@ use yii\helpers\Url;
         }
         return Sum;
     }
-    function getkonwledge(Tmp_Code,Stage){
-            //$('#'+ Tmp_Code +'-konwledge').append('<input type="radio" name="konwledge">222')
-            $.ajax({
-                type:'GET',
-                url: '<?=Url::toRoute("exam-module/get-konwledge")?>',
-                dataType: 'JSON',
-                data: {'Stage':Stage},
-                success: function (value) {
-                     if(value!=null){
-                         for(tmp in value){
-                            $('#'+ Tmp_Code +'-konwledge').append('<input type="checkbox" name="konwledge" value="'+value[tmp]['KnowledgeBh']+'">'+value[tmp]['KnowledgeName']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')
-                         }
-                     }
-                }
-            })
-    }
+
     //Switch Navigation Bar
     $('#question-type a').click(function (e) {
         e.preventDefault();
