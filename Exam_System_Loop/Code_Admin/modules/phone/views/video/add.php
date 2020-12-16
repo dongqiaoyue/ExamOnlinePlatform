@@ -42,32 +42,29 @@ $m_know = new \app\models\question\Knowledgepoint();
                 </div>
                 <h1></h1>
                 <div class="box-body">
-                    <!-- 弹出框 -->
-                    <div class="container">
-                        <div class="view-body">
-                            <div class="keypoint  bg-inverse radius text-center csbg">
-                                <p>
-                                    <br />
-                                    <button class="button  bg-main button-big icon-arrow-circle-up" id="upid">
-                                        立即上传</button>
-                                </p>
-                            </div>
-                            <div class="progress progress-small">
-                                <div class="progress-bar bg-yellow" id="myProgress" style="width: 0%;">
-                                </div>
-                            </div>
-                        </div>
 
-
-
-                    </div>
                     <?php $form = ActiveForm::begin(["id" => "admin-role-form", "class"=>"form-horizontal", "action"=>Url::toRoute("video/index"),'options'=> ['enctype' => 'multipart/form-data']]); ?>
                     <div class="row">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">视频路径</label>
-                            <div class="col-xs-4">
+                            <label id="videoPath" for="inputEmail3" class="col-sm-1 control-label col-md-offset-1" hidden>
+                                视频路径
+                            </label>
+                            <!--上传视频-->
+                            <div id="mydialog" class="col-sm-1 control-label col-md-offset-1" >
+                                <button id="upid">
+                                    上传视频
+                                </button>
+                            </div>
+                            <div id="videoURL" class="col-xs-4" hidden>
                                 <input type="text" class="form-control" id="urlGO" name="Tresources[ResourcesURL]" readonly>
                             </div>
+                            <!-- 进度条 -->
+                            <div class="col-xs-4">
+                                <div id="allProgress" class="progress progress-small">
+                                    <div class="progress-bar bg-yellow" id="myProgress" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <!--//-->
                         </div>
                     </div>
 
@@ -87,13 +84,17 @@ $m_know = new \app\models\question\Knowledgepoint();
                     <h1></h1>
                     <br>
 
-                    <div class="input-group  col-sm-5" style="float: left;" >
-                        <span class="input-group-addon">&nbsp;学&nbsp;期</span>
-                        <select class="form-control" id="video_Term" value="0" name="Tresources[Term]">
-                            <?php foreach ($term as $model){?>
-                                <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
-                            <?php }?>
-                        </select>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">学期</label>
+                            <div class="col-xs-4">
+                                <select class="form-control" id="video_Term" value="0" name="Tresources[Term]">
+                                <?php foreach ($term as $model){?>
+                                    <option id="<?=$model->CuitMoon_DictionaryCode?>" value="<?=$model->CuitMoon_DictionaryCode?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                <?php }?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <h1></h1>
                     <br>
@@ -302,8 +303,12 @@ $m_know = new \app\models\question\Knowledgepoint();
             if (status == 2) {
                 alert(msg);
                 $('#pic').attr("src", url);
-                $("#urlGO").attr("value", url)
-                $('#mydialog').show();
+                $("#urlGO").attr("value", url);
+                $("#videoPath").show();
+                $("#videoURL").show();
+                $('#mydialog').hide();
+                $("#allProgress").hide();
+
             }
 
             // 还在上传中
@@ -333,12 +338,12 @@ $m_know = new \app\models\question\Knowledgepoint();
         // 开始上传前的处理和回调,比如进度条初始化等
         upStart: function () {
             Progress(0);
-            $('#mydialog').hide();
+            // $('#mydialog').hide();
+            //$('#allProgress').show();
             alert('开始上传');
         }
 
     });
-
 
 
 

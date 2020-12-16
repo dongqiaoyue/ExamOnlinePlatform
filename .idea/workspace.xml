@@ -20,9 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="358f16cb-fe41-4b7f-bc4d-621692d7b690" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/models/system/TbcuitmoonDictionary.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/models/system/TbcuitmoonDictionary.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/video/add.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/video/add.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/web/uploads/video/fc0262a1e582023847f72dd91eabf994.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/web/uploads/video/fc0262a1e582023847f72dd91eabf994.mp4" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +60,10 @@
       <workItem from="1607951120500" duration="70000" />
       <workItem from="1608093858879" duration="860000" />
       <workItem from="1608095106572" duration="7000" />
-      <workItem from="1608118765590" duration="4383000" />
+      <workItem from="1608118765590" duration="6500000" />
+      <workItem from="1608129687860" duration="1343000" />
+      <workItem from="1608133609636" duration="1789000" />
+      <workItem from="1608135432202" duration="3287000" />
     </task>
     <servers />
   </component>
@@ -86,5 +91,16 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2504" y="221" key="RollbackChangesDialog/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607951145200" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php</url>
+          <line>68</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
