@@ -33,17 +33,17 @@ use app\models\phone\Tresourceslearn;
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <label>专业:&nbsp;</label>
-                                <select class="form-control" id="major-choice">
-                                    <option>请选择</option>
-                                    <?php foreach ($class_list as $model) {?>
-                                        <option value="<?=$model['MajorName']?>"><?=$model['MajorName']?></option>
-                                    <?php }?>
-                                </select>
-                                <label>班级:&nbsp;</label>
-                                <select class="form-control" id="class-choice">
-
-                                </select>
+<!--                                <label>专业:&nbsp;</label>-->
+<!--                                <select class="form-control" id="major-choice">-->
+<!--                                    <option>请选择</option>-->
+<!--                                    --><?php //foreach ($class_list as $model) {?>
+<!--                                        <option value="--><?//=$model['MajorName']?><!--">--><?//=$model['MajorName']?><!--</option>-->
+<!--                                    --><?php //}?>
+<!--                                </select>-->
+<!--                                <label>班级:&nbsp;</label>-->
+<!--                                <select class="form-control" id="class-choice">-->
+<!---->
+<!--                                </select>-->
                                 <label>我的教学班:&nbsp;</label>
                                 <select class="form-control" id="myClass-choice">
                                     <option value="没有任何作用的选项">请选择</option>
@@ -152,7 +152,26 @@ use app\models\phone\Tresourceslearn;
                             </table>
                         </div>
                     </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="dataTables_info" id="data_table_info" role="status" aria-live="polite">
+                                    <div class="infos">
+                                        从<?= $pages->getPage() * $pages->getPageSize() + 1 ?>            		到 <?= ($pageCount = ($pages->getPage() + 1) * $pages->getPageSize()) < $pages->totalCount ?  $pageCount : $pages->totalCount?>            		 共 <?= $pages->totalCount?> 条记录</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="data_table_paginate">
+                                    <?= LinkPager::widget([
+                                        'pagination' => $pages,
+                                        'nextPageLabel' => '»',
+                                        'prevPageLabel' => '«',
+                                        'firstPageLabel' => '首页',
+                                        'lastPageLabel' => '尾页',
+                                    ]); ?>
 
+                                </div>
+                            </div>
+                        </div>
 
             </div>
         </div>
@@ -196,23 +215,23 @@ use app\models\phone\Tresourceslearn;
         }
     });
 
-    $('#class-choice').change(function (e) {
-        e.preventDefault();
-        window.location.href = '<?=Url::toRoute("learn/index")?>'+'&major='+$("#major-choice").val()+'&class='+$(this).val();
-    });
-
+    //$('#class-choice').change(function (e) {
+    //    e.preventDefault();
+    //    window.location.href = '<?//=Url::toRoute("learn/index")?>//'+'&major='+$("#major-choice").val()+'&class='+$(this).val();
+    //});
+    //
     $('#myClass-choice').change(function (e) {
         e.preventDefault();
         window.location.href = '<?=Url::toRoute("learn/index")?>'+'&TeachingClassID='+$(this).val();
     });
-
-    $(document).ready(function () {
-        var major = '<?=$choice["major"]?>';
-        if (major != '') {
-            $('#major-choice option[value='+ major +']').attr('selected','selected');
-            ajaxGetClass('<?=$choice["major"]?>','<?=$choice["class"]?>');
-        }
-    });
+    //
+    //$(document).ready(function () {
+    //    var major = '<?//=$choice["major"]?>//';
+    //    if (major != '') {
+    //        $('#major-choice option[value='+ major +']').attr('selected','selected');
+    //        ajaxGetClass('<?//=$choice["major"]?>//','<?//=$choice["class"]?>//');
+    //    }
+    //});
     function jump(id) {
         window.location.href = '<?=Url::toRoute("learn/view")?>&id='+id;
     }

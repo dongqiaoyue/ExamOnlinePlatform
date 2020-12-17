@@ -31,7 +31,7 @@ class LearnController extends BaseController
         $w = '';
 
         $name = Yii::$app->session->get('UserName');
-        $myClass = $m_tec->find()->where(['TeacherName' => $name])->all();
+        $myClass = $m_tec->find()->where(['TeacherName' => $name])->asArray()->all();
 
         $where['CourseID'] = Yii::$app->session->get('courseCode');
 
@@ -41,30 +41,35 @@ class LearnController extends BaseController
 
         $Info = Yii::$app->request->get();
         if (isset($Info['TeachingClassID'])) {$w = $Info['TeachingClassID'];}
-        $ClassList = $m_student->find()->groupBy('MajorName')->asArray()->all();
-        $where = [];
+//        $ClassList = $m_student->find()->groupBy('MajorName')->asArray()->all();
+//        $where = [];
 
 
 
-        if (isset($Info['class'])) {
-            $where['ClassName'] = $Info['class'];
-            $where['MajorName'] = $Info['major'];
-            $Choice['class'] = $Info['class'];
-            $Choice['major'] = $Info['major'];
-        } else {
-            $Choice['major'] = false;
-            $Choice['class'] = false;
-        }
-        $Stu = $m_student->find()->where($where)->all();
+//        if (isset($Info['class'])) {
+//            $where['ClassName'] = $Info['class'];
+//            $where['MajorName'] = $Info['major'];
+//            $Choice['class'] = $Info['class'];
+//            $Choice['major'] = $Info['major'];
+//        } else {
+//            $Choice['major'] = false;
+//            $Choice['class'] = false;
+//        }
 
         if(isset($Info['TeachingClassID'])){
             $StuN = $m_tecd->find()->where(['TeachingClassID' => $Info['TeachingClassID']])->asArray()->all();
-            $Stu = $m_student->find()->where(['in','StuNumber',$StuN])->all();
+        }else{
+            $StuN = $m_tecd->find()->where(['in','TeachingClassID',array_column($myClass,'TeachingClassID')])->asArray()->all();
         }
+        $Stu = $m_student->find()->where(['in','StuNumber',$StuN]);
+
+        $countList = clone $Stu;
+        $pages = $com->Tab($countList);
         return $this->render('index', [
-            'class_list' => $ClassList,
-            'list' => $Stu,
-            'choice' => $Choice,
+            'list' => $Stu->offset($pages->offset)->limit($pages->limit)->all(),
+            'pages' => $pages,
+//            'class_list' => $ClassList,
+//            'choice' => $Choice,
             'myClass' => $myClass,
             'w' => $w,
             'doc' => $doc,
