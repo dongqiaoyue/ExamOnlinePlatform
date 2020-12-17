@@ -127,7 +127,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                                             if($m=$m_model->isModel($id)){
                                                 echo '      <td>'.$m['PaperName'].'</td>';
                                             }else{
-                                                echo '      <td>未配置测试模板</td>';
+                                                echo '      <td><font color="red">未配置测试模板</font></td>';
                                             }
                                         }else{
                                             echo '<td>不需要考核</td>';
