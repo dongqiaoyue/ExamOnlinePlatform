@@ -186,7 +186,7 @@ class ExamModuleController extends BaseController{
             $m_exam_config->AddBy = Yii::$app->session->get('UserName');
             $m_exam_config->ResourcesID = $RecordID;
 
-            $sql = 'insert into Tresourceexaminfoset (XH,QuestionType,QuestionTypeNumber,EveryQuestionScore,KnowledgeBh,difficulty,BH) values';
+            $sql = 'insert into tresourceexaminfoset (XH,QuestionType,QuestionTypeNumber,EveryQuestionScore,KnowledgeBh,difficulty,BH) values';
             //题目类型
             foreach ($info['Num'] as $key=>$value){
                 //题目难度
