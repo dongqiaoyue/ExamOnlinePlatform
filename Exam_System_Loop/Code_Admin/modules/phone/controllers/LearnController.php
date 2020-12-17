@@ -30,16 +30,28 @@ class LearnController extends BaseController
         $where = [];
         $w = '';
 
+        $Info = Yii::$app->request->get();
         $name = Yii::$app->session->get('UserName');
-        $myClass = $m_tec->find()->where(['TeacherName' => $name])->asArray()->all();
-
         $where['CourseID'] = Yii::$app->session->get('courseCode');
+        $term = $m_dic->getDictionaryList('学期');
+
+
+        $myClass = $m_tec->find()->where(['TeacherName' => $name]);
+        $termc = $m_dic->find()->select('CuitMoon_DictionaryCode');
+        if(isset($Info['term']))
+        {
+            $myClass = $myClass->andWhere(['Term' => $Info['term']])->asArray()->all();
+            $termc = $termc->where(['CuitMoon_DictionaryName'=>$Info['term']])->one();
+        }else{
+            $myClass = $myClass->andWhere(['Term' => $term[0]->CuitMoon_DictionaryName])->asArray()->all();
+            $termc = $termc->where(['CuitMoon_DictionaryName'=>$term[0]->CuitMoon_DictionaryName])->one();
+        }
+        $where['Term'] = $termc->CuitMoon_DictionaryCode;
 
         $doc = $m_sou->find()->where(['and',$where,['Type' => '1000801']])->orderBy('ID DESC')->limit(3)->all();
         $ppt = $m_sou->find()->where(['and',$where,['Type' => '1000802']])->orderBy('ID DESC')->limit(3)->all();
         $vid = $m_sou->find()->where(['and',$where,['Type' => '1000803']])->orderBy('ID DESC')->limit(3)->all();
 
-        $Info = Yii::$app->request->get();
         if (isset($Info['TeachingClassID'])) {$w = $Info['TeachingClassID'];}
 //        $ClassList = $m_student->find()->groupBy('MajorName')->asArray()->all();
 //        $where = [];
@@ -61,7 +73,7 @@ class LearnController extends BaseController
         }else{
             $StuN = $m_tecd->find()->where(['in','TeachingClassID',array_column($myClass,'TeachingClassID')])->asArray()->all();
         }
-        $Stu = $m_student->find()->where(['in','StuNumber',$StuN]);
+        $Stu = $m_student->find()->where(['in','StuNumber',array_column($StuN,'StuNumber')]);
 
         $countList = clone $Stu;
         $pages = $com->Tab($countList);
@@ -71,6 +83,7 @@ class LearnController extends BaseController
 //            'class_list' => $ClassList,
 //            'choice' => $Choice,
             'myClass' => $myClass,
+            'term' => $m_dic->getDictionaryList('学期'),
             'w' => $w,
             'doc' => $doc,
             'ppt' => $ppt,
@@ -82,18 +95,31 @@ class LearnController extends BaseController
 
     public function actionView()
     {
-        $m_lea = new Tresourceslearn();
+//        $m_lea = new Tresourceslearn();
+        $m_dic = new TbcuitmoonDictionary();
         $m_sou = new Tresources();
         $m_stu = new Studentinfo();
-        $id = Yii::$app->request->get('id');
+
+        $Info = Yii::$app->request->get();
         $i = 0; $j = 0; $z = 0;
+        $where = [];
         $doc = [];
         $ppt = [];
         $vid = [];
 
-        $data = $m_lea->find()->where(['StuID' => $id])->all();
-        $name = $m_stu->find()->where(['StuNumber' => $id])->asArray()->one();
-        $list = $m_sou->find()->asArray()->all();
+        $term = $m_dic->getDictionaryList('学期');
+        $termc = $m_dic->find()->select('CuitMoon_DictionaryCode');
+        if(isset($Info['term']))
+        {
+            $termc = $termc->where(['CuitMoon_DictionaryName'=>$Info['term']])->one();
+        }else{
+            $termc = $termc->where(['CuitMoon_DictionaryName'=>$term[0]->CuitMoon_DictionaryName])->one();
+        }
+        $where['Term'] = $termc->CuitMoon_DictionaryCode;
+
+//        $data = $m_lea->find()->where(['StuID' => $id])->all();
+        $name = $m_stu->find()->where(['StuNumber' => $Info['id']])->asArray()->one();
+        $list = $m_sou->find()->where($where)->asArray()->all();
         foreach ($list as $key => $value){
             if ($value['Type'] == 1000801){
                 $doc[$i] = $value['ID'];
@@ -107,7 +133,7 @@ class LearnController extends BaseController
             }
         }
         return $this->render('view',[
-            'id' => $id,
+            'id' => $Info['id'],
             'name' => $name['Name'],
             'doc' => $doc,
             'ppt' => $ppt,
@@ -116,18 +142,6 @@ class LearnController extends BaseController
             'j' =>$j,
             'z' =>$z
         ]);
-    }
-
-    public function actionGetMajorClass()
-    {
-        $m_student = new Studentinfo();
-
-
-        $Major = Yii::$app->request->get('major');
-        $Class = $m_student->find()->where([
-            'MajorName' => $Major
-        ])->groupBy('ClassName')->asArray()->orderBy('ClassName DESC')->all();
-        return json_encode($Class);
     }
 
     public function actionScore()

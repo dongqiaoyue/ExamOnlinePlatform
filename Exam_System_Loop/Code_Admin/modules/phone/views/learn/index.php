@@ -44,9 +44,25 @@ use app\models\phone\Tresourceslearn;
 <!--                                <select class="form-control" id="class-choice">-->
 <!---->
 <!--                                </select>-->
+                                <label>学期</label>
+                                <select class="form-control" id="term-choice">
+<!--                                    <option value="0">全部学期</option>-->
+                                    <?php if(isset($_GET['term'])){?>
+                                        <?php foreach ($term as $model){?>
+                                            <?php if($model->CuitMoon_DictionaryName === $_GET['term']){?>
+                                                <option value="<?=$model->CuitMoon_DictionaryName?>" selected="selected"><?=$model->CuitMoon_DictionaryName?></option>
+                                            <?php }else{?>
+                                                <option value="<?=$model->CuitMoon_DictionaryName?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                            <?php }?>
+                                        <?php }?>
+                                    <?php }else{?>
+                                        <?php foreach ($term as $model){?>
+                                            <option value="<?=$model->CuitMoon_DictionaryName?>" ><?=$model->CuitMoon_DictionaryName?></option>
+                                        <?php }}?>
+                                </select>
                                 <label>我的教学班:&nbsp;</label>
                                 <select class="form-control" id="myClass-choice">
-                                    <option value="没有任何作用的选项">请选择</option>
+                                    <option value="0">全部班级</option>
                                     <?php foreach ($myClass as $model) {?>
                                         <?php if ($model['TeachingClassID'] == $w){?>
                                         <option selected="selected" value="<?=$model['TeachingClassID']?>"><?=$model['TeachingName']?></option>
@@ -222,7 +238,21 @@ use app\models\phone\Tresourceslearn;
     //
     $('#myClass-choice').change(function (e) {
         e.preventDefault();
-        window.location.href = '<?=Url::toRoute("learn/index")?>'+'&TeachingClassID='+$(this).val();
+        var url = '<?=Url::toRoute("learn/index")?>' ;
+        if ($('#myClass-choice').val() != 0)
+            url += '&TeachingClassID='+$('#myClass-choice').val();
+        if ($('#term-choice').val() != 0)
+            url += '&Term='+$(this).val();
+        window.location.href = url;
+    });
+    $('#term-choice').change(function (e) {
+        e.preventDefault();
+        var url = '<?=Url::toRoute("learn/index")?>' ;
+        if ($('#myClass-choice').val() != 0)
+            url += '&TeachingClassID='+$('#myClass-choice').val();
+        if ($('#term-choice').val() != 0)
+            url += '&term='+$('#term-choice').val();
+        window.location.href = url;
     });
     //
     //$(document).ready(function () {
@@ -233,7 +263,7 @@ use app\models\phone\Tresourceslearn;
     //    }
     //});
     function jump(id) {
-        window.location.href = '<?=Url::toRoute("learn/view")?>&id='+id;
+        window.location.href = '<?=Url::toRoute("learn/view")?>&id='+id+'&term='+$('#term-choice').val();
     }
 
 </script>
