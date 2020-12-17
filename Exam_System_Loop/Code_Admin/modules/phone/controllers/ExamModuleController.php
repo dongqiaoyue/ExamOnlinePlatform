@@ -178,14 +178,13 @@ class ExamModuleController extends BaseController{
         $com = new commonFuc();
 
         $info = Yii::$app->request->post();
-
         $RecordID = $com->create_id();
+        if($m_exam_config->load($info)){
             $m_exam_config->BH = $RecordID;
             $m_exam_config->AddAt = date('Y-m-d H:i:s');
             $m_exam_config->CourseID = Yii::$app->session->get('courseCode');
             $m_exam_config->AddBy = Yii::$app->session->get('UserName');
             $m_exam_config->ResourcesID = $RecordID;
-            $m_exam_config->save(); 
 
             $sql = 'insert into Tresourceexaminfoset (XH,QuestionType,QuestionTypeNumber,EveryQuestionScore,KnowledgeBh,difficulty,BH) values';
             //题目类型
@@ -206,6 +205,7 @@ class ExamModuleController extends BaseController{
             $sql = substr($sql,0,strlen($sql)-1);
             $transaction = Yii::$app->db->beginTransaction();
             try{
+                $m_exam_config->save();
                 $connection = Yii::$app->db;
                 $insert = $connection->createCommand($sql);
                 $insert->execute();
@@ -215,6 +215,9 @@ class ExamModuleController extends BaseController{
                 $transaction->rollBack();
                 $com->JsonFail($m_exam_config->getErrors());
             }
+        }else{
+            echo $com->JsonFail('数据错误');
+        }
     }
 
     /**
