@@ -243,7 +243,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     <select size=1 name="BH" id="model">
                         <option value="0" selected>无</option>
                         <?php foreach ($mod as $value){ ?>
-                            <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                        <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
                     </select>
                     </span>
                 </div>
