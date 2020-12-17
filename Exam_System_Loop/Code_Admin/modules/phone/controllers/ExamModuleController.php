@@ -43,13 +43,11 @@ class ExamModuleController extends BaseController{
             }
 
             $info = $m_ExamConfig->find()
-                ->orderBy("AddAt DESC")
-                ->where(['in', 'ResourcesID', $w])->all();
+                ->where(['in', 'ResourcesID', $w])->groupBy('BH')->orderBy('AddAt DESC')->all();
         }
         else{
             $info = $m_ExamConfig->find()
-                ->orderBy("AddAt DESC")
-                ->where($where)->all();
+                ->where($where)->groupBy('BH')->orderBy('AddAt DESC')->all();
         }
 
         return $this->render('index',[
