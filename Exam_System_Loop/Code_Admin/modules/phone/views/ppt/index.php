@@ -229,7 +229,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 </div>
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
-                    <select size=1 name="BH" id="model">
+                    <option value="0" selected>无</option>
                         <?php foreach ($mod as $value){ ?>
                             <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
                     </select>
@@ -262,6 +262,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;前&nbsp;置&nbsp;资&nbsp;源&nbsp;</span>
                     <select class="form-control" id="ppt_BeforeID" value="0" name="Tresources[BeforeID]">
+                        <option value="0" selected>无</option>
                         <?php foreach ($pr as $model){?>
                             <option id="<?=$model->ID?>" value="<?=$model->ID?>" ><?=$model->Name?></option>
                         <?php }?>
