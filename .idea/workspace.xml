@@ -20,8 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="358f16cb-fe41-4b7f-bc4d-621692d7b690" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/ppt/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/ppt/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/video/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/video/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/DocumentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/DocumentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/PptController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/PptController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/VideoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/VideoController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +47,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../break" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -67,6 +71,8 @@
       <workItem from="1608187746822" duration="8077000" />
       <workItem from="1608212845836" duration="605000" />
       <workItem from="1608217055659" duration="1254000" />
+      <workItem from="1608465741942" duration="165000" />
+      <workItem from="1608465910758" duration="904000" />
     </task>
     <servers />
   </component>
@@ -86,10 +92,11 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1608217052049">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="493" y="180" key="FileChooserDialogImpl" timestamp="1608466109807">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1608217052049" />
+    <state x="493" y="180" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1608466109807" />
     <state x="2504" y="221" key="RollbackChangesDialog" timestamp="1608189945144">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

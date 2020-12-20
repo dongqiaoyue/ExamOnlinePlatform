@@ -57,7 +57,7 @@ class DocumentController extends BaseController
             ]);
         }
 
-        $list = $list->orderBy("Type ASC");
+        $list = $list->orderBy("AddAt DESC");
 
 
         //Tab
