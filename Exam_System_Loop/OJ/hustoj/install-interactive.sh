@@ -29,7 +29,7 @@ if uname -a|grep 'Ubuntu\|Debian'
 then
 sudo apt-get update
 sudo apt-get install make flex g++ clang libmysqlclient-dev libmysql++-dev php apache2 mysql-server php-mysql php-gd php-cli mono-gmcs subversion  redis-server php-redis
-sudo apt-get install make flex g++ clang libmysqlclient-dev libmysql++-dev php5 apache2 mysql-server php5-mysql php5-gd php5-cli mono-gmcs subversion  redis-server php5-redis
+sudo apt-get install make flex g++ clang libmysqlclient-dev libmysql++-dev php5.6 apache2 mysql-server php5.6-mysql php5.6-gd php5.6-cli mono-gmcs subversion  redis-server php5.6-redis
 sudo /etc/init.d/mysql start
 HTTP_START="sudo /etc/init.d/apache2 restart"
 

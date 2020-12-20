@@ -106,7 +106,7 @@ $m_know = new \app\models\question\Knowledgepoint();
 
                                             echo '  <td class="center">';
 
-                                            echo '      <button id="view_btn" onclick="viewAction(' . "'$id'" . ')" class="btn btn-primary btn-sm" > <i class="glyphicon glyphicon-zoom-in icon-white"></i>查看</button>';
+                                            //echo '      <button id="view_btn" onclick="viewAction(' . "'$id'" . ')" class="btn btn-primary btn-sm" > <i class="glyphicon glyphicon-zoom-in icon-white"></i>查看</button>';
                                             echo '      <a id="edit_btn" onclick="editAction(' . "'$id'"  . ')" class="btn btn-primary btn-sm" href="#"> <i class="glyphicon glyphicon-edit icon-white"></i>修改</a>';
 
 
