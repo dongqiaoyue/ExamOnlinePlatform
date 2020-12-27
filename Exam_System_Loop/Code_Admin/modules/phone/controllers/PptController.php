@@ -147,9 +147,8 @@ class PptController extends BaseController
         $id = Yii::$app->request->get('id');
         if (isset($id)) {
             $data = $m_ppt->find()->where(['ID' => $id])->asArray()->one();
-            $BH = Tresourceexaminfo::find()->where(['ResourcesID'=>$id])->one()->BH;
-            if(isset($BH)){
-            $data['BH'] = $BH;
+            if(isset(Tresourceexaminfo::find()->where(['ResourcesID'=>$id])->one()->BH)){
+            $data['BH'] = Tresourceexaminfo::find()->where(['ResourcesID'=>$id])->one()->BH;
             }else{
                 $data['BH'] = '0';
             }
