@@ -409,6 +409,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#video_ResourcesContent").val(data['ResourcesContent']);
                     $("#video_Description").val(data['Description']);
                     $("#"+data['Term']).attr("selected",true);
+                    $("#"+data['BH']).attr("selected",true);
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
                     $('#edit_dialog_ok').addClass('hidden');
