@@ -2,6 +2,7 @@
 
 namespace app\modules\front\controllers;
 
+use app\models\aid\Question;
 use app\models\exam\Createpaper;
 use app\models\exam\Exampaper;
 use app\models\exam\Examprocess;
@@ -67,7 +68,7 @@ class ExamController extends BaseController
         $m_student = new Studentinfo();
         $com = new commonFuc();
         $m_tb = new TbcuitmoonDictionary();
-        $Data = [];
+//        $Data = [];
 
         $Id = Yii::$app->request->get('ExamPlanBh');
         $Paper = Exampaper::find()->where([
@@ -141,46 +142,58 @@ class ExamController extends BaseController
         }
 
 
+//        $QuestionTypes = $m_create_paper->find()->select(['Memo'])
+//            ->where([
+//                'PaperBh' => $id,
+//            ])->groupBy(['Memo'])->asArray()->all();//查找试卷所有类型
         $QuestionTypes = $m_create_paper->find()->select(['Memo'])
             ->where([
                 'PaperBh' => $id,
-            ])->groupBy(['Memo'])->asArray()->all();//查找试卷所有类型
-        foreach ($QuestionTypes as $item) {
-            $Tmp = $m_create_paper->find()->where([
+            ])->asArray()->all();//查找试卷所有类型
+
+        foreach ($QuestionTypes as $value){
+            $Data[$value['Memo']] = $m_create_paper->find()->where([
                 'PaperBh' => $id,
-                'Memo' => $item['Memo'],
+                'Memo' => $value['Memo'],
             ])->all();
-            foreach ($Tmp as $value) {
-                $TmpData = $value->question;
-                $TmpData['Score'] = $value->TotalScore;
-                $Tmp_Data[] = $TmpData;
-            }
-            $Data[$item['Memo']] = $Tmp_Data;
-
-
-            unset($Tmp_Data);
         }
-        //获取文件
-        foreach ($Data as $key1 => $value1) {
-            foreach ($value1 as $key => $value) {
-                $Data[$key1][$key]['file'] = [];
-                $path = $_SERVER['DOCUMENT_ROOT'].'/QuestionFile/'.$value['QuestionBh'].'/';
-                if(is_dir($path))
-                {
-                    $handler = opendir($path);
-                    $url_path = Url::to("@web/QuestionFile/".$value['QuestionBh'].'/', true);
-                    $i = 0;
-                    while( ($filename = readdir($handler)) !== false )
-                    {
-                        if($filename != "." && $filename != "..")
-                        {
-                            $Data[$key1][$key]['file'][$filename] = $url_path.$filename;
-                        }
-                    }
-                    closedir($handler);
-                }
-            }
-        }
+
+//        foreach ($QuestionTypes as $item) {
+//            $Tmp = $m_create_paper->find()->where([
+//                'PaperBh' => $id,
+//                'Memo' => $item['Memo'],
+//            ])->all();
+//            foreach ($Tmp as $value) {
+//                $TmpData = $value->question;
+//                $TmpData['Score'] = $value->TotalScore;
+//                $Tmp_Data[] = $TmpData;
+//            }
+//            $Data[$item['Memo']] = $Tmp_Data;
+//
+//
+//            unset($Tmp_Data);
+//        }
+//        //获取文件
+//        foreach ($Data as $key1 => $value1) {
+//            foreach ($value1 as $key => $value) {
+//                $Data[$key1][$key]['file'] = [];
+//                $path = $_SERVER['DOCUMENT_ROOT'].'/QuestionFile/'.$value['QuestionBh'].'/';
+//                if(is_dir($path))
+//                {
+//                    $handler = opendir($path);
+//                    $url_path = Url::to("@web/QuestionFile/".$value['QuestionBh'].'/', true);
+//                    $i = 0;
+//                    while( ($filename = readdir($handler)) !== false )
+//                    {
+//                        if($filename != "." && $filename != "..")
+//                        {
+//                            $Data[$key1][$key]['file'][$filename] = $url_path.$filename;
+//                        }
+//                    }
+//                    closedir($handler);
+//                }
+//            }
+//        }
         $StarTime = Examplan::findOne(['ExamPlanBh' => $Id])->StarTime;
         $EndTime = Examplan::findOne(['ExamPlanBh' => $Id])->EndTime;
         $ExamTime = Examplan::find()->where(['ExamPlanBh' => $Id])->asArray()->one()['ExamTime'];
@@ -193,10 +206,14 @@ class ExamController extends BaseController
         ])->orderBy("ExamBeginTime DESC")->asArray()->one();
         $PassTime = (int)((int)(strtotime(date('Y-m-d H:i:s'))-strtotime($info['ExamBeginTime']))/60);
 
+//        var_dump($Data);
+//        exit();
+
         return $this->render('paper',[
             'info' => $Data,
             'examPlanBh' => $Id,
             'paperID' => $PaperId,
+            'paperBh' => $id,
             'answer' => json_encode($Answer),
             'endTime' => $EndTime,
             'StuNumber' => Yii::$app->session->get('StudentNum'),
@@ -333,6 +350,65 @@ class ExamController extends BaseController
                 $m_exam_process->save();
             }
         }
+    }
+
+    public function actionGetQuestionDetail()
+    {
+        $post = Yii::$app->request->post();
+        $QuestionType = $post['QuestionType'];
+        $paperBh = $post['paperBh'];
+        $Data = [];
+        if (!is_null($QuestionType) and !is_null($paperBh)){
+
+            $Tmp = Createpaper::find()->where([
+                'PaperBh' => $paperBh,
+                'Memo' => $QuestionType,
+            ])->all();
+
+            foreach ($Tmp as $value) {
+                $TmpData = Questions::find()->where(['QuestionBh'=>$value->QuestionBh])->asArray()->one();
+                $TmpData['Score'] = $value->TotalScore;
+                if($QuestionType == '1000208'){
+                    $m_find_error = new \app\models\question\FindError();
+                    $TmpData['Errors'] = $m_find_error->find()->where([
+                        'QuestionBh' => $value->QuestionBh
+                    ]);
+                }
+                $Tmp_Data[] = $TmpData;
+            }
+            $Data[$QuestionType] = $Tmp_Data;
+            unset($Tmp_Data);
+
+            //获取文件
+            foreach ($Data as $key1 => $value1) {
+                foreach ($value1 as $key => $value) {
+                    $Data[$key1][$key]['file'] = [];
+                    $path = $_SERVER['DOCUMENT_ROOT'].'/QuestionFile/'.$value['QuestionBh'].'/';
+                    if(is_dir($path))
+                    {
+                        $handler = opendir($path);
+                        $url_path = Url::to("@web/QuestionFile/".$value['QuestionBh'].'/', true);
+                        $i = 0;
+                        while( ($filename = readdir($handler)) !== false )
+                        {
+                            if($filename != "." && $filename != "..")
+                            {
+                                $Data[$key1][$key]['file'][$filename] = $url_path.$filename;
+                            }
+                        }
+                        closedir($handler);
+                    }
+                }
+            }
+
+            echo json_encode($Data);
+
+        }else{
+            echo "获取失败";
+        }
+
+
+
     }
 
     public function actionGetSourceCode()
