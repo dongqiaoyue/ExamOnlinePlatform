@@ -209,6 +209,15 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     </div>
                     <div class="clearfix"></div>
                 </div>
+
+                <div id="Name_div" class="form-group">
+                    <label for="Name" class="col-sm-2 control-label">URL</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="ppt_ResourcesURL" name="Tresources[ResourcesURL]" >
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;学&nbsp;期</span>
                     <select class="form-control" id="ppt_Term" value="0" name="Tresources[Term]">
@@ -230,7 +239,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
                     <select size=1 name="BH" id="model">
-                        <option value="0" selected>无</option>
+                        <option id="0" value="0" selected>无</option>
                         <?php foreach ($mod as $value){ ?>
                         <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
                     </select>
@@ -380,6 +389,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_Description").val('');
                     $("#ppt_Term").val('');
                     $('#uploadfile-file').attr({readonly:false,disabled:false});
+                    $('#ppt_ResourcesURL').addClass('hidden');
                 }
                 else{
                     $("#id").val(data['ID']);
@@ -391,10 +401,12 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_BeforeID").val(data['BeforeID']);
                     //$("#ppt_DifficultyCode").val(data['DifficultyCode']);
                     $("#ppt_Name").val(data['Name']);
+                    $('#ppt_ResourcesURL').val(data['ResourcesURL']);
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
                     $("#ppt_Description").val(data['Description']);
                     $("#"+data['Term']).attr("selected",true);
+                    $("#"+data['BH']).attr("selected",true);
                     $('#edit_dialog_ok').addClass('hidden');
                     $('#uploadfile-file').attr({readonly:true,disabled:true});
                 }
@@ -407,6 +419,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_Name").attr({readonly:true,disabled:true});
                     $("#ppt_Term").attr({readonly:true,disabled:true});
                     $("#ppt_Description").attr({readonly:true,disabled:true});
+                    $("#ppt_ResourcesURL").attr({readonly:true,disabled:true});
                 }
                 else{
                     $("#ppt_CustomBh").attr({readonly:false,disabled:false});
@@ -419,6 +432,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $('#model1').removeClass('hidden');
                     $("#ppt_Description").attr({readonly:false,disabled:false});
                     $("#ppt_Term").attr({readonly:false,disabled:false});
+                    $("#ppt_ResourcesURL").attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }
                 $('#edit_dialog').modal('show');

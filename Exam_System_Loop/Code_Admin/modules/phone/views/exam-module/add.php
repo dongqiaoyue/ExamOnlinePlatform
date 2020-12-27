@@ -140,6 +140,7 @@ use yii\helpers\Url;
                 return false;
             }
         });
+        if($('#moduleName').val().length!=0){
         if(Tmp_One != true && Tmp_Code!='0') {
             $('#question-type').append('<li role="presentation"><a href="#'+ Tmp_Code +'" data-toggle="tab">' + Tmp + '</a></li>');
             $('#question-type-text').append('<div class="tab-pane fade  row" id="'+ Tmp_Code +'">' +
@@ -152,7 +153,11 @@ use yii\helpers\Url;
                 '<td><?php foreach ($diff as $value){?><label class="checkbox-inline" id="'+ Tmp_Code +'-diff"><input type="radio" name="diff" id="'+ Tmp_Code +'-'+ <?=$value["CuitMoon_DictionaryCode"]?> +'-diff" value="<?=$value["CuitMoon_DictionaryCode"]?>"><?=$value["CuitMoon_DictionaryName"]?></label><?php }?></td></tr><tr><td>题目阶段</td><td><?php foreach ($stage as $value){?><label class="checkbox-inline" id="'+ Tmp_Code +'-stage"><input type="radio" name="Stages['+ Tmp_Code +'][]" id="'+ Tmp_Code +'-stage" value="<?=$value["CuitMoon_DictionaryCode"]?>" onclick="Stage('+ Tmp_Code +')"><?=$value["CuitMoon_DictionaryName"]?></label><?php }?></td></tr><tr><td>知识点</td><td><div class="checkbox-inline" id="'+ Tmp_Code +'-konwledge" ></div></td></tr><tr><td>每种难度题目数量</td><td><table class="table" id="'+ Tmp_Code +'-new-table">' +
                 '<tr><th>题目难度</th><th>题目知识点</th><th>题目总数</th><th>题目数量</th><th>每题分值</th><th>操作</th></tr></table></td></tr></table></div>')
         }
-    });
+         }else{
+         alert('请输入模版名称');
+        }
+});
+
 
     //Asynchronous get the number of questions
     function getkonwledge(Tmp_Code,Stage){

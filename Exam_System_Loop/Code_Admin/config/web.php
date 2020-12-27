@@ -72,17 +72,17 @@ $config = [
 
 
     'components' => [
-        // 'redis' => [
-        //     'class' => 'yii\redis\Connection',
-        //     'hostname' => '172.18.0.1',
-        //     'port' => 6379,
-        //     'database' => 0,
-        // ],
-        // 'session' => [
-        //     'class' => 'yii\redis\Session',
-        //     'redis' =>'redis',
-        // ],
-        // //RBAC权限管理
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '172.18.0.1',
+            'port' => 6379,
+            'database' => 0,
+        ],
+        'session' => [
+            'class' => 'yii\redis\Session',
+            'redis' =>'redis',
+        ],
+        //RBAC权限管理
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             'itemTable' => 'auth_item',

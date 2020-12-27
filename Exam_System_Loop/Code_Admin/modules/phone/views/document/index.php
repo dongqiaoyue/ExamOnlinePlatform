@@ -240,7 +240,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                 <div class="input-group  col-sm-5" style="float: left;" >
                 <span class="input-group-addon" id="model1">&nbsp;模&nbsp;板&nbsp;配&nbsp;置&nbsp;</span>
                 <select size=1 name="BH" id="model">
-                    <option value="0" selected>无</option>
+                    <option id="0" value="0" selected>无</option>
                     <?php foreach ($mod as $value){ ?>
                     <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
                 </select>
@@ -411,6 +411,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_ResourcesContent").val(data['ResourcesContent']);
                     $("#document_Description").val(data['Description']);
                     $("#"+data['Term']).attr("selected",true);
+                    $("#"+data['BH']).attr("selected",true);
                     $('#model').addClass('hidden');
                     $('#model1').addClass('hidden');
                     $('#edit_dialog_ok').addClass('hidden');
@@ -426,7 +427,6 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Term").attr({readonly:true,disabled:true});
                     $("#document_ResourcesContent").attr({readonly:true,disabled:true});
                     $("#document_Description").attr({readonly:true,disabled:true});
-
                 }
                 else{
                     $("#document_CustomBh").attr({readonly:false,disabled:false})

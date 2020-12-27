@@ -113,13 +113,16 @@ class VideoController extends BaseController{
         $m_vid = new Tresources();
 
         $id = Yii::$app->request->get('id');
-        if ($id) {
-            $data = $m_vid->find()->where([
-                'ID' => $id,
-            ])->asArray()->one();
-            return json_encode($data);
+        if (isset($id)) {
+            $data = $m_vid->find()->where(['ID' => $id])->asArray()->one();
+            $BH = Tresourceexaminfo::find()->where(['ResourcesID'=>$id])->one()->BH;
+            if(isset($BH)){
+            $data['BH'] = $BH;
+            }else{
+                $data['BH'] = '0';
+            }
         }
-
+        return json_encode($data);
     }
     public function actionUpdate()
     {
@@ -135,15 +138,16 @@ class VideoController extends BaseController{
         }
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load(Yii::$app->request->post())) {
-            if (isset($post['BH']))
+            if ($post['BH']!='0')
             {
-                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
-                $m_mod->AddBy = Yii::$app->session->get('UserName');
-                $m_mod->AddAt = date('Y-m-d H:i:s');
-                $m_mod->CourseID = Yii::$app->session->get('courseCode');
-                $m_mod->BH = $post['BH'];
-                $m_mod->PaperName = $PaperName['PaperName'];
+                Tresourceexaminfo::deleteAll(['ResourcesID'=>$id]);
+                $name = Tresourceexaminfo::find()->select('PaperName')->where(['BH'=>$_POST['BH']])->one()->PaperName;
+                $m_mod->BH = $_POST['BH'];
+                $m_mod->PaperName = $name;
                 $m_mod->ResourcesID = $id;
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->AddBy = Yii::$app->session->get('Username');
+                $m_mod->CourseID = Yii::$app->session->get('CourseCode');
                 $m_mod->save();
             }
             if ($update->validate() && $update->save()) {

@@ -164,6 +164,12 @@ class DocumentController extends BaseController
         $id = Yii::$app->request->get('id');
         if (isset($id)) {
             $data = $m_doc->find()->where(['ID' => $id])->asArray()->one();
+            $BH = Tresourceexaminfo::find()->where(['ResourcesID'=>$id])->one()->BH;
+            if(isset($BH)){
+            $data['BH'] = $BH;
+            }else{
+                $data['BH'] = '0';
+            }
         }
 
         echo json_encode($data);
@@ -177,25 +183,21 @@ class DocumentController extends BaseController
         $m_mod = new Tresourceexaminfo();
         $post = Yii::$app->request->post();
         $id = $post['id'];
-        if ($m_mod->find()->where(['ResourcesID'=>$id])->exists())
-        {
-            $m_mod = Tresourceexaminfo::findOne($id);
-        }
         $update = $m_doc->findOne($id);
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load(Yii::$app->request->post())) {
-            if (isset($post['BH']))
+            if ($post['BH']!='0')
             {
-                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$_POST['BH']])->one();
-                $m_mod->AddBy = Yii::$app->session->get('UserName');
-                $m_mod->AddAt = date('Y-m-d H:i:s');
-                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                Tresourceexaminfo::deleteAll(['ResourcesID'=>$id]);
+                $name = Tresourceexaminfo::find()->select('PaperName')->where(['BH'=>$_POST['BH']])->one()->PaperName;
                 $m_mod->BH = $_POST['BH'];
-                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->PaperName = $name;
                 $m_mod->ResourcesID = $id;
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->AddBy = Yii::$app->session->get('Username');
+                $m_mod->CourseID = Yii::$app->session->get('CourseCode');
                 $m_mod->save();
             }
-
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {

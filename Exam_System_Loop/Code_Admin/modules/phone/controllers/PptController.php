@@ -97,8 +97,8 @@ class PptController extends BaseController
             $m_ppt->AddBy = Yii::$app->session->get('UserName');
             $m= UploadedFile::getInstance($m, 'file');
             $name= 'file'.time().'_'.rand(1,999).'.'.$m->extension;
-            $m->saveAs('uploads/ppt/'.$name);
-            $path = 'uploads/ppt/'.$name;
+            $m->saveAs('/uploads/ppt/'.$name);
+            $path = '/uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
             if ($m_ppt->validate() && $m_ppt->save()) {
                 if (isset($post['BH']))
@@ -144,10 +144,15 @@ class PptController extends BaseController
     public function actionView()
     {
         $m_ppt = new Tresources();
-
         $id = Yii::$app->request->get('id');
         if (isset($id)) {
             $data = $m_ppt->find()->where(['ID' => $id])->asArray()->one();
+            $BH = Tresourceexaminfo::find()->where(['ResourcesID'=>$id])->one()->BH;
+            if(isset($BH)){
+            $data['BH'] = $BH;
+            }else{
+                $data['BH'] = '0';
+            }
         }
 
         echo json_encode($data);
@@ -159,6 +164,7 @@ class PptController extends BaseController
         $com = new commonFuc();
         $m_ppt = new Tresources();
         $m_mod = new Tresourceexaminfo();
+        $m = new UploadFile();
         $post = Yii::$app->request->post();
         $id = $post['id'];
         if ($m_mod->find()->where(['ResourcesID'=>$id])->exists())
@@ -168,15 +174,16 @@ class PptController extends BaseController
         $update = $m_ppt->findOne($id);
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load($post)) {
-            if (isset($post['BH']))
+            if ($post['BH']!='0')
             {
-                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
-                $m_mod->AddBy = Yii::$app->session->get('UserName');
-                $m_mod->AddAt = date('Y-m-d H:i:s');
-                $m_mod->CourseID = Yii::$app->session->get('courseCode');
-                $m_mod->BH = $post['BH'];
-                $m_mod->PaperName = $PaperName['PaperName'];
+                Tresourceexaminfo::deleteAll(['ResourcesID'=>$id]);
+                $name = Tresourceexaminfo::find()->select('PaperName')->where(['BH'=>$_POST['BH']])->one()->PaperName;
+                $m_mod->BH = $_POST['BH'];
+                $m_mod->PaperName = $name;
                 $m_mod->ResourcesID = $id;
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->AddBy = Yii::$app->session->get('Username');
+                $m_mod->CourseID = Yii::$app->session->get('CourseCode');
                 $m_mod->save();
             }
             if ($update->validate() && $update->save()) {
