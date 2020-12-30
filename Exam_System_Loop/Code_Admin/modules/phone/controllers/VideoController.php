@@ -162,6 +162,14 @@ class VideoController extends BaseController{
     public function actionAdd(){
         $m_know = new Knowledgepoint();
         $m_dic = new TbcuitmoonDictionary();
+        $CourseID = Yii::$app->session->get('courseCode');
+
+        $mod = Tresourceexaminfo::find()
+            ->select(['BH','PaperName'])
+            ->where(['CourseID'=>$CourseID])
+            ->groupBy(['BH'])
+            ->orderBy('BH DESC')
+            ->all();
 
         $data = $m_know->find()->all();
         return $this->render('add',[
@@ -170,6 +178,7 @@ class VideoController extends BaseController{
             'defaultKnow' => $m_know->getByStage(1000301),
             'data' => $data,
             'term' => $m_dic->getDictionaryList('学期'),
+            'mod' => $mod
         ]);
     }
 

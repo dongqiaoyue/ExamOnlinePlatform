@@ -47,7 +47,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                     <div class="row">
                         <div class="form-group">
                             <label id="videoPath" for="inputEmail3" class="col-sm-1 control-label col-md-offset-1" hidden>
-                                视频路径
+                                <a id="video_url">视频路径</a>
                             </label>
                             <!--上传视频-->
                             <div id="mydialog" class="col-sm-1 control-label col-md-offset-1" >
@@ -98,6 +98,22 @@ $m_know = new \app\models\question\Knowledgepoint();
                     </div>
                     <h1></h1>
                     <br>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label col-md-offset-1">模板配置</label>
+                            <div class="col-xs-4">
+                                <select size=1 name="BH" id="model">
+                                    <option value="0" selected>无</option>
+                                    <?php foreach ($mod as $value){ ?>
+                                        <option id="<?=$value->BH?>" value="<?=$value->BH?>"><?=$value->PaperName?></option><?php }?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <h1></h1>
+                    <br>
+
 
                     <div class="row">
                         <div class="form-group">
@@ -262,7 +278,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                 }
             }
         })
-    })
+    });
 
     // 进度条
     function Progress(value) {
@@ -304,6 +320,7 @@ $m_know = new \app\models\question\Knowledgepoint();
                 alert(msg);
                 $('#pic').attr("src", url);
                 $("#urlGO").attr("value", url);
+                $("#video_url").attr({href:'<?=Yii::$app->request->hostInfo;?>/'+url,target:"_blank"});
                 $("#videoPath").show();
                 $("#videoURL").show();
                 $('#mydialog').hide();

@@ -211,13 +211,34 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     <div class="clearfix"></div>
                 </div>
 
+
                 <div id="Name_div" class="form-group">
-                    <label for="Name" class="col-sm-2 control-label">视频URL</label>
+                    <label for="Name" class="col-sm-2 control-label">
+                        <a id="video_url">预览视频</a>
+                    </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="video_ResourcesURL" name="Tresources[ResourcesURL]" >
                     </div>
                     <div class="clearfix"></div>
                 </div>
+                <div class="row">
+                    <div class="form-group">
+                        <!--上传视频-->
+                        <div id="mydialog" class="col-sm-4" >
+                            <button id="upid">
+                                更新视频
+                            </button>
+                        </div>
+                        <!-- 进度条 -->
+                        <div class="col-xs-4">
+                            <div id="allProgress" class="progress progress-small">
+                                <div class="progress-bar bg-yellow" id="myProgress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <!--//-->
+                    </div>
+                </div>
+
 
                 <br>
                 <div class="input-group  col-sm-5" style="float: left;" >
@@ -302,7 +323,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     </div>
                 </div>
                 <br>
-                
+
 
 
                 <div class="clearfix"></div>
@@ -320,6 +341,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
 
         <?php $this->beginBlock('footer');  ?>
         <!-- <body></body>������ -->
+        <script src="<?=Url::base()?>/fcup/fcup/js/jquery.fcup.js"></script>
         <script type="text/javascript" src="<?=Url::base()?>/component/editor/ueditor.config.js"></script>
         <script type="text/javascript" src="<?=Url::base()?>/component/editor/ueditor.all.min.js"></script>
         <script type="text/javascript">
@@ -403,7 +425,8 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     //$("#video_KnowledgeBhCode").val(data['KnowledgeBh']);
                     $("#video_IsExam").val(data['IsExam']);
                     $("#video_BeforeID").val(data['BeforeID']);
-                    $("#video_ResourcesURL").val(data['ResourcesURL'])
+                    $("#video_ResourcesURL").val(data['ResourcesURL']);
+                    $("#video_url").attr({href:'<?=Yii::$app->request->hostInfo;?>/'+data['ResourcesURL'],target:"_blank"});
                     //$("#video_DifficultyCode").val(data['DifficultyCode']);
                     $("#video_Name").val(data['Name']);
                     $("#video_ResourcesContent").val(data['ResourcesContent']);
@@ -719,6 +742,83 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
 
                     }
                 });
+            });
+            // 进度条
+            function Progress(value) {
+                $('#myProgress').css('width', value + '%');
+                // if(value == 100){
+                //     window.location.reload();
+                // }
+            }
+
+            function CloseDialog() {
+                $('#mydialog').hide();
+            }
+
+
+            $.fcup({
+
+                upId: 'upid', //上传dom的id
+
+                upShardSize: '', //切片大小,(单次上传最大值)单位M，默认2M
+
+                upMaxSize: '', //上传文件大小,单位M，不设置不限制
+
+                upUrl: '<?=Url::base()?>/fcup/php/file.php', //文件上传接口
+
+                upType: 'FLV,mp4,AVI,MPG,flv,MP4,avi,mpg', //上传类型检测,用,号分割
+
+                //接口返回结果回调，根据结果返回的数据来进行判断，可以返回字符串或者json来进行判断处理
+                upCallBack: function (res) {
+
+                    // 状态
+                    var status = res.status;
+                    // 信息
+                    var msg = res.message;
+                    // url
+                    var url = res.url;
+
+                    // 已经完成了
+                    if (status == 2) {
+                        alert(msg);
+                        $("#video_url").attr({href:'<?=Yii::$app->request->hostInfo;?>/'+url,target:"_blank"});
+                        $("#video_ResourcesURL").val(url);
+
+
+                    }
+
+                    // 还在上传中
+                    if (status == 1) {
+                        console.log(msg);
+                    }
+
+                    // 接口返回错误
+                    if (status == 0) {
+                        // 停止上传并且提示信息
+                        $.upStop(msg);
+                    }
+                },
+
+                // 上传过程监听，可以根据当前执行的进度值来改变进度条
+                upEvent: function (num) {
+                    // num的值是上传的进度，从1到100
+                    Progress(num);
+                },
+
+                // 发生错误后的处理
+                upStop: function (errmsg) {
+                    // 这里只是简单的alert一下结果，可以使用其它的弹窗提醒插件
+                    alert(errmsg);
+                },
+
+                // 开始上传前的处理和回调,比如进度条初始化等
+                upStart: function () {
+                    Progress(0);
+                    // $('#mydialog').hide();
+                    //$('#allProgress').show();
+                    alert('开始上传');
+                }
+
             });
 
 
