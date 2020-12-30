@@ -108,7 +108,7 @@ class PptController extends BaseController
             $m= UploadedFile::getInstance($m, 'file');
             $name= 'file'.time().'_'.rand(1,999).'.'.$m->extension;
             $m->saveAs('uploads/ppt/'.$name);
-            $path = '/uploads/ppt/'.$name;
+            $path = 'uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
             if ($m_ppt->validate() && $m_ppt->save()) {
                 $com->JsonSuccess('添加成功');
@@ -167,7 +167,12 @@ class PptController extends BaseController
         {
             $m_mod = Tresourceexaminfo::findOne($id);
         }
+
+        $m= UploadedFile::getInstance($m, 'file');
         $update = $m_ppt->findOne($id);
+        if(isset($m)){
+            $m->saveAs($update->ResourcesURL);
+        }
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load($post)) {
             if ($post['BH']!='0')

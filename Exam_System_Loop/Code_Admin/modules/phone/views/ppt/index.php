@@ -392,7 +392,6 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $('#ppt').remove();
                     UE.getEditor('ppt_Description').setContent('');
                     UE.getEditor('ppt_Description').setEnabled();
-                    // $('#ppt_ResourcesURL1').addClass('hidden');
                 }
                 else{
                     $('#ppt').remove();
@@ -414,6 +413,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#"+data['BH']).attr("selected",true);
                     $('#edit_dialog_ok').addClass('hidden');
                     $('#uploadfile-file').attr({readonly:true,disabled:true});
+                    $("#ppt_ResourcesURL").attr({readonly:true,disabled:true});
                 }
                 if(type == "view"){
                     $("#ppt_CustomBh").attr({readonly:true,disabled:true});
@@ -424,7 +424,6 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_Name").attr({readonly:true,disabled:true});
                     $("#ppt_Term").attr({readonly:true,disabled:true});
                     $("#ppt_Description").attr({readonly:true,disabled:true});
-                    $("#ppt_ResourcesURL").attr({readonly:true,disabled:true});
                 }
                 else{
                     $("#ppt_CustomBh").attr({readonly:false,disabled:false});
@@ -437,7 +436,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $('#model1').removeClass('hidden');
                     $("#ppt_Description").attr({readonly:false,disabled:false});
                     $("#ppt_Term").attr({readonly:false,disabled:false});
-                    $("#ppt_ResourcesURL").attr({readonly:false,disabled:false});
+                    $('#uploadfile-file').attr({readonly:false,disabled:false});
                     $('#edit_dialog_ok').removeClass('hidden');
                 }
                 $('#edit_dialog').modal('show');
