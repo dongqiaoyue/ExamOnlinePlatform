@@ -210,13 +210,13 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     <div class="clearfix"></div>
                 </div>
 
-                <div id="Name_div" class="form-group">
+                <!-- <div class="form-group" id="ppt">
                     <label for="Name" class="col-sm-2 control-label">URL</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="ppt_ResourcesURL" name="Tresources[ResourcesURL]" >
                     </div>
                     <div class="clearfix"></div>
-                </div>
+                </div> -->
 
                 <div class="input-group  col-sm-5" style="float: left;" >
                     <span class="input-group-addon">&nbsp;学&nbsp;期</span>
@@ -389,9 +389,14 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#ppt_Description").val('');
                     $("#ppt_Term").val('');
                     $('#uploadfile-file').attr({readonly:false,disabled:false});
-                    $('#ppt_ResourcesURL').addClass('hidden');
+                    $('#ppt').remove();
+                    UE.getEditor('ppt_Description').setContent('');
+                    UE.getEditor('ppt_Description').setEnabled();
+                    // $('#ppt_ResourcesURL1').addClass('hidden');
                 }
                 else{
+                    $('#ppt').remove();
+                    $("#Name_div").before("<div class='form-group' id='ppt'> <label for='Name' class='col-sm-2 control-label'>URL</label><div class='col-sm-10'><input type='text' class='form-control' id='ppt_ResourcesURL' name='Tresources[ResourcesURL]' > </div><div class='clearfix'></div> </div>");
                     $("#id").val(data['ID']);
                     $("#ppt_CustomBh").val(data['CustomBh']);
                     stage(data['KnowledgeBh']);

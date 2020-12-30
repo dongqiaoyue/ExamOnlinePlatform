@@ -88,7 +88,17 @@ class PptController extends BaseController
         $m = new UploadFile();
         if ($m_ppt->load($post)) {
             $m_ppt->ID= $com->create_id();
-
+            if ($post['BH']!='0')
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $post['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $m_ppt->ID;
+                $m_mod->save();
+            }
             $m_ppt->CourseID = Yii::$app->session->get('courseCode');
             $m_ppt->Type = '1000802';
             $m_ppt->IsPublish = '0';
@@ -97,24 +107,11 @@ class PptController extends BaseController
             $m_ppt->AddBy = Yii::$app->session->get('UserName');
             $m= UploadedFile::getInstance($m, 'file');
             $name= 'file'.time().'_'.rand(1,999).'.'.$m->extension;
-            $m->saveAs('/uploads/ppt/'.$name);
+            $m->saveAs('uploads/ppt/'.$name);
             $path = '/uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
             if ($m_ppt->validate() && $m_ppt->save()) {
-                if (isset($post['BH']))
-                {
-                    $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
-                    $m_mod->AddBy = Yii::$app->session->get('UserName');
-                    $m_mod->AddAt = date('Y-m-d H:i:s');
-                    $m_mod->CourseID = Yii::$app->session->get('courseCode');
-                    $m_mod->BH = $post['BH'];
-                    $m_mod->PaperName = $PaperName['PaperName'];
-                    $m_mod->ResourcesID = $m_ppt->ID;
-                    $m_mod->save();
-                }
                 $com->JsonSuccess('添加成功');
-//            } else {
-//                $com->JsonFail($m_ppt->getErrors());
             }
         } else {
             /*$com->JsonFail('数据出错');*/

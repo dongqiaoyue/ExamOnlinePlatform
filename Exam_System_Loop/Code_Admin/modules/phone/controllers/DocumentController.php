@@ -86,7 +86,7 @@ class DocumentController extends BaseController
         
         if ($m_doc->load($post)) {
             $m_doc->ID= $com->create_id();
-            if (isset($post['BH']))
+            if ($post['BH']!='0')
             {
                 $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
                 $m_mod->AddBy = Yii::$app->session->get('UserName');
