@@ -23,6 +23,7 @@ class LearnallController extends BaseController
         $CourseID = Yii::$app->session->get('courseCode');
 
         $list = $m_sou->find()
+            ->where(['CourseID'=>$CourseID])
             ->select(['ID', 'Name', 'Type']);
 
         if (isset($Info['term'])) {
