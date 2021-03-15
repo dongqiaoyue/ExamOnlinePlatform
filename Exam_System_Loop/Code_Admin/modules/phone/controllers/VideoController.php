@@ -101,7 +101,7 @@ class VideoController extends BaseController{
                 $m_mod->CourseID = Yii::$app->session->get('courseCode');
                 $m_mod->BH = $post['BH'];
                 $m_mod->PaperName = $PaperName['PaperName'];
-                $m_mod->ResourcesID = $m_doc->ID;
+                $m_mod->ResourcesID = $m_vid->ID;
                 $m_mod->save();
             }
             $m_vid->AddAt = date('Y-m-d H:i:s');
