@@ -87,8 +87,23 @@ class VideoController extends BaseController{
     {
         $m_vid = new Tresources();
         $com = new commonFuc();
-        if($m_vid->load(Yii::$app->request->post())){
+        $m_mod = new Tresourceexaminfo();
+        $post = Yii::$app->request->post();
+        
+        if($m_vid->load($post)){
             $m_vid->ID = $com->create_id();
+
+            if ($post['BH']!='0')
+            {
+                $PaperName = Tresourceexaminfo::find()->select(['PaperName'])->where(['BH'=>$post['BH']])->one();
+                $m_mod->AddBy = Yii::$app->session->get('UserName');
+                $m_mod->AddAt = date('Y-m-d H:i:s');
+                $m_mod->CourseID = Yii::$app->session->get('courseCode');
+                $m_mod->BH = $post['BH'];
+                $m_mod->PaperName = $PaperName['PaperName'];
+                $m_mod->ResourcesID = $m_doc->ID;
+                $m_mod->save();
+            }
             $m_vid->AddAt = date('Y-m-d H:i:s');
             $m_vid->AddBy = Yii::$app->session->get('UserName');
             $m_vid->CourseID = Yii::$app->session->get('courseCode');
