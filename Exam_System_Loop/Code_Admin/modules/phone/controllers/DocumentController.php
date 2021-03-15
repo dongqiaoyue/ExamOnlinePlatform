@@ -32,7 +32,7 @@ class DocumentController extends BaseController
         $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>$CourseID])->groupBy(['BH'])->orderBy('BH DESC')->all();
 
         $list = $m_doc->find()
-            ->where(['Type' => 1000801]);
+            ->where(['Type' => 1000801,'CourseID'=>$CourseID]);
 
 
         if (isset($Info['term'])) {

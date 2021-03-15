@@ -33,7 +33,7 @@ class VideoController extends BaseController{
         $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>$CourseID])->groupBy(['BH'])->orderBy('BH DESC')->all();
 
         $list = $m_vid->find()
-            ->where(['Type' => 1000803]);
+            ->where(['Type' => 1000803,'CourseID'=>$CourseID]);
 
 
         if (isset($Info['term'])) {

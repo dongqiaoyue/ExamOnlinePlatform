@@ -33,7 +33,7 @@ class PptController extends BaseController
         $mod = Tresourceexaminfo::find()->select(['BH','PaperName'])->where(['CourseID'=>$CourseID])->groupBy(['BH'])->orderBy('BH DESC')->all();
 
         $list = $m_ppt->find()
-            ->where(['Type' => 1000802]);
+            ->where(['Type' => 1000802,'CourseID'=>$CourseID]);
 
         if (isset($Info['term'])) {
             $list = $list->andWhere([
