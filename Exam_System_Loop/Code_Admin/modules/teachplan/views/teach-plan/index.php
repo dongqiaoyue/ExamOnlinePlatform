@@ -166,6 +166,21 @@ use yii\helpers\Url;
                 </div>
 
                 <div id="term_div" class="form-group">
+                    <label for="des" class="col-sm-2 control-label">选择学院</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="Teachingclassmannage[Department]" id="Department">
+                            <?php
+                            foreach($college as $key=>$data){
+                                echo "<option value='" . $data['CuitMoon_DictionaryName'] . "'>". $data['CuitMoon_DictionaryName']."</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <div id="term_div" class="form-group">
                     <label for="des" class="col-sm-2 control-label">学期</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="Teachingclassmannage[Term]" id="Term">

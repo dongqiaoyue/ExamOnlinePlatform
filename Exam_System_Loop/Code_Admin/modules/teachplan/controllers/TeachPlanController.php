@@ -117,7 +117,6 @@ class TeachPlanController extends BaseController{
         $update = $m_teachManage->findOne($id);
         if($update->load(Yii::$app->request->post())){
             $update->CourseID = Yii::$app->session->get('courseCode');
-            $update->Department = '信息安全工程学院';
             $update->TeacherName = Yii::$app->session->get('UserName');
             if($update->validate() && $update->save()){
                 $com->JsonSuccess('修改成功');
@@ -167,7 +166,6 @@ class TeachPlanController extends BaseController{
         if($m_teachManage->load(Yii::$app->request->post())){
             $m_teachManage->TeachingClassID = $com->create_id();
             $m_teachManage->CourseID = Yii::$app->session->get('courseCode');
-            $m_teachManage->Department = '信息安全工程学院';
             $m_teachManage->TeacherName = Yii::$app->session->get('UserName');
             $m_teachManage->Type = '1';
             if($m_teachManage->validate() && $m_teachManage->save()){
