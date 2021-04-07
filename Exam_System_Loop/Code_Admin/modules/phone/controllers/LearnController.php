@@ -164,14 +164,20 @@ class LearnController extends BaseController
         $TeachingClassID = Yii::$app->request->get('TeachingClassID');
         $where['CourseID'] = Yii::$app->session->get('courseCode');
 
-        $StuID = Teachingclassdetails::find()->where(['TeachingClassID' => $TeachingClassID])->orderBy("StuNumber")->asArray()->all();
+        if (empty($TeachingClassID))
+        {
+            $StuID = Teachingclassdetails::find()->orderBy("StuNumber")->asArray()->all();
+            $ClassName = '全部班级';
+        }else{
+            $StuID = Teachingclassdetails::find()->where(['TeachingClassID' => $TeachingClassID])->orderBy("StuNumber")->asArray()->all();
+            $ClassName = Teachingclassmannage::findOne(['TeachingClassID' =>$TeachingClassID])['TeachingName'];
+        }
+
+//        $StuID = Teachingclassdetails::find()->where(['TeachingClassID' => $TeachingClassID])->orderBy("StuNumber")->asArray()->all();
         $Stu = Studentinfo::find()->where(['in','StuNumber',$StuID])->asArray()->all();
 
 
         $list = Tresources::find()->where($where)->orderBy("Type")->all();
-        $ClassName = Teachingclassmannage::findOne(['TeachingClassID' =>$TeachingClassID])['TeachingName'];
-        if ($ClassName==NULL)
-            $ClassName = '全部班级';
         $PHPExcel->getProperties()->setTitle($ClassName);
         $PHPExcel->setActiveSheetIndex(0);
 
