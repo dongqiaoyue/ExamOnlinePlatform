@@ -169,8 +169,9 @@ class LearnController extends BaseController
 
 
         $list = Tresources::find()->where($where)->orderBy("Type")->all();
-        $ClassName = Teachingclassmannage::findOne(['TeachingClassID' =>$TeachingClassID])
-            ->TeachingName;
+        $ClassName = Teachingclassmannage::findOne(['TeachingClassID' =>$TeachingClassID])['TeachingName'];
+        if ($ClassName==NULL)
+            $ClassName = '全部班级';
         $PHPExcel->getProperties()->setTitle($ClassName);
         $PHPExcel->setActiveSheetIndex(0);
 
@@ -226,7 +227,7 @@ class LearnController extends BaseController
         }
 
 
-        header('Content-Type : application/vnd.ms-excel');
+        //header('Content-Type : application/vnd.ms-excel');
         header('Content-Disposition:attachment;filename="'.$ClassName.'.xls"');
         $objWriter= \PHPExcel_IOFactory::createWriter($PHPExcel,'Excel5');
         $objWriter->save('php://output');
