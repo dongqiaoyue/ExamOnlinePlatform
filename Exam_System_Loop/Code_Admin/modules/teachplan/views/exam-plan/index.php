@@ -233,6 +233,9 @@ $m_paper = new Paperconfigure();
                             </table>
                         </div>
                     </div>
+                    <div class="clo-xs-6">
+                    <a id="student_add" onclick="addstu()" class="btn btn-primary btn-sm" > <i class="glyphicon glyphicon-zoom-in icon-white"></i>添加学生</a>
+                    </div>
                 </div>
 
 
@@ -240,6 +243,40 @@ $m_paper = new Paperconfigure();
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="stu_add" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>添加学生</h3>
+            </div>
+            <div class="modal-body">
+            <form id="student_form" action=<?=Url::toRoute('exam-plan/add-student')?> method="post">    
+            <div class="input-group " >
+            <input type="hidden" class="form-control" id="option_ExamPlanBh1" name="Examplan"/>
+            </div>  
+            <span class="input-group-addon">选择教学班</span>
+            <div class="input-group" id="selectclass">
+    
+            </div>
+            <div class="input-group " >
+            <span class="input-group-addon">学生学号</span>
+            <input class="form-control" id="studentcode" name="studentcode"/>
+            </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+                <a  class="btn btn-default" data-dismiss="modal">关闭</a> <a
+                    id="edit_student_ok"  class="btn btn-primary">确定</a>
+            </div>
+        </div>
+      </div>
+</div>
+
+
 
 <div class="modal fade" id="edit_dialog" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
@@ -304,6 +341,7 @@ $m_paper = new Paperconfigure();
         $('#edit_dialog').modal('show');
     });
 
+
     $(function (){
         if('<?=Yii::$app->request->get('term');?>' == ""){
             var Tmp = $('#term-choice').val();
@@ -336,6 +374,23 @@ $m_paper = new Paperconfigure();
         initModel(id, 'view', 'fun');
     }
 
+    function addstu(){
+     Bh = $('#option_ExamPlanBh').val();
+     $.ajax({
+       type: "GET",
+       url: "<?=URL::toRoute('exam-plan/get-techclass')?>",
+       data: {"Bh":Bh},
+       dataType:"json",
+       success: function(data){
+          $('#stu_add').modal('show');
+          $('#option_ExamPlanBh1').val($('#option_ExamPlanBh').val());
+          for(var value in data) {
+            $('#selectclass').append('<label> <input type="radio" name="Teachingclass" id="TeachingClassID" value="'+ data[value]['TeachingClassID'] +'" checked="checked">'+ data[value]['TeachingName'] +'</label>');
+          }
+     }
+     });
+     
+    }
     function publishAction(id,me) {
         $.ajax({
             type: "GET",
@@ -411,7 +466,7 @@ $m_paper = new Paperconfigure();
             $('#option_form').children('.input-group').each(function(){
             $('#option_title').text('查看考试计划');
             $(this).children('.form-control').attr('disabled',true);
-
+            $('#student_add').addClass('hidden');
             });
 
         }
@@ -426,6 +481,7 @@ $m_paper = new Paperconfigure();
             //$('#option_EndTime').attr('disabled',true);
             $('#option_StarTime').datetimepicker();
             $('#option_EndTime').datetimepicker();
+           
 
         }
 
@@ -572,6 +628,14 @@ $m_paper = new Paperconfigure();
         $('#admin-role-form').submit();
     });
 
+     //提交增加学生表单
+    $(document).on('click','#edit_student_ok',function(){
+        $('#student_form').ajaxSubmit(function(res){
+            alert(res);
+            window.location.reload();
+        })
+    });
+
     $('#create_btn').click(function (e) {
         window.location.href = "<?=Url::toRoute('exam-plan/add')?>";
     });
@@ -580,6 +644,7 @@ $m_paper = new Paperconfigure();
         e.preventDefault();
         deleteAction('');
     });
+
 
     $('#admin-role-form').bind('submit', function(e) {
         e.preventDefault();

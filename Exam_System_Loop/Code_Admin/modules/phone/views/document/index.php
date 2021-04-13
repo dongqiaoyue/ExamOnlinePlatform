@@ -394,7 +394,7 @@ $m_model = new \app\models\phone\Tresourceexaminfo;
                     $("#document_Description").val('');
                     $("#document_ResourcesContent").val('');
                     $("#document_Term").val('');
-                    $("#model").val('');
+                    $("#model").val('0');
                     UE.getEditor('document_ResourcesContent').setContent('');
                     UE.getEditor('document_ResourcesContent').setEnabled();
                 }

@@ -349,8 +349,11 @@ use yii\helpers\Url;
     //Submit
     $('#question-Submit').click(function (e) {
         e.preventDefault();
-        if(confirm('当前分值:'+getSum()+',是否确认')) {
+        sum=getSum();
+        if(sum==100) {
             $('#examModuleAdd').submit();
+        }else{
+            alert('总分必须为100分');
         }
     });
 

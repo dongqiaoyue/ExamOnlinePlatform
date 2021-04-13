@@ -108,7 +108,7 @@ class ExamPlanController extends BaseController{
     public function actionAdd(){
         $m_dic = new TbcuitmoonDictionary();
         return $this->render('add',[
-            'college' => '信息安全工程学院',
+            'college' => $m_dic->getDictionaryList('学院'),
             'term' => $m_dic->getDictionaryList('学期'),
             'project' => Yii::$app->session->get('courseCode'),
         ]);
@@ -147,10 +147,8 @@ class ExamPlanController extends BaseController{
                     $PPlan->PassScore =  $Info['Examplan']['PassScore'];
                     $PPlan->CreateUser = Yii::$app->user->getId();
                     $PPlan->StarTime = $Info['StartTime'][0];
-                    // date('Y-m-d', strtotime ("+1 day", strtotime('2011-11-01')))
-                    // echo date('Y-m-d H:i:s', strtotime ("+".$Info['Examplan']['ExamTime']." minute", strtotime($Info['StartTime'][0])));
+                    $PPlan->Department = $Info['Examplan']['Department'];
                     $PPlan->EndTime = $Info['EndTime'][0];
-                    // $Info['EndTime'][count($Info['EndTime'])-1];
                     if (!$PPlan->save()) {
                         print_r($PPlan->getErrors());
                     } else {
@@ -168,7 +166,7 @@ class ExamPlanController extends BaseController{
                             $m_teach_class->CourseID = (string)Yii::$app->session->get('courseCode');
                             $m_teach_class->Memo = '期末考试班';
                             $m_teach_class->Type = '0';
-                            $m_teach_class->Department = '信息安全工程学院';
+                            $m_teach_class->Department = $Info['Examplan']['Department'];
 
                             $m_examPlan->TeachingClassID = $ClassID;
                             $m_examPlan->ExamPlanBh = $com->create_id();
@@ -182,6 +180,7 @@ class ExamPlanController extends BaseController{
                             $m_examPlan->CourseID = Yii::$app->session->get('courseCode');
                             $m_examPlan->Term = $Info['Examplan']['Term'];
                             $m_examPlan->Type = '1';
+                            $m_examPlan->Department=$Info['Examplan']['Department'];
                             $m_examPlan->IsFixedPlace = '0';
                             $m_examPlan->PassScore = $Info['Examplan']['PassScore'];
                             $m_examPlan->CreateUser = $PPlan->ExamPlanBh;
@@ -327,32 +326,54 @@ class ExamPlanController extends BaseController{
         $info = Yii::$app->request->post();
         $m_techClass = new Teachingclassmannage();
 
-        foreach ($info as $key=>$value){
-            if($value != 0){
-                $where[$key] = $value;
-            }
-        }
-        $where['Type'] = '1';
         $Tmp = $m_techClass->find()
             ->select(['TeachingClassID','TeachingName'])
-            ->where($where)->asArray()->all();
+            ->where([
+            'Type'=>'1',
+            'Department'=>$info['Department'],
+            'CourseID' =>$info['CourseID'],
+            'Term' => $info['Term'],
+            ])->asArray()->all();
         echo json_encode($Tmp);
+    }
+
+    public function actionAddStudent(){
+
+        $com = new commonFuc();
+        $student0 = new Teachingclassdetails();
+        $student1 = new Teachingclassdetails();
+        $data = Yii::$app->request->post();
+        $ExamPlanBh = $data['Examplan'];
+        $techclassid=Examplan::find()->select(['TeachingClassID'])->where(['ExamPlanBh'=>$ExamPlanBh])->one()['TeachingClassID'];
+        //在基础班中添加学生
+        $student0->TeachingClassDetailsID=$com->create_id();
+        $student0->TeachingClassID=$data['Teachingclass'];
+        $student0->StuNumber=$data['studentcode'];
+
+        //在期末班中添加学生
+        $student1->TeachingClassDetailsID=$com->create_id();
+        $student1->TeachingClassID=$techclassid;
+        $student1->StuNumber=$data['studentcode'];
+        if ($student0->save() && $student1->save()) {
+            echo $techclassid;
+        } else {
+            $com->JsonFail('失败');
+        }
+
     }
 
     public function actionGetClassOne() {
         $info = Yii::$app->request->post();
         $m_techClass = new Teachingclassmannage();
-
-        foreach ($info as $key=>$value){
-            if($value != 0){
-                $where[$key] = $value;
-            }
-        }
-        $where['Type'] = '1';
-        $where['TeacherName'] = Yii::$app->session->get('UserName');
         $Tmp = $m_techClass->find()
             ->select(['TeachingClassID','TeachingName'])
-            ->where($where)->asArray()->all();
+            ->where([
+            'Type' => '1',
+            'TeacherName' => 'UserName',
+            'Department'=>$info['Department'],
+            'CourseID' =>$info['CourseID'],
+            'Term' => $info['Term'],
+            ])->asArray()->all();
         echo json_encode($Tmp);
     }
 
@@ -476,6 +497,24 @@ class ExamPlanController extends BaseController{
             echo json_encode($Num);
         } else {
             echo json_encode(0);
+        }
+    }
+
+    public function actionGetTechclass(){
+        $ExamPlanBh=Yii::$app->request->get();
+        $techclassid=Examplan::find()->select(['CreateUser'])->where(['ExamPlanBh'=>$ExamPlanBh])->one()['CreateUser'];
+        $techClassid=Examplan::find()->select(['Memo'])->where(['ExamPlanBh'=>$techclassid])->one()['Memo'];
+        $a=explode('|',$techClassid);
+        foreach($a as $id){
+            $data[]=Teachingclassmannage::find()->select(['TeachingClassID','TeachingName'])->where([
+                'TeachingClassID'=>$id,
+                 'Type'=>'1',
+                 ])->asArray()->one();
+        }
+        if(isset($data)){
+            return json_encode($data);
+        }else{
+            echo "没有配置教学班级";
         }
     }
 

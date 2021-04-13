@@ -117,6 +117,21 @@ input:focus{
                                     ?>
                                 </select>
                             </div>
+                            <div class="row">
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-1 control-label">所属学院：</label>
+                        <div class="col-xs-2">
+                            <select class="form-group" style="width:99%;" name="Examplan[Department]" id="collegeChose">
+                                <option value="0">请选择</option>
+                                <?php
+                                foreach($college as $key=>$data){
+                                    echo "<option value='" . $data->CuitMoon_DictionaryName . "'>". $data->CuitMoon_DictionaryName."</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
 
                             <div class="col-xs-1" style="width: 130px;">
                                 <button class="btn btn-warning btn-sm" type="button" id="classChose">选择考试班级</button>
@@ -216,7 +231,7 @@ input:focus{
                 data:{
                     'CourseID':'<?=$project?>',
                     'Term':$('#termChose').val(),
-                    'Department':'<?=$college?>',
+                    'Department':$('#collegeChose').val(),
                 },
                 success:function (value) {
                     $('#checkClass').empty();
@@ -234,7 +249,7 @@ input:focus{
                 data:{
                     'CourseID':'<?=$project?>',
                     'Term':$('#termChose').val(),
-                    'Department':'<?=$college?>',
+                    'Department':$('#collegeChose').val(),
                 },
                 success:function (value) {
                     $('#checkClass').empty();
