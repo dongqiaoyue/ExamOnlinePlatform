@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="af7f92c0-72d7-4a3b-972a-ff6d77689213" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/LearnController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/LearnController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,17 +59,42 @@
       <workItem from="1615811503553" duration="3239000" />
       <workItem from="1616424015005" duration="21000" />
       <workItem from="1617092106860" duration="709000" />
-      <workItem from="1617796023436" duration="2488000" />
+      <workItem from="1617796023436" duration="3223000" />
+      <workItem from="1618294462191" duration="7262000" />
+      <workItem from="1618899164382" duration="1766000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="WindowStateProjectService">
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1616424037880">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616424037880" />
+    <state x="368" y="42" key="RollbackChangesDialog" timestamp="1618899465418">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="368" y="42" key="RollbackChangesDialog/0.0.1280.680@0.0.1280.680" timestamp="1618899465418" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1618300177872">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1618300177872" />
+    <state x="448" y="254" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1618900857330">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="448" y="254" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1618900857330" />
   </component>
 </project>

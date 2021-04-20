@@ -223,7 +223,7 @@ use app\models\phone\Tresourceslearn;
     $('#output_excel').click(function (e) {
         e.preventDefault();
         var TeachingClassID = $('#myClass-choice').val();
-        if (TeachingClassID == "没有任何作用的选项") {
+        if (TeachingClassID == "0") {
             alert('请选择我的教学班');
         } else {
             window.location.href = '<?=Url::toRoute("learn/output-excel")?>'

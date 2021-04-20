@@ -157,19 +157,23 @@ class LearnController extends BaseController
     public function actionOutputExcel()
     {
         $PHPExcel = new \PHPExcel();
+        $Teachingclassdetails = new Teachingclassdetails();
+
         //垂直居中
         $PHPExcel->getDefaultStyle()->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $PHPExcel->getDefaultStyle()->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
+        $Info = Yii::$app->request->get();
         $TeachingClassID = Yii::$app->request->get('TeachingClassID');
         $where['CourseID'] = Yii::$app->session->get('courseCode');
 
-        if (empty($TeachingClassID))
+        if (empty($Info['TeachingClassID']))
         {
-            $StuID = Teachingclassdetails::find()->orderBy("StuNumber")->asArray()->all();
-            $ClassName = '全部班级';
+//            $StuID = $Teachingclassdetails->find()->orderBy("StuNumber")->asArray()->all();
+//            $ClassName = '全部班级';
+            die();//全部内容导出会卡
         }else{
-            $StuID = Teachingclassdetails::find()->where(['TeachingClassID' => $TeachingClassID])->orderBy("StuNumber")->asArray()->all();
+            $StuID = $Teachingclassdetails->find()->where(['TeachingClassID' => $Info['TeachingClassID']])->orderBy("StuNumber")->asArray()->all();
             $ClassName = Teachingclassmannage::findOne(['TeachingClassID' =>$TeachingClassID])['TeachingName'];
         }
 
