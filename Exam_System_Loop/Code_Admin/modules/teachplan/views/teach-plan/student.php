@@ -489,9 +489,9 @@ $m_upload = new UploadForm();
             data:{id:"<?=$classId?>"},
             success: function(value)
             {
-                if(value.error == 0){
+                if(value.error == 1){
                     $('#edit_dialog').modal('hide');
-                    alert('以下学生导入失败:'+value.msg);
+                    alert(value.msg);
                     window.location.reload();
                 }
                 else{

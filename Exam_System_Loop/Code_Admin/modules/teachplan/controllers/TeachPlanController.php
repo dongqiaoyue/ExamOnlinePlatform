@@ -229,11 +229,11 @@ class TeachPlanController extends BaseController{
                 $filename = md5($upload->excel->baseName.$newtime);
                 $upload
                     ->excel
-                    ->saveAs(__DIR__.'/../../../upload/tmp_file/'.
+                    ->saveAs('upload/tmp_file/'.
                         $filename.'.'.$upload->excel->extension);
                 $reader = \PHPExcel_IOFactory::createReader('Excel5');
                 $PHPExcel = $reader
-                    ->load(__DIR__.'/../../../upload/tmp_file/'.
+                    ->load('upload/tmp_file/'.
                         $filename.'.'.$upload->excel->extension);
                 $sheet = $PHPExcel->getSheet(0);
                 $row = $sheet->getHighestRow();
@@ -269,8 +269,8 @@ class TeachPlanController extends BaseController{
                 }
 
                 $data = [
-                    'error' => 0,
-                    'msg' => '错误',
+                    'error' => 1,
+                    'msg' => '成功',
                 ];
                 echo json_encode($data);
             }else{
