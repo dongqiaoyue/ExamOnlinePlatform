@@ -107,16 +107,11 @@ class PptController extends BaseController
             $m_ppt->AddBy = Yii::$app->session->get('UserName');
             $m= UploadedFile::getInstance($m, 'file');
             $real_name = 'file'.time().'_'.rand(1,999);
-            $name= $real_name.$m->extension;
+            $name= $real_name.'.'.$m->extension;
             $m->saveAs('uploads/ppt/'.$name);
-            $path = 'uploads/ppt/'.$name;
+            $path = 'uploads/ppt/'.$real_name;
             $m_ppt->ResourcesURL=$path;
-            try {
-                shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/uploads/ppt/'.$name.' '.Yii::$app->basePath.'/web/uploads/ppt/'.$real_name.'.pdf');
-            }catch(\yii\httpclient\Exception $e) {
-                $com->JsonSuccess($e);
-// todo
-            }
+            shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/uploads/ppt/'.$name.' '.Yii::$app->basePath.'/web/uploads/ppt/'.$real_name.'.pdf');
                 if ($m_ppt->validate() && $m_ppt->save()) {
                 $com->JsonSuccess('添加成功');
             }
@@ -194,6 +189,7 @@ class PptController extends BaseController
                 $m_mod->CourseID = Yii::$app->session->get('CourseCode');
                 $m_mod->save();
             }
+            shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/'.$name.'.ppt '.Yii::$app->basePath.'/web/'.$name.'.pdf');
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {
