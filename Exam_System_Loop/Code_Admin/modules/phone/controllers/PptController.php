@@ -111,8 +111,13 @@ class PptController extends BaseController
             $m->saveAs('uploads/ppt/'.$name);
             $path = 'uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
-            shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/uploads/ppt/'.$name.' '.Yii::$app->basePath.'/web/uploads/ppt/'.$real_name.'.pdf');
-            if ($m_ppt->validate() && $m_ppt->save()) {
+            try {
+                shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/uploads/ppt/'.$name.' '.Yii::$app->basePath.'/web/uploads/ppt/'.$real_name.'.pdf');
+            }catch(\yii\httpclient\Exception $e) {
+                $com->JsonSuccess($e);
+// todo
+            }
+                if ($m_ppt->validate() && $m_ppt->save()) {
                 $com->JsonSuccess('添加成功');
             }
         } else {
