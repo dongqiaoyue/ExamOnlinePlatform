@@ -23,7 +23,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/db.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/config/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/LearnController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/LearnController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/PptController.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/controllers/PptController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +61,20 @@
       <workItem from="1617092106860" duration="709000" />
       <workItem from="1617796023436" duration="3223000" />
       <workItem from="1618294462191" duration="7262000" />
-      <workItem from="1618899164382" duration="1766000" />
+      <workItem from="1618899164382" duration="6355000" />
+      <workItem from="1619160175305" duration="450000" />
+      <workItem from="1619165053410" duration="4797000" />
+      <workItem from="1619230525559" duration="3114000" />
+      <workItem from="1619234244305" duration="3685000" />
+      <workItem from="1619278373608" duration="474000" />
+      <workItem from="1619401426983" duration="1079000" />
+      <workItem from="1619402765140" duration="6843000" />
+      <workItem from="1619525821819" duration="6943000" />
+      <workItem from="1619538934496" duration="491000" />
+      <workItem from="1619712895180" duration="3279000" />
+      <workItem from="1620612570653" duration="1160000" />
+      <workItem from="1621958915146" duration="877000" />
+      <workItem from="1622197044514" duration="1640000" />
     </task>
     <servers />
   </component>
@@ -78,16 +91,21 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="389" y="141" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1619534073689">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="389" y="141" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.680@0.0.1280.680" timestamp="1619534073689" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1616424037880">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616424037880" />
-    <state x="368" y="42" key="RollbackChangesDialog" timestamp="1618899465418">
+    <state x="368" y="42" key="RollbackChangesDialog" timestamp="1618901186173">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="368" y="42" key="RollbackChangesDialog/0.0.1280.680@0.0.1280.680" timestamp="1618899465418" />
+    <state x="368" y="42" key="RollbackChangesDialog/0.0.1280.680@0.0.1280.680" timestamp="1618901186173" />
     <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1618300177872">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

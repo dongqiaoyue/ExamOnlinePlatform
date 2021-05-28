@@ -106,10 +106,12 @@ class PptController extends BaseController
             $m_ppt->AddAt = date('Y-m-d H:i:s');
             $m_ppt->AddBy = Yii::$app->session->get('UserName');
             $m= UploadedFile::getInstance($m, 'file');
-            $name= 'file'.time().'_'.rand(1,999).'.'.$m->extension;
+            $real_name = 'file'.time().'_'.rand(1,999);
+            $name= $real_name.$m->extension;
             $m->saveAs('uploads/ppt/'.$name);
             $path = 'uploads/ppt/'.$name;
             $m_ppt->ResourcesURL=$path;
+            shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/uploads/'.$name.' '.Yii::$app->basePath.'/web/uploads/'.$real_name.'.pdf');
             if ($m_ppt->validate() && $m_ppt->save()) {
                 $com->JsonSuccess('添加成功');
             }
