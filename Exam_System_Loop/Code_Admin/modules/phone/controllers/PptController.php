@@ -175,6 +175,8 @@ class PptController extends BaseController
         if(isset($m)){
 	        $real_name = $update->ResourcesURL;
             $m->saveAs($real_name.'.ppt');
+            shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/'.$real_name.'.ppt '.'/var/www/html/break/web/'.$real_name.'.pdf');
+
         }
         $update->KnowledgeBh =  implode("||",$_POST['KnowledgeBhCode']);
         if ($update->load($post)) {
@@ -190,7 +192,6 @@ class PptController extends BaseController
                 $m_mod->CourseID = Yii::$app->session->get('CourseCode');
                 $m_mod->save();
             }
-            shell_exec('java -jar /usr/local/jodconverter-2.2.2/lib/jodconverter-cli-2.2.2.jar '.Yii::$app->basePath.'/web/'.$real_name.'.ppt '.'/var/www/html/break/web/'.$real_name.'.pdf');
             if ($update->validate() && $update->save()) {
                 $com->JsonSuccess('更新成功');
             } else {
