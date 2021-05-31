@@ -242,7 +242,7 @@ use app\models\phone\Tresourceslearn;
         if ($('#myClass-choice').val() != 0)
             url += '&TeachingClassID='+$('#myClass-choice').val();
         if ($('#term-choice').val() != 0)
-            url += '&Term='+$(this).val();
+            url += '&term='+$('#term-choice').val();
         window.location.href = url;
     });
     $('#term-choice').change(function (e) {
