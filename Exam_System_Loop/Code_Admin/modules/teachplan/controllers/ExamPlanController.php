@@ -369,7 +369,7 @@ class ExamPlanController extends BaseController{
             ->select(['TeachingClassID','TeachingName'])
             ->where([
             'Type' => '1',
-            'TeacherName' => 'UserName',
+            'TeacherName' => Yii::$app->session->get('UserName'),
             'Department'=>$info['Department'],
             'CourseID' =>$info['CourseID'],
             'Term' => $info['Term'],
