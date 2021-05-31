@@ -184,23 +184,23 @@ $i = 1;
                             <div class="">
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <button type="button"  id="<?=$k?>-href" class="btn btn-lg btn-primary " onclick="toggles('<?=$k?>','<?=$paperBh;?>')"><?=$com->codeTranName($k);?></button>
+                                        <button type="button"  id="<?=$k?>-href" class="btn btn-lg btn-primary " onclick="toggle(<?=$k;?>)"><?=$com->codeTranName($k);?></button>
                                     </div>
                                 </div>
                                 <h1></h1>
                                 <div style="display: none" id="<?=$k;?>">
                                     <?php foreach ($value as $key=>$item) {?>
-                                        <div class="row <?=$k;?>" id="<?=$k;?>"  name="<?=$item->QuestionBh;?>">
-                                            <button type="button" class="btn btn-default col-xs-10 col-xs-offset-1 title" onclick="toggle('<?=$item->QuestionBh?>')"><div class="noFlow">(<?=$item->TotalScore;?> 分) </div></button>
+                                        <div class="row <?=$k;?>" id="<?=$k;?>"  name="<?=$item['QuestionBh'];?>">
+                                            <button type="button" class="btn btn-default col-xs-10 col-xs-offset-1 title" onclick="toggle(<?=$i?>)"><div class="noFlow">(<?=$item['Score'];?> 分) <?=$i.'.';/*.$item['CustomBh'];*/?> <?=$item['name']?></div></button>
 
-                                            <div class="col-xs-10 col-xs-offset-1" style="display: none; float:left; padding-top: 10px;" id="<?=$item->QuestionBh;?>">
-                                                <?php//=$item['Description'];?>
-                                                <?php//switchType($k, $item);?>
+                                            <div class="col-xs-10 col-xs-offset-1" style="display: none; float:left; padding-top: 10px;" id="<?=$i;?>">
+                                                <?=$item['Description'];?>
+                                                <?=switchType($k, $item);?>
                                             </div>
 
                                         </div>
                                         <h6></h6>
-                                    <?php $i++; }?>
+                                        <?php $i++; }?>
                                 </div>
                             </div>
                         <?php }?>
@@ -247,106 +247,6 @@ $i = 1;
         } else {
             $('#'+id).slideUp(500);
         }
-    }
-
-    function toggles(QuestionType, paperBh) {
-        console.log('sss1')
-        var display =$('#'+QuestionType).css('display');
-        if (display == 'none') {
-            $('#'+QuestionType).slideDown(500);
-            $.ajax({
-                type: 'post',
-                url: '<?=Url::toRoute("exam/get-question-detail")?>',
-                dataType: "JSON",
-                data: {
-                    'QuestionType': QuestionType,
-                    'paperBh': paperBh
-                },
-                success: function (value) {
-                    console.log(value)
-                    for (let k in value)
-                    {
-                        switchType(k, value[k]);
-                    }
-                }
-            });
-        } else {
-            $('#'+QuestionType).slideUp(500);
-
-        }
-    }
-
-    function switchType(type, question) {
-            var question = question[0]
-            switch (type){
-                case '100020101':
-                    $('#'+question.QuestionBh).append('<p>'+question.Description+'</p>')
-                    $('#'+question.QuestionBh).append("<input type='radio' value='A' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;A " +
-                        "<input type='radio' value='B' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;B " +
-                        "<input type='radio' value='C' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;C " +
-                        "<input type='radio' value='D' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;D")
-                    break;
-                case '100020102':
-                    $('#'+question.QuestionBh).append('<p>'+question.Description+'</p>')
-                    $('#'+question.QuestionBh).append("<input type='checkbox' value='A' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;A " +
-                        "<input type='checkbox' value='B' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;B " +
-                        "<input type='checkbox' value='C' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;C " +
-                        "<input type='checkbox' value='D' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;D")
-                    break;
-                case '1000203':
-                    $('#'+question.QuestionBh).append('<p>'+question.Description+'</p>')
-                    $('#'+question.QuestionBh).append("<input type='radio' value='1' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;对 " +
-                        "<input type='radio' value='0' name='"+question.QuestionBh+"'/>&nbsp;&nbsp;错")
-                    break;
-                case '1000204':
-
-                    break;
-                case '1000205':
-                    $('#'+question.QuestionBh).append("<textarea class='col-xs-8' rows='20' name='"+question.QuestionBh+"'></textarea>");
-
-                    break;
-                case '1000206':
-
-                    // $QuestionBh = $question['QuestionBh'];
-                    var File = question.file;
-                    if (question.IsProgramBlank == '100001') {
-                        //这里需要加个是否存在文件的判断，然后再显示吧
-                        $('#'+question.QuestionBh).append("<p class='friendFile'>题目所用文件：")
-                        for (let key in File) {
-                            $('#'+question.QuestionBh).append("<a class='fileName' href='"+File[key]+"' target='_blank'>"+key+"</a>")
-                        }
-                        $('#'+question.QuestionBh).append("</p>");
-
-                        $('#'+question.QuestionBh).append("<textarea class='col-xs-8' rows='20' name='"+question.QuestionBh+"'>")
-                        $('#'+question.QuestionBh).append("</textarea> " +
-                            "<button id='revert"+question.QuestionBh+"' class='btn btn-default BY' type='button' onclick='"+revertAnswer(question.QuestionBh)+"'>还原代码</button>" +
-                        "<div class='noDiv' style='margin:0; padding:0;'><button id='compile"+question.QuestionBh+"' class='btn BY'  type='button' onclick='"+compile(question.QuestionBh)+"'>编译该题</button></div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分数:</label>&nbsp;&nbsp;<strong class='stuScore' id='score"+question.QuestionBh+"'></strong><div class='message' style='top:-53px; left:85px;'>请勿频繁操作</div>")
-                    } else {
-                        //这里需要加个是否存在文件的判断，然后再显示吧
-                        $('#'+question.QuestionBh).append("<p class='friendFile'>题目所用文件：</p>")
-                        for (let key in File) {
-                            $('#'+question.QuestionBh).append("<a class='fileName' href='"+File[key]+"' target='_blank'>"+key+"</a>")
-                        }
-                        $('#'+question.QuestionBh).append("</p>");
-                        $('#'+question.QuestionBh).append("<textarea class='col-xs-8' rows='20' name='"+question.QuestionBh+"'>")
-                        $('#'+question.QuestionBh).append("</textarea> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " +
-                            "<div class='noDiv' style='margin:0; padding:0;'><button id='compile"+question.QuestionBh+"' class='btn BY'  type='button' onclick='"+compile(question.QuestionBh)+"'>编译该题</button></div><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分数:</label>&nbsp;&nbsp;<strong class='stuScore' id='score"+question.QuestionBh+"'></strong><div class='message'>请勿频繁操作</div>")
-                    }
-
-                    break;
-                case '1000207':
-                    $('#'+question.QuestionBh).append("<textarea class='col-xs-8' rows='20' name='"+question.QuestionBh+"'></textarea>")
-                    break;
-                case '1000208':
-                //     $m_find_error = new \app\models\question\FindError();
-                //     $Tmp_Error = $m_find_error->find()->where([
-                //     'QuestionBh' => $question['QuestionBh']
-                // ]);
-                    for (var i=0; i<question.Errors.length; i) {
-                        $('#'+question.QuestionBh).append(i+1 +"<input id='"+question.QuestionBh+"' type='text' name='"+question.QuestionBh+"'/></br></br>")
-                }
-                    break;
-            }
     }
 
     function revertAnswer(id) {
@@ -757,21 +657,22 @@ $i = 1;
         }else{
             lastTime = ExamTime;
         }
+        console.log(ExamTime,nowTime,e_Hours,testTime,ExamTime);
         document.getElementById("minutes").innerHTML=lastTime;
         // if(lastTime<1){
         //     alert("考试结束，自动提交试卷！");
         //     submit();
         // }
-        // setInterval(
-        //     function(){
-        //         lastTime -=1;
-        //         document.getElementById("minutes").innerHTML=lastTime;
-        //         if(lastTime<1){
-        //             alert("考试结束，自动提交试卷！");
-        //             submit();
-        //         }
-        //     }
-        //     ,60000)
+        setInterval(
+            function(){
+                lastTime -=1;
+                document.getElementById("minutes").innerHTML=lastTime;
+                if(lastTime<1){
+                    alert("考试结束，自动提交试卷！");
+                    submit();
+                }
+            }
+            ,60000)
     }
     window.onload=showTime;
 
