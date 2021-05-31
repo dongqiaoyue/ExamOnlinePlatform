@@ -657,7 +657,7 @@ $i = 1;
         }else{
             lastTime = ExamTime;
         }
-        console.log(ExamTime,nowTime,e_Hours,testTime,ExamTime);
+        // console.log(ExamTime,nowTime,e_Hours,testTime,ExamTime);
         document.getElementById("minutes").innerHTML=lastTime;
         // if(lastTime<1){
         //     alert("考试结束，自动提交试卷！");
