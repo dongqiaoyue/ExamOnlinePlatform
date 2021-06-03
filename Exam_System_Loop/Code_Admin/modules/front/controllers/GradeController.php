@@ -5,7 +5,7 @@ use app\models\grade\Stuscore;
 use common\commonFuc;
 use app\models\teachplan\Examplan;
 use Yii;
-
+error_reporting(0);
 class GradeController extends BaseController
 {
     public function actionIndex()
