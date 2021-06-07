@@ -119,7 +119,7 @@ use app\models\phone\Tresourceslearn;
                                         if ($v['ResourcesStatus'] == null)
                                             echo '<th><font style="color: red">未学习</font></th>';
                                         else {
-                                            if ($v['ResourcesStatus'] == 1000808)
+                                            if ($v['ResourcesStatus'] == '1000808')
                                                 echo '<th><font style="color: #4682B4	">' . $v['Score'] . '</font></th>';
                                             else
                                                 echo '<th><font style="color: red"> 已通过 </font></th>';
