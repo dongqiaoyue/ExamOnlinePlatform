@@ -120,9 +120,9 @@ use app\models\phone\Tresourceslearn;
                                             echo '<th><font style="color: red">未学习</font></th>';
                                         else {
                                             if ($v['ResourcesStatus'] == '1000808')
-                                                echo '<th><font style="color: #4682B4	">' . $v['Score'] . '</font></th>';
+                                                echo '<th><font style="color: red">' . $v['Score'] . '</font></th>';
                                             else
-                                                echo '<th><font style="color: red"> 已通过 </font></th>';
+                                                echo '<th><font style="color: #4682B4"> 已通过 </font></th>';
                                         }
                                             $i++;
                                             if ($i == 3)break;
@@ -130,13 +130,13 @@ use app\models\phone\Tresourceslearn;
                                     $aa = (new Tresourceslearn())->findScore($value['StuNumber'],$ppt);
                                     $i = 0;
                                     foreach ($aa as $v){
-                                        if ($v == null)
+                                        if ($v['ResourcesStatus'] == null)
                                             echo '<th><font style="color: red">未学习</font></th>';
                                         else {
-                                            if ($v == '100')
-                                                echo '<th><font style="color: #4682B4	">' . $v . '</font></th>';
+                                            if ($v['ResourcesStatus'] == '1000808')
+                                                echo '<th><font style="color: red">' . $v['Score'] . '</font></th>';
                                             else
-                                                echo '<th><font style="color: red">' . $v . '</font></th>';
+                                                echo '<th><font style="color: #4682B4"> 已通过 </font></th>';
                                         }
                                         $i++;
                                         if ($i == 3)break;
@@ -144,13 +144,13 @@ use app\models\phone\Tresourceslearn;
                                     $aa = (new Tresourceslearn())->findScore($value['StuNumber'],$vid);
                                     $i = 0;
                                     foreach ($aa as $v){
-                                        if ($v == null)
+                                        if ($v['ResourcesStatus'] == null)
                                             echo '<th><font style="color: red">未学习</font></th>';
                                         else {
-                                            if ($v == '100')
-                                                echo '<th><font style="color: #4682B4	">' . $v . '</font></th>';
+                                            if ($v['ResourcesStatus'] == '1000808')
+                                                echo '<th><font style="color: red">' . $v['Score'] . '</font></th>';
                                             else
-                                                echo '<th><font style="color: red">' . $v . '</font></th>';
+                                                echo '<th><font style="color: #4682B4"> 已通过 </font></th>';
                                         }
                                         $i++;
                                         if ($i == 3)break;
