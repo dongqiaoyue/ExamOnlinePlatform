@@ -19,7 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af7f92c0-72d7-4a3b-972a-ff6d77689213" name="Default Changelist" comment="" />
+    <list default="true" id="af7f92c0-72d7-4a3b-972a-ff6d77689213" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/models/phone/Tresourceslearn.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/models/phone/Tresourceslearn.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/learn/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/Exam_System_Loop/Code_Admin/modules/phone/views/learn/index.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,7 +43,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../break" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -73,7 +77,8 @@
       <workItem from="1622219982446" duration="1135000" />
       <workItem from="1622429454034" duration="5103000" />
       <workItem from="1622463477715" duration="2183000" />
-      <workItem from="1622466289217" duration="2716000" />
+      <workItem from="1622466289217" duration="3006000" />
+      <workItem from="1623032576981" duration="1796000" />
     </task>
     <servers />
   </component>
@@ -97,9 +102,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="389" y="141" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.680@0.0.1280.680" timestamp="1619534073689" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1616424037880">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="493" y="180" key="FileChooserDialogImpl" timestamp="1623033085337">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state x="493" y="180" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1623033085337" />
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616424037880" />
     <state x="552" y="64" key="RollbackChangesDialog" timestamp="1622198720041">
       <screen x="0" y="0" width="1920" height="1040" />

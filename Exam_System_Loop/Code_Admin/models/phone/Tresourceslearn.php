@@ -73,8 +73,8 @@ class Tresourceslearn extends \yii\db\ActiveRecord
     {
         $a = [];
         foreach ($list as $key => $value){
-            $data = self::find()->where(['ResourcesID' => $value['ID'],'StuID' => $StuNumber])->asArray()->orderBy('ResourcesID DESC')->one();
-            $a[] = $data['Score'];
+            $data = self::find()->select(['Score', 'ResourcesStatus'])->where(['ResourcesID' => $value['ID'],'StuID' => $StuNumber])->asArray()->orderBy('ResourcesID DESC')->one();
+            $a[] = $data;
         };
         return $a;
     }
