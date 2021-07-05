@@ -170,7 +170,9 @@ use yii\helpers\Url;
                 success: function (value) {
                      if(value!=null){
                         for(tmp in value){
-                         a=a+'<label id="'+ Tmp_Code +'-konwledge"><input type="radio" name="Knowledge['+ Tmp_Code +'][]" id="'+ Tmp_Code+'" value="'+value[tmp]['KnowledgeBh']+'" onclick="Knowledge('+ Tmp_Code +')">'+value[tmp]['KnowledgeName']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>'
+                         if(($('#'+ Tmp_Code + '_'+Stage +'-konwledge').length)==0){
+                         a=a+'<label id="'+ Tmp_Code + '_'+Stage +'-konwledge"><input type="radio" name="Knowledge['+ Tmp_Code +'][]" id="'+ Tmp_Code+'" value="'+value[tmp]['KnowledgeBh']+'" onclick="Knowledge('+ Tmp_Code+','+Stage+')">'+value[tmp]['KnowledgeName']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>'
+                         }
                         }
                         $('#'+Tmp_Code+'-konwledge').append(a)
                      }
@@ -188,10 +190,10 @@ use yii\helpers\Url;
         });
     }
 
-    function Knowledge(Tmp_Code) {
+    function Knowledge(Tmp_Code,Stage) {
         var Diff = []
         var Knowledge = []
-        $('label[id='+ Tmp_Code +'-konwledge]').each(function (i){
+        $('label[id='+ Tmp_Code +'_'+Stage+'-konwledge]').each(function (i){
              if($(this).children().is(':checked')){
                  Knowledge.push($(this).children().val());
              }
